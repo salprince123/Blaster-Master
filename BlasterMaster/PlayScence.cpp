@@ -6,6 +6,7 @@
 #include "Textures.h"
 #include "Sprites.h"
 #include "Portal.h"
+#include "LadyBird.h"
 
 using namespace std;
 
@@ -29,8 +30,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 
 #define OBJECT_TYPE_MARIO	0
 #define OBJECT_TYPE_BRICK	1
-#define OBJECT_TYPE_GOOMBA	2
-#define OBJECT_TYPE_KOOPAS	3
+#define OBJECT_TYPE_LADYBIRD	30
 
 #define OBJECT_TYPE_PORTAL	50
 
@@ -153,9 +153,18 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 		DebugOut(L"[INFO] Player object created!\n");
 		break;
-	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(); break;
+	case OBJECT_TYPE_LADYBIRD:
+	{
+		int x0 = atof(tokens[4].c_str());
+		int y0 = atof(tokens[5].c_str());
+		int x1 = atof(tokens[6].c_str());
+		int y1 = atof(tokens[7].c_str());
+		obj = new LadyBird(x0,y0,x1,y1);
+		
+		break;
+	} 
 	case OBJECT_TYPE_BRICK: obj = new CBrick(); break;
-	case OBJECT_TYPE_KOOPAS: obj = new CKoopas(); break;
+	//case OBJECT_TYPE_KOOPAS: obj = new CKoopas(); break;
 	case OBJECT_TYPE_PORTAL:
 		{	
 			float r = atof(tokens[4].c_str());
@@ -252,8 +261,8 @@ void CPlayScene::Update(DWORD dt)
 	CGame *game = CGame::GetInstance();
 	cx -= game->GetScreenWidth() / 2;
 	cy -= game->GetScreenHeight() / 2;
-
-	CGame::GetInstance()->SetCamPos(cx, 0.0f /*cy*/);
+	if(cx<=10) CGame::GetInstance()->SetCamPos(0, 0.0f /*cy*/);
+	else CGame::GetInstance()->SetCamPos(cx, 0.0f /*cy*/);
 }
 
 void CPlayScene::Render()

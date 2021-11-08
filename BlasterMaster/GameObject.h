@@ -6,11 +6,13 @@
 
 #include "Sprites.h"
 #include "Animations.h"
-
-
 using namespace std;
 
 #define ID_TEX_BBOX -100		// special texture to draw object bounding box
+#define OBJECT_TYPE_PLAYER 1
+#define OBJECT_TYPE_ENEMY 2
+#define OBJECT_TYPE_BACKGROUND 3
+
 
 class CGameObject; 
 typedef CGameObject * LPGAMEOBJECT;
@@ -61,6 +63,8 @@ public:
 	DWORD dt; 
 
 	LPANIMATION_SET animation_set;
+
+	int ObjectType;
 
 public: 
 	void SetPosition(float x, float y) { this->x = x, this->y = y; }

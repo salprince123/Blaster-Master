@@ -22,14 +22,13 @@
 
 #include "Mario.h"
 #include "Brick.h"
-#include "Goomba.h"
 
 #include "PlayScence.h"
 
 #define WINDOW_CLASS_NAME L"Window"
 #define MAIN_WINDOW_TITLE L"BLASTER MASTER"
 
-#define BACKGROUND_COLOR D3DCOLOR_XRGB(255, 255, 200)
+#define BACKGROUND_COLOR D3DCOLOR_XRGB(0, 0,0)
 #define SCREEN_WIDTH 320
 #define SCREEN_HEIGHT 240
 
@@ -136,7 +135,7 @@ int Run()
 {
 	MSG msg;
 	int done = 0;
-	DWORD frameStart = GetTickCount();
+	DWORD frameStart = GetTickCount64();
 	DWORD tickPerFrame = 1000 / MAX_FRAME_RATE;
 
 	while (!done)
@@ -149,7 +148,7 @@ int Run()
 			DispatchMessage(&msg);
 		}
 
-		DWORD now = GetTickCount();
+		DWORD now = GetTickCount64();
 
 		// dt: the time between (beginning of last frame) and now
 		// this frame: the frame we are about to render
@@ -181,7 +180,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	game->Load(L"mario-sample.txt");
 
-	SetWindowPos(hWnd, 0, 0, 0, SCREEN_WIDTH*2, SCREEN_HEIGHT*2, SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);
+	SetWindowPos(hWnd, 0, 400, 300, SCREEN_WIDTH*2, SCREEN_HEIGHT*2,  SWP_NOOWNERZORDER | SWP_NOZORDER);
 
 	Run();
 
