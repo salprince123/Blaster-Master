@@ -7,6 +7,7 @@
 #include "Sprites.h"
 #include "Portal.h"
 #include "LadyBird.h"
+#include "Background.h"
 
 using namespace std;
 
@@ -30,6 +31,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 
 #define OBJECT_TYPE_MARIO	0
 #define OBJECT_TYPE_BRICK	1
+#define OBJECT_TYPE_BACKROUND	2
 #define OBJECT_TYPE_LADYBIRD	30
 
 #define OBJECT_TYPE_PORTAL	50
@@ -54,7 +56,7 @@ void CPlayScene::_ParseSection_TEXTURES(string line)
 
 void CPlayScene::_ParseSection_SPRITES(string line)
 {
-	vector<string> tokens = split(line);
+	vector<string> tokens = split(line," ");
 
 	if (tokens.size() < 6) return; // skip invalid lines
 
@@ -77,7 +79,7 @@ void CPlayScene::_ParseSection_SPRITES(string line)
 
 void CPlayScene::_ParseSection_ANIMATIONS(string line)
 {
-	vector<string> tokens = split(line);
+	vector<string> tokens = split(line," ");
 
 	if (tokens.size() < 3) return; // skip invalid lines - an animation must at least has 1 frame and 1 frame time
 
@@ -98,7 +100,7 @@ void CPlayScene::_ParseSection_ANIMATIONS(string line)
 
 void CPlayScene::_ParseSection_ANIMATION_SETS(string line)
 {
-	vector<string> tokens = split(line);
+	vector<string> tokens = split(line," ");
 
 	if (tokens.size() < 2) return; // skip invalid lines - an animation set must at least id and one animation id
 
@@ -124,7 +126,7 @@ void CPlayScene::_ParseSection_ANIMATION_SETS(string line)
 */
 void CPlayScene::_ParseSection_OBJECTS(string line)
 {
-	vector<string> tokens = split(line);
+	vector<string> tokens = split(line," ");
 
 	//DebugOut(L"--> %s\n",ToWSTR(line).c_str());
 
@@ -164,6 +166,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	} 
 	case OBJECT_TYPE_BRICK: obj = new CBrick(); break;
+	case OBJECT_TYPE_BACKROUND: obj = new Background(); break;
 	//case OBJECT_TYPE_KOOPAS: obj = new CKoopas(); break;
 	case OBJECT_TYPE_PORTAL:
 		{	
@@ -215,9 +218,6 @@ void CPlayScene::Load()
 			section = SCENE_SECTION_OBJECTS; continue; }
 		if (line[0] == '[') { section = SCENE_SECTION_UNKNOWN; continue; }	
 
-		//
-		// data section
-		//
 		switch (section)
 		{ 
 			case SCENE_SECTION_TEXTURES: _ParseSection_TEXTURES(line); break;
