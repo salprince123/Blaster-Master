@@ -26,7 +26,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
 	// Simple fall down
 	vy += MARIO_GRAVITY*dt;
-	if (x <= 0) x = 0;
+	//if (x <= 0 && y> CGame::GetInstance()->GetScreenHeight() / 2) x = 0;
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 

@@ -7,10 +7,12 @@
 #include "Sprites.h"
 #include "Portal.h"
 #include "LadyBird.h"
+#include "Boom.h"
+
 #include "Background.h"
 
 using namespace std;
-
+int _dy = 0;
 CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 	CScene(id, filePath)
 {
@@ -33,6 +35,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 #define OBJECT_TYPE_BRICK	1
 #define OBJECT_TYPE_BACKROUND	2
 #define OBJECT_TYPE_LADYBIRD	30
+#define OBJECT_TYPE_BOOM	31
 
 #define OBJECT_TYPE_PORTAL	50
 
@@ -165,6 +168,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		
 		break;
 	} 
+	case OBJECT_TYPE_BOOM: obj = new Boom(); break;
 	case OBJECT_TYPE_BRICK: obj = new CBrick(); break;
 	case OBJECT_TYPE_BACKROUND: obj = new Background(); break;
 	//case OBJECT_TYPE_KOOPAS: obj = new CKoopas(); break;
@@ -257,12 +261,14 @@ void CPlayScene::Update(DWORD dt)
 	// Update camera to follow mario
 	float cx, cy;
 	player->GetPosition(cx, cy);
-
+	
 	CGame *game = CGame::GetInstance();
 	cx -= game->GetScreenWidth() / 2;
 	cy -= game->GetScreenHeight() / 2;
-	if(cx<=10) CGame::GetInstance()->SetCamPos(0, 0.0f /*cy*/);
-	else CGame::GetInstance()->SetCamPos(cx, 0.0f /*cy*/);
+	_dy = abs(cy - CGame::GetInstance()->getCamPosY());
+	if(cx<=10 && cy< CGame::GetInstance()->GetScreenHeight()/2) CGame::GetInstance()->SetCamPos(0, 0.0f);
+	else if (_dy> CGame::GetInstance()->GetScreenHeight()*2/3) CGame::GetInstance()->SetCamPos(round(cx), CGame::GetInstance()->getCamPosY()+100);
+	else CGame::GetInstance()->SetCamPos(round(cx), round(cy));
 }
 
 void CPlayScene::Render()
@@ -292,10 +298,10 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	CMario *mario = ((CPlayScene*)scence)->GetPlayer();
 	switch (KeyCode)
 	{
-	case DIK_SPACE:
+	case DIK_S:
 		mario->SetState(MARIO_STATE_JUMP);
 		break;
-	case DIK_A: 
+	case DIK_R: 
 		mario->Reset();
 		break;
 	}

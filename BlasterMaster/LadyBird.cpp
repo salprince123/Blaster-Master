@@ -53,7 +53,7 @@ void LadyBird::Render()
 	int alpha = 255;
 
 	animation_set->at(ani)->Render(x, y, alpha);
-	
+	//RenderBoundingBox();
 }
 void LadyBird::SetState(int state)
 {
