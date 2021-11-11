@@ -1,5 +1,4 @@
 #include "Boom.h"
-#include "Utils.h"
 Boom::Boom()
 {
 	SetState(BOOM_STATE_ALIVE);

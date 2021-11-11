@@ -1,5 +1,6 @@
 #include "Enemy.h"
 #include "Utils.h"
+#include <math.h>
 Enemy::Enemy()
 {
 	this->ObjectType = OBJECT_TYPE_ENEMY;
@@ -20,10 +21,15 @@ void Enemy::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 
 void Enemy::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	CGameObject::Update(dt, coObjects);
+	/*CGameObject::Update(dt, coObjects);
 	//DebugOut(L"LADYBIRD HERE\n");
 	x += dx;
-	y += dy;
+	y += dy;*/
+	this->dt = dt;
+	dx = vx * dt;
+	dy = vy * dt;
+	x += 1;
+	y = 50+10*sin(0.15*x);
 }
 
 void Enemy::Render()

@@ -1,5 +1,6 @@
 #pragma once
 #include "Enemy.h"
+#include "Utils.h"
 #define BOOM_BBOX_WIDTH 16
 #define BOOM_BBOX_HEIGHT 15
 #define BOOM_BBOX_HEIGHT_DIE 0
