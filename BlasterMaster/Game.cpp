@@ -7,6 +7,7 @@
 #include "PlayScence.h"
 
 CGame * CGame::__instance = NULL;
+Camera* CGame::_camera = NULL;
 
 /*
 	Initialize DirectX, create a Direct3D device for rendering within the window, initial Sprite library for 
@@ -65,7 +66,7 @@ void CGame::Init(HWND hWnd)
 */
 void CGame::Draw(float x, float y, LPDIRECT3DTEXTURE9 texture, int left, int top, int right, int bottom, int alpha)
 {
-	D3DXVECTOR3 p(x - cam_x, y - cam_y, 0);
+	D3DXVECTOR3 p(x - _camera->getCamPosX(), y - _camera->getCamPosY(), 0);
 	RECT r; 
 	r.left = left;
 	r.top = top;
@@ -310,6 +311,11 @@ CGame *CGame::GetInstance()
 {
 	if (__instance == NULL) __instance = new CGame();
 	return __instance;
+}
+Camera* CGame::getCamera()
+{
+	if (_camera == NULL) _camera = new Camera();
+	return _camera;
 }
 
 #define MAX_GAME_LINE 1024

@@ -263,12 +263,21 @@ void CPlayScene::Update(DWORD dt)
 	player->GetPosition(cx, cy);
 	
 	CGame *game = CGame::GetInstance();
-	cx -= game->GetScreenWidth() / 2;
-	cy -= game->GetScreenHeight() / 2;
-	_dy = abs(cy - CGame::GetInstance()->getCamPosY());
-	if(cx<=10 && cy< CGame::GetInstance()->GetScreenHeight()/2) CGame::GetInstance()->SetCamPos(0, 0.0f);
-	else if (_dy> CGame::GetInstance()->GetScreenHeight()*2/3) CGame::GetInstance()->SetCamPos(round(cx), CGame::GetInstance()->getCamPosY()+100);
-	else CGame::GetInstance()->SetCamPos(round(cx), round(cy));
+	Camera* camera = CGame::getCamera();
+	camera->SetSize(game->GetScreenWidth(), game->GetScreenHeight());
+	camera->Update(cx, cy);
+	/*
+	* ================OLD CODE CAMERA=====================
+		//cx -= game->GetScreenWidth() / 2;
+		//cy -= game->GetScreenHeight() / 2;
+	
+		//_dy = abs(cy - CGame::getCamera()->getCamPosY());
+
+		//if(cx<=10 && cy< CGame::GetInstance()->GetScreenHeight()/2) CGame::getCamera()->SetCamPos(0, 0.0f);
+		//else if (_dy> CGame::GetInstance()->GetScreenHeight()*2/3) CGame::getCamera()->SetCamPos(round(cx), CGame::GetInstance()->getCamPosY()+100);
+		//else CGame::getCamera()->SetCamPos(round(cx), round(cy));
+	*/
+	
 }
 
 void CPlayScene::Render()

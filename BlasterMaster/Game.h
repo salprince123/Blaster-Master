@@ -11,6 +11,7 @@
 #include <dinput.h>
 
 #include "Scence.h"
+#include "Camera.h"
 
 using namespace std;
 
@@ -19,6 +20,7 @@ using namespace std;
 class CGame
 {
 	static CGame * __instance;
+	static Camera* _camera;
 	HWND hWnd;									// Window handle
 
 	LPDIRECT3D9 d3d = NULL;						// Direct3D handle
@@ -46,6 +48,7 @@ class CGame
 
 	void _ParseSection_SETTINGS(string line);
 	void _ParseSection_SCENES(string line);
+	
 
 public:
 	void InitKeyboard();
@@ -85,6 +88,7 @@ public:
 	void SetCamPos(float x, float y) { cam_x = x; cam_y = y; }
 	float getCamPosY();
 	static CGame * GetInstance();
+	static Camera* getCamera();
 
 	~CGame();
 };
