@@ -2,12 +2,15 @@
 #include <iostream>
 #include "Utils.h"
 #include "GameObject.h"
+#define WIDTH_OF_QUADTREE 200
 class Rect
 {
 public: 
 	double x;
 	double y;
 	double width;
+	Rect() { this->x = 0; this->y = 0; this->width = WIDTH_OF_QUADTREE; }
+	Rect(double x, double y) { this->x = x; this->y = y; this->width = WIDTH_OF_QUADTREE; }
 };
 class Quadtree
 {
@@ -23,13 +26,20 @@ class Quadtree
 	* Kích thước quad tree : có thể kahi báo dạng x,y width (chỉ cso width vì mình lấy theo hình vuông)
 	*	hoặc typedef 1 kiểu SQUARE lưu x,y,width 
 	*/
-	Quadtree* child;
 	vector<CGameObject> object;
+	Quadtree* topLeftTree;
+	Quadtree* topRightTree;
+	Quadtree* botLeftTree;
+	Quadtree* botRightTree;
 	Rect size;
 public:
+	Quadtree();
+	Quadtree(double x, double y);
 	bool isConstain(float objX, float objY);
 	void AddObject();
 	void Split();
 	void Clear();
+	vector<CGameObject> search(double x, double y);
+	bool inBoundary(double x, double y);
 };
 
