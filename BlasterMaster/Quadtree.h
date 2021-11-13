@@ -1,4 +1,14 @@
 ﻿#pragma once
+#include <iostream>
+#include "Utils.h"
+#include "GameObject.h"
+class Rect
+{
+public: 
+	double x;
+	double y;
+	double width;
+};
 class Quadtree
 {
 	/*Note: 1 quad tree cần có:
@@ -13,5 +23,13 @@ class Quadtree
 	* Kích thước quad tree : có thể kahi báo dạng x,y width (chỉ cso width vì mình lấy theo hình vuông)
 	*	hoặc typedef 1 kiểu SQUARE lưu x,y,width 
 	*/
+	Quadtree* child;
+	vector<CGameObject> object;
+	Rect size;
+public:
+	bool isConstain(float objX, float objY);
+	void AddObject();
+	void Split();
+	void Clear();
 };
 

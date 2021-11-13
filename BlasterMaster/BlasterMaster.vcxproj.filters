@@ -43,6 +43,12 @@
     <Filter Include="Source Files\Object">
       <UniqueIdentifier>{ce1f8d47-2ca6-47a9-bff1-090742e75db9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Quadtree">
+      <UniqueIdentifier>{ae5ae0b2-1d5f-47b4-8a8f-b483a6d038ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Quadtree">
+      <UniqueIdentifier>{4dee5ff1-5833-420e-bbc6-b221b0037c41}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -96,6 +102,9 @@
     <ClCompile Include="Camera.cpp">
       <Filter>Source Files\General</Filter>
     </ClCompile>
+    <ClCompile Include="Quadtree.cpp">
+      <Filter>Source Files\Quadtree</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animations.h">
@@ -148,6 +157,9 @@
     </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>Header Files\General</Filter>
+    </ClInclude>
+    <ClInclude Include="Quadtree.h">
+      <Filter>Header Files\Quadtree</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
