@@ -15,9 +15,10 @@ class Rect
 public: 
 	double x;
 	double y;
-	double width;
-	Rect() { this->x = 0; this->y = 0; this->width = WIDTH_OF_QUADTREE; }
-	Rect(double x, double y) { this->x = x; this->y = y; this->width = WIDTH_OF_QUADTREE; }
+	float width;
+	Rect() { this->x = 0; this->y = 0; this->width = MAX_WIDTH_OF_QUADTREE; }
+	Rect(double x, double y) { this->x = x; this->y = y; this->width = MAX_WIDTH_OF_QUADTREE; }
+	Rect(double x, double y, float width) { this->x = x; this->y = y; this->width = width; }
 };
 class Quadtree
 {	
@@ -26,13 +27,14 @@ class Quadtree
 	Quadtree* topRightTree;
 	Quadtree* botLeftTree;
 	Quadtree* botRightTree;
+	int level;
 	Rect size;
 public:
 	Quadtree();
-	Quadtree(double x, double y);
+	Quadtree(int level,double x, double y, float width);
 	Quadtree(LPCWSTR path);
 	bool isConstain(float objX, float objY);
-	void AddObject();
+	void AddObject(LPGAMEOBJECT obj);
 	void Split();
 	void Clear();
 	vector<LPGAMEOBJECT> search(double x, double y);

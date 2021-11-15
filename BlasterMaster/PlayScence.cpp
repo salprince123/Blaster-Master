@@ -181,6 +181,7 @@ void CPlayScene::_ParseSection_QUAD(string line)
 	vector<LPGAMEOBJECT> quad = quadtree->getAll();
 	objects.insert(objects.end(), quad.begin(), quad.end());
 	DebugOut(L"READ QUADTREE SUCCESS, HAVE %d OBJECTS\n", objects.size());
+	quadtree->Split();
 }
 void CPlayScene::Load()
 {
