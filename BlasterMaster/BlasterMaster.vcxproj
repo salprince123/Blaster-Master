@@ -150,6 +150,7 @@
     <ClInclude Include="Boom.h" />
     <ClInclude Include="Brick.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Define.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="LadyBird.h" />
     <ClInclude Include="Portal.h" />

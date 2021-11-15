@@ -25,7 +25,7 @@ void LadyBird::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	// Calculate dx, dy 
 
-	DebugOut(L"[LADYBIRD] %d %d %d %d \n", x0, y0, x1, y1);
+	//DebugOut(L"[LADYBIRD] %d %d %d %d \n", x0, y0, x1, y1);
 
 	/*if (vx < 0 && x < x0) {
 		x = x0; vx = -vx;

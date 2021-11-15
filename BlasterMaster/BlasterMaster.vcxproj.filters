@@ -161,5 +161,8 @@
     <ClInclude Include="Quadtree.h">
       <Filter>Header Files\Quadtree</Filter>
     </ClInclude>
+    <ClInclude Include="Define.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

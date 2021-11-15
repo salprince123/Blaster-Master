@@ -19,28 +19,6 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 	key_handler = new CPlayScenceKeyHandler(this);
 }
 
-/*
-	Load scene resources from scene file (textures, sprites, animations and objects)
-	See scene1.txt, scene2.txt for detail format specification
-*/
-
-#define SCENE_SECTION_UNKNOWN -1
-#define SCENE_SECTION_TEXTURES 2
-#define SCENE_SECTION_SPRITES 3
-#define SCENE_SECTION_ANIMATIONS 4
-#define SCENE_SECTION_ANIMATION_SETS	5
-#define SCENE_SECTION_OBJECTS	6
-
-#define OBJECT_TYPE_MARIO	0
-#define OBJECT_TYPE_BRICK	1
-#define OBJECT_TYPE_BACKROUND	2
-#define OBJECT_TYPE_LADYBIRD	30
-#define OBJECT_TYPE_BOOM	31
-
-#define OBJECT_TYPE_PORTAL	50
-
-#define MAX_SCENE_LINE 1024
-
 
 void CPlayScene::_ParseSection_TEXTURES(string line)
 {
@@ -194,6 +172,16 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	objects.push_back(obj);
 }
 
+void CPlayScene::_ParseSection_QUAD(string line)
+{
+	vector<string> tokens = split(line);
+	DebugOut(L"--> %s\n", ToWSTR(line).c_str());
+	LPCWSTR path = ToLPCWSTR(tokens[0]);
+	quadtree = new Quadtree(path);
+	vector<LPGAMEOBJECT> quad = quadtree->getAll();
+	objects.insert(objects.end(), quad.begin(), quad.end());
+	DebugOut(L"READ QUADTREE SUCCESS, HAVE %d OBJECTS\n", objects.size());
+}
 void CPlayScene::Load()
 {
 	DebugOut(L"[INFO] Start loading scene resources from : %s \n", sceneFilePath);
@@ -220,6 +208,9 @@ void CPlayScene::Load()
 			section = SCENE_SECTION_ANIMATION_SETS; continue; }
 		if (line == "[OBJECTS]") { 
 			section = SCENE_SECTION_OBJECTS; continue; }
+		if (line == "[QUADTREE]") {
+			section = SCENE_SECTION_QUAD; continue;
+		}
 		if (line[0] == '[') { section = SCENE_SECTION_UNKNOWN; continue; }	
 
 		switch (section)
@@ -229,6 +220,7 @@ void CPlayScene::Load()
 			case SCENE_SECTION_ANIMATIONS: _ParseSection_ANIMATIONS(line); break;
 			case SCENE_SECTION_ANIMATION_SETS: _ParseSection_ANIMATION_SETS(line); break;
 			case SCENE_SECTION_OBJECTS: _ParseSection_OBJECTS(line); break;
+			case SCENE_SECTION_QUAD: _ParseSection_QUAD(line); break;
 		}
 	}
 
@@ -265,7 +257,7 @@ void CPlayScene::Update(DWORD dt)
 	CGame *game = CGame::GetInstance();
 	Camera* camera = CGame::getCamera();
 	camera->SetSize(game->GetScreenWidth(), game->GetScreenHeight());
-	camera->Update(cx, cy);
+	//camera->Update(cx, cy);
 	/*
 	* ================OLD CODE CAMERA=====================
 		//cx -= game->GetScreenWidth() / 2;

@@ -1,8 +1,15 @@
 ﻿#pragma once
 #include <iostream>
+#include <fstream>;
 #include "Utils.h"
 #include "GameObject.h"
-#define WIDTH_OF_QUADTREE 200
+#include "Define.h"
+#include "LadyBird.h"
+#include "Boom.h"
+#include "Brick.h"
+#include  "Background.h"
+#include "Portal.h"
+using namespace std;
 class Rect
 {
 public: 
@@ -13,20 +20,8 @@ public:
 	Rect(double x, double y) { this->x = x; this->y = y; this->width = WIDTH_OF_QUADTREE; }
 };
 class Quadtree
-{
-	/*Note: 1 quad tree cần có:
-	* Các quadtree con
-	* vector<object> (chỉ quadtree cấp nhỏ nhất có, các cấp lớn hơn là null)
-	* Hàm kiểm tra vị trí đối tượng (x,y) có thuộc quadtree đang gọi hay không (include)
-	* Hàm bỏ đối tượng vô quadtree nếu include(nếu gọi đệ quy đúng thì đối tượng sẽ đc chuyển từ quad trê lớn sang quadtree nhỏ nhất,
-		cuối cùng chỉ có quadtree nhỏ nhất là danh sách đối tượng NOT NULL)
-	* Hàm Clear: giải phóng bộ nhớ 
-	* hàm chia quadtree lớn thành quadtree nhỏ hơn (gọi đệ quy đến DIEUKIENDUNG)
-	* DIEUKIENDUNG: khi kích thước quadtree =1/2 màn hình
-	* Kích thước quad tree : có thể kahi báo dạng x,y width (chỉ cso width vì mình lấy theo hình vuông)
-	*	hoặc typedef 1 kiểu SQUARE lưu x,y,width 
-	*/
-	vector<CGameObject> object;
+{	
+	vector<LPGAMEOBJECT> object;
 	Quadtree* topLeftTree;
 	Quadtree* topRightTree;
 	Quadtree* botLeftTree;
@@ -35,11 +30,14 @@ class Quadtree
 public:
 	Quadtree();
 	Quadtree(double x, double y);
+	Quadtree(LPCWSTR path);
 	bool isConstain(float objX, float objY);
 	void AddObject();
 	void Split();
 	void Clear();
-	vector<CGameObject> search(double x, double y);
+	vector<LPGAMEOBJECT> search(double x, double y);
 	bool inBoundary(double x, double y);
+	void _ParseSection_OBJECTS(string line);
+	vector<LPGAMEOBJECT> getAll() { return object; }
 };
 
