@@ -19,17 +19,19 @@ public:
 	Rect() { this->x = 0; this->y = 0; this->width = MAX_WIDTH_OF_QUADTREE; }
 	Rect(double x, double y) { this->x = x; this->y = y; this->width = MAX_WIDTH_OF_QUADTREE; }
 	Rect(double x, double y, float width) { this->x = x; this->y = y; this->width = width; }
+	
 };
 class Quadtree
 {	
 	vector<LPGAMEOBJECT> object;
+	
+	int level;
+	Rect size;
+public:
 	Quadtree* topLeftTree;
 	Quadtree* topRightTree;
 	Quadtree* botLeftTree;
 	Quadtree* botRightTree;
-	int level;
-	Rect size;
-public:
 	Quadtree();
 	Quadtree(int level,double x, double y, float width);
 	Quadtree(LPCWSTR path);

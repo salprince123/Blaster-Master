@@ -22,7 +22,7 @@ void Camera::Update(float player_x, float player_y)
 	player_y -= height / 2;
 	float _dy = abs(player_y - CGame::getCamera()->getCamPosY());
 
-	if (player_x <= 10 && player_y < CGame::GetInstance()->GetScreenHeight() / 2) CGame::getCamera()->SetCamPos(0, 0.0f);
+	/*if (player_x <= 10 && player_y < CGame::GetInstance()->GetScreenHeight() / 2) CGame::getCamera()->SetCamPos(0, 0.0f);
 	else if (_dy > CGame::GetInstance()->GetScreenHeight() * 2 / 3) CGame::getCamera()->SetCamPos(round(player_x), CGame::GetInstance()->getCamPosY() + 100);
-	else CGame::getCamera()->SetCamPos(round(player_x), round(player_y));
+	else */CGame::getCamera()->SetCamPos(round(player_x), round(player_y));
 }

@@ -69,7 +69,7 @@
     <ClCompile Include="Utils.cpp">
       <Filter>Source Files\General</Filter>
     </ClCompile>
-    <ClCompile Include="Mario.cpp">
+    <ClCompile Include="CMario.cpp">
       <Filter>Source Files\Player</Filter>
     </ClCompile>
     <ClCompile Include="Animations.cpp">
@@ -104,6 +104,15 @@
     </ClCompile>
     <ClCompile Include="Quadtree.cpp">
       <Filter>Source Files\Quadtree</Filter>
+    </ClCompile>
+    <ClCompile Include="FrogWheel.cpp">
+      <Filter>Source Files\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="FrogBody.cpp">
+      <Filter>Source Files\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="FrogGun.cpp">
+      <Filter>Source Files\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -163,6 +172,15 @@
     </ClInclude>
     <ClInclude Include="Define.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FrogWheel.h">
+      <Filter>Header Files\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="FrogBody.h">
+      <Filter>Header Files\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="FrogGun.h">
+      <Filter>Header Files\Player</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

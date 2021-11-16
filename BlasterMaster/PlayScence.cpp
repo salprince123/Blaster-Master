@@ -169,7 +169,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
 
 	obj->SetAnimationSet(ani_set);
-	objects.push_back(obj);
+	staticObjects.push_back(obj);
 }
 
 void CPlayScene::_ParseSection_QUAD(string line)
@@ -177,10 +177,7 @@ void CPlayScene::_ParseSection_QUAD(string line)
 	vector<string> tokens = split(line);
 	DebugOut(L"--> %s\n", ToWSTR(line).c_str());
 	LPCWSTR path = ToLPCWSTR(tokens[0]);
-	quadtree = new Quadtree(path);
-	vector<LPGAMEOBJECT> quad = quadtree->getAll();
-	objects.insert(objects.end(), quad.begin(), quad.end());
-	DebugOut(L"READ QUADTREE SUCCESS, HAVE %d OBJECTS\n", objects.size());
+	quadtree = new Quadtree(path);	
 	quadtree->Split();
 }
 void CPlayScene::Load()
@@ -236,18 +233,38 @@ void CPlayScene::Update(DWORD dt)
 {
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
 	// TO-DO: This is a "dirty" way, need a more organized way 
-
+	Camera* camera = CGame::getCamera();
+	CGame* game = CGame::GetInstance();
 	vector<LPGAMEOBJECT> coObjects;
 	for (size_t i = 1; i < objects.size(); i++)
 	{
 		coObjects.push_back(objects[i]);
 	}
-
+	float camX = camera->getCamPosX();
+	float camY = camera->getCamPosY();
+	float camWidth = game->GetScreenWidth();
+	float camHeight = game->GetScreenHeight();
+	//DebugOut(L"[CAMPOS] %f %f\n", camera->getCamPosX(), camera->getCamPosY());
+	vector<LPGAMEOBJECT> topLeft = quadtree->search(camX, camY);
+	vector<LPGAMEOBJECT> topRight = quadtree->search((float)(camX+camHeight), camY);
+	vector<LPGAMEOBJECT> botLeft = quadtree->search(camX, (float)(camY+camWidth));
+	vector<LPGAMEOBJECT> botRight = quadtree->search((float)(camX+camHeight), (float)(camY+camWidth));
+	//vector<LPGAMEOBJECT> quad = quadtree->botLeftTree->getAll();
+	//vector<LPGAMEOBJECT> quad1 = quadtree->topLeftTree->getAll();
+	objects.clear();
+	objects.insert(objects.end(), topLeft.begin(), topLeft.end());
+	objects.insert(objects.end(), topRight.begin(), topRight.end());
+	objects.insert(objects.end(), botLeft.begin(), botLeft.end());
+	objects.insert(objects.end(), botRight.begin(), botRight.end());
+	//DebugOut(L"topLeft have %d, topRight have %d, botLeft have %d, botRight have %d\n", topLeft.size(), topRight.size(), botLeft.size(), botRight.size());
 	for (size_t i = 0; i < objects.size(); i++)
 	{
 		objects[i]->Update(dt, &coObjects);
 	}
-
+	for (size_t i = 0; i < staticObjects.size(); i++)
+	{
+		staticObjects[i]->Update(dt, &coObjects);
+	}
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
 	if (player == NULL) return; 
 
@@ -255,10 +272,10 @@ void CPlayScene::Update(DWORD dt)
 	float cx, cy;
 	player->GetPosition(cx, cy);
 	
-	CGame *game = CGame::GetInstance();
-	Camera* camera = CGame::getCamera();
+	
+	
 	camera->SetSize(game->GetScreenWidth(), game->GetScreenHeight());
-	//camera->Update(cx, cy);
+	camera->Update(cx, cy);
 	/*
 	* ================OLD CODE CAMERA=====================
 		//cx -= game->GetScreenWidth() / 2;
@@ -275,8 +292,11 @@ void CPlayScene::Update(DWORD dt)
 
 void CPlayScene::Render()
 {
+	
 	for (int i = 0; i < objects.size(); i++)
 		objects[i]->Render();
+	for (size_t i = 0; i < staticObjects.size(); i++)
+		staticObjects[i]->Render();
 }
 
 /*

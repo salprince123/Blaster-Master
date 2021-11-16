@@ -119,13 +119,7 @@ void Quadtree::Split()
 {
     double pX = this->size.x;
     double pY = this->size.y;
-    float width = this->size.width / 2;
-    if (width <= MIN_WIDTH_OF_QUADTREE)
-    {
-        //DebugOut(L"LEVEL %d LEFT: %d, RIGHT: %d, TOP %d, BOTTOM %d \n", this->level, topLeftTree->getAll().size(), topRightTree->getAll().size(), botLeftTree->getAll().size(), botRightTree->getAll().size());
-        DebugOut(L"RRRRRR LEVEL %d SIZE %d %f %f\n", this->level, this->object.size(), this->size.x, this->size.y);
-        return;
-    }
+    float width = this->size.width / 2;    
     topLeftTree = new Quadtree(this->level + 1, pX, pY, width);
     topRightTree= new Quadtree(this->level + 1, pX+width, this->size.y, width);
     botLeftTree= new Quadtree(this->level + 1, pX, pY+width, width);
@@ -137,11 +131,21 @@ void Quadtree::Split()
         botLeftTree->AddObject(object[i]);
         botRightTree->AddObject(object[i]);
     }
+    if (width <= MIN_WIDTH_OF_QUADTREE)
+    {
+        //DebugOut(L"LEVEL %d LEFT: %d, RIGHT: %d, TOP %d, BOTTOM %d \n", this->level, topLeftTree->getAll().size(), topRightTree->getAll().size(), botLeftTree->getAll().size(), botRightTree->getAll().size());
+        //DebugOut(L"RRRRRR LEVEL %d SIZE %d %f %f\n", this->level, this->object.size(), this->size.x, this->size.y);
+        return;
+    }
+    else
+    {
         topLeftTree->Split();
         topRightTree->Split();
         botLeftTree->Split();
         botRightTree->Split();
-        DebugOut(L"LEVEL %d SIZE %d %f %f\n", this->level, this->object.size(), this->size.x, this->size.y);
+        //DebugOut(L"LEVEL %d SIZE %d %f %f\n", this->level, this->object.size(), this->size.x, this->size.y);
+    }
+        
     //DK dừng: width =1/2 camera     
 }
 void Quadtree::Clear()
@@ -157,6 +161,7 @@ bool Quadtree::inBoundary(double x, double y)
 }
 vector<LPGAMEOBJECT> Quadtree::search(double x, double y)
 {
+    //DebugOut(L"YOU ARE IN SEARCH      %d\n", this->level);
     Rect botRight(size.x + size.width, size.y + size.width);
     // Current quad cannot contain it
     if (!inBoundary(x,y))
@@ -172,6 +177,7 @@ vector<LPGAMEOBJECT> Quadtree::search(double x, double y)
         // Indicates topLeftTree
         if ((size.y + botRight.y) / 2 >= y)
         {
+            DebugOut(L"YOU ARE IN TOP LEFT      %d\n", this->level);
             if (topLeftTree == NULL)
                 return {};
             return topLeftTree->search(x,y);
@@ -180,6 +186,7 @@ vector<LPGAMEOBJECT> Quadtree::search(double x, double y)
         // Indicates botLeftTree
         else
         {
+            DebugOut(L"YOU ARE IN BOT LEFT      %d\n", this->level);
             if (botLeftTree == NULL)
                 return {};
             return botLeftTree->search(x,y);
@@ -190,6 +197,7 @@ vector<LPGAMEOBJECT> Quadtree::search(double x, double y)
         // Indicates topRightTree
         if ((size.y + botRight.y) / 2 >= y)
         {
+            DebugOut(L"YOU ARE IN TOP RIGHT      %d\n", this->level);
             if (topRightTree == NULL)
                 return {};
             return topRightTree->search(x,y);
@@ -198,6 +206,7 @@ vector<LPGAMEOBJECT> Quadtree::search(double x, double y)
         // Indicates botRightTree
         else
         {
+            DebugOut(L"YOU ARE IN BOT RIGHT      %d\n", this->level);
             if (botRightTree == NULL)
                 return {};
             return botRightTree->search(x,y);

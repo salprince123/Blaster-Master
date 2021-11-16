@@ -182,7 +182,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	game->Load(L"mario-sample.txt");
 
 	SetWindowPos(hWnd, 0, 400, 300, SCREEN_WIDTH*2, SCREEN_HEIGHT*2,  SWP_NOOWNERZORDER | SWP_NOZORDER);
-
+	//SetWindowPos(hWnd, 0, 0, 0, SCREEN_WIDTH * 2, SCREEN_HEIGHT * 2, SWP_NOOWNERZORDER | SWP_NOZORDER);
 	Run();
 
 	return 0;
