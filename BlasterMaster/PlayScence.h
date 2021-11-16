@@ -7,6 +7,10 @@
 #include "Mario.h"
 #include "Quadtree.h"
 #include "Define.h"
+#include "Frog.h"
+#include "FrogGun.h"
+#include "FrogBody.h"
+#include "FrogWheel.h"
 using namespace std;
 
 
@@ -14,7 +18,7 @@ class CPlayScene: public CScene
 {
 protected: 
 	CMario *player;					// A play scene has to have player, right? 
-
+	Frog* player1;
 	vector<LPGAMEOBJECT> objects;
 	vector<LPGAMEOBJECT> staticObjects;
 	Quadtree* quadtree;
@@ -34,7 +38,7 @@ public:
 	virtual void Unload();
 
 	CMario * GetPlayer() { return player; } 
-
+	Frog* GetPlayer1() { return player1; }
 	//friend class CPlayScenceKeyHandler;
 };
 

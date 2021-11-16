@@ -114,6 +114,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	if (tokens.size() < 3) return; // skip invalid lines - an object set must have at least id, x, y
 
 	int object_type = atoi(tokens[0].c_str());
+	DebugOut(L"STATIC OBJECT TYPE= %d\n", object_type);
 	float x = atof(tokens[1].c_str());
 	float y = atof(tokens[2].c_str());
 
@@ -125,51 +126,96 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	switch (object_type)
 	{
-	case OBJECT_TYPE_MARIO:
-		if (player!=NULL) 
-		{
-			DebugOut(L"[ERROR] MARIO object was created before!\n");
-			return;
-		}
-		obj = new CMario(x,y); 
-		player = (CMario*)obj;  
+		case OBJECT_TYPE_MARIO:
+			if (player!=NULL) 
+			{
+				DebugOut(L"[ERROR] MARIO object was created before!\n");
+				return;
+			}
+			obj = new CMario(x,y); 
+			//dynamic_cast<CMario*>(obj)->gun = new FrogGun();
+			player = (CMario*)obj;  
 
-		DebugOut(L"[INFO] Player object created!\n");
-		break;
-	case OBJECT_TYPE_LADYBIRD:
-	{
-		int x0 = atof(tokens[4].c_str());
-		int y0 = atof(tokens[5].c_str());
-		int x1 = atof(tokens[6].c_str());
-		int y1 = atof(tokens[7].c_str());
-		obj = new LadyBird(x0,y0,x1,y1);
+			DebugOut(L"[INFO] Player object created!\n");
+			break;
+		case OBJECT_TYPE_FROG:
+			if (player1 != NULL)
+			{
+				DebugOut(L"[ERROR] FROG object was created before!\n");
+				return;
+			}
+			obj = new Frog(x, y);
+			player1 = (Frog*)obj;
+			//obj = new Background();
+			DebugOut(L"[INFO] FROG  object created!\n");
+			break;
 		
-		break;
-	} 
-	case OBJECT_TYPE_BOOM: obj = new Boom(); break;
-	case OBJECT_TYPE_BRICK: obj = new CBrick(); break;
-	case OBJECT_TYPE_BACKROUND: obj = new Background(); break;
-	//case OBJECT_TYPE_KOOPAS: obj = new CKoopas(); break;
-	case OBJECT_TYPE_PORTAL:
-		{	
-			float r = atof(tokens[4].c_str());
-			float b = atof(tokens[5].c_str());
-			int scene_id = atoi(tokens[6].c_str());
-			obj = new CPortal(x, y, r, b, scene_id);
+		case OBJECT_TYPE_FROG_GUN:
+		{
+			CGameObject* temp = new FrogGun();
+			temp->SetPosition(x, y);
+			LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
+			temp->SetAnimationSet(ani_set);
+			//staticObjects.push_back(temp);
+			if (player != NULL)
+			{
+				player->gun = dynamic_cast<FrogGun*>(temp) ;
+			}
+			//obj = new FrogGun();
+			break;
 		}
-		break;
-	default:
-		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
-		return;
+		case OBJECT_TYPE_FROG_BODY:
+		{
+			obj = new FrogBody();
+			break;
+		}
+		case OBJECT_TYPE_FROG_WHEEL:
+		{
+			obj = new FrogWheel();
+			break;
+		}
+		/*case OBJECT_TYPE_FROG_BODY:
+		{
+			FrogBody* temp = new FrogBody();
+			//temp->SetPosition(x, y);
+			if (player != NULL)
+			{
+				player->bodyUp = (FrogBody*)temp;
+			}
+			break;
+		}
+		case OBJECT_TYPE_FROG_WHEEL:
+		{
+			FrogWheel* temp = new FrogWheel();
+			//temp->SetPosition(x, y);
+			if (player != NULL)
+			{
+				player->wheelLeft = (FrogWheel*)temp;
+			}
+			break;
+		}*/
+		case OBJECT_TYPE_PORTAL:
+			{	
+				float r = atof(tokens[4].c_str());
+				float b = atof(tokens[5].c_str());
+				int scene_id = atoi(tokens[6].c_str());
+				obj = new CPortal(x, y, r, b, scene_id);
+			}
+			break;
+		default:
+			DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
+			return;
 	}
 
 	// General object setup
-	obj->SetPosition(x, y);
-
-	LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
-
-	obj->SetAnimationSet(ani_set);
-	staticObjects.push_back(obj);
+	if (obj != NULL)
+	{
+		obj->SetPosition(x, y);
+		LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
+		obj->SetAnimationSet(ani_set);
+		staticObjects.push_back(obj);
+	}	
+	//DebugOut(L"STATIC OBJECT HAVE %d\n", staticObjects.size());
 }
 
 void CPlayScene::_ParseSection_QUAD(string line)
@@ -204,11 +250,12 @@ void CPlayScene::Load()
 			section = SCENE_SECTION_ANIMATIONS; continue; }
 		if (line == "[ANIMATION_SETS]") { 
 			section = SCENE_SECTION_ANIMATION_SETS; continue; }
-		if (line == "[OBJECTS]") { 
-			section = SCENE_SECTION_OBJECTS; continue; }
 		if (line == "[QUADTREE]") {
 			section = SCENE_SECTION_QUAD; continue;
 		}
+		if (line == "[OBJECTS]") { 
+			section = SCENE_SECTION_OBJECTS; continue; }
+		
 		if (line[0] == '[') { section = SCENE_SECTION_UNKNOWN; continue; }	
 
 		switch (section)
@@ -217,7 +264,7 @@ void CPlayScene::Load()
 			case SCENE_SECTION_SPRITES: _ParseSection_SPRITES(line); break;
 			case SCENE_SECTION_ANIMATIONS: _ParseSection_ANIMATIONS(line); break;
 			case SCENE_SECTION_ANIMATION_SETS: _ParseSection_ANIMATION_SETS(line); break;
-			case SCENE_SECTION_OBJECTS: _ParseSection_OBJECTS(line); break;
+			case SCENE_SECTION_OBJECTS: _ParseSection_OBJECTS(line); DebugOut(L"STATIC OBJECT  \n") ; break;
 			case SCENE_SECTION_QUAD: _ParseSection_QUAD(line); break;
 		}
 	}
@@ -292,7 +339,7 @@ void CPlayScene::Update(DWORD dt)
 
 void CPlayScene::Render()
 {
-	
+	//DebugOut(L"STATIC OBJECT HAVE %d\n", staticObjects.size());
 	for (int i = 0; i < objects.size(); i++)
 		objects[i]->Render();
 	for (size_t i = 0; i < staticObjects.size(); i++)

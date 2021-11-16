@@ -23,7 +23,13 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	// Calculate dx, dy 
 	CGameObject::Update(dt);
-
+	//update all child 
+	if (this->gun != NULL)
+	{
+		DebugOut(L"HIHIHIHIHIIHIH\n");
+		this->gun->UpdateWithPlayer(dt, coObjects, x, y);
+	}
+	else DebugOut(L"HAHAHAHAHHA\n");
 	// Simple fall down
 	vy += MARIO_GRAVITY*dt;
 	//if (x <= 0 && y> CGame::GetInstance()->GetScreenHeight() / 2) x = 0;

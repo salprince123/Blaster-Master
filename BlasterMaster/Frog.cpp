@@ -77,7 +77,7 @@ void Frog::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void Frog::Render()
 {
-	int ani = -1;
+	/*int ani = -1;
 	if (state == FROG_STATE_DIE)
 		ani = FROG_ANI_DIE;
 	else
@@ -101,7 +101,7 @@ void Frog::Render()
 			}
 			else if (vx > 0)
 				ani = FROG_ANI_SMALL_WALKING_RIGHT;
-			else ani = FROG_ANI_SMALL_WALKING_LEFT;*/
+			else ani = FROG_ANI_SMALL_WALKING_LEFT;
 			//render here
 		}
 
@@ -110,7 +110,7 @@ void Frog::Render()
 
 	animation_set->at(ani)->Render(x, y, alpha);
 
-	//RenderBoundingBox();
+	//RenderBoundingBox();*/
 }
 
 void Frog::SetState(int state)
