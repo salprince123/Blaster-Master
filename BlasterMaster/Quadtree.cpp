@@ -177,7 +177,7 @@ vector<LPGAMEOBJECT> Quadtree::search(double x, double y)
         // Indicates topLeftTree
         if ((size.y + botRight.y) / 2 >= y)
         {
-            DebugOut(L"YOU ARE IN TOP LEFT      %d\n", this->level);
+            //DebugOut(L"YOU ARE IN TOP LEFT      %d\n", this->level);
             if (topLeftTree == NULL)
                 return {};
             return topLeftTree->search(x,y);
@@ -186,7 +186,7 @@ vector<LPGAMEOBJECT> Quadtree::search(double x, double y)
         // Indicates botLeftTree
         else
         {
-            DebugOut(L"YOU ARE IN BOT LEFT      %d\n", this->level);
+            //DebugOut(L"YOU ARE IN BOT LEFT      %d\n", this->level);
             if (botLeftTree == NULL)
                 return {};
             return botLeftTree->search(x,y);
@@ -197,7 +197,7 @@ vector<LPGAMEOBJECT> Quadtree::search(double x, double y)
         // Indicates topRightTree
         if ((size.y + botRight.y) / 2 >= y)
         {
-            DebugOut(L"YOU ARE IN TOP RIGHT      %d\n", this->level);
+           // DebugOut(L"YOU ARE IN TOP RIGHT      %d\n", this->level);
             if (topRightTree == NULL)
                 return {};
             return topRightTree->search(x,y);
@@ -206,7 +206,7 @@ vector<LPGAMEOBJECT> Quadtree::search(double x, double y)
         // Indicates botRightTree
         else
         {
-            DebugOut(L"YOU ARE IN BOT RIGHT      %d\n", this->level);
+           // DebugOut(L"YOU ARE IN BOT RIGHT      %d\n", this->level);
             if (botRightTree == NULL)
                 return {};
             return botRightTree->search(x,y);

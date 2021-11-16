@@ -114,6 +114,9 @@
     <ClCompile Include="FrogGun.cpp">
       <Filter>Source Files\Player</Filter>
     </ClCompile>
+    <ClCompile Include="Frog.cpp">
+      <Filter>Source Files\Player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animations.h">
@@ -180,6 +183,9 @@
       <Filter>Header Files\Player</Filter>
     </ClInclude>
     <ClInclude Include="FrogGun.h">
+      <Filter>Header Files\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Frog.h">
       <Filter>Header Files\Player</Filter>
     </ClInclude>
   </ItemGroup>

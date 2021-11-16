@@ -131,6 +131,7 @@
     <ClCompile Include="Brick.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="Frog.cpp" />
     <ClCompile Include="FrogBody.cpp" />
     <ClCompile Include="FrogGun.cpp" />
     <ClCompile Include="FrogWheel.cpp" />
@@ -155,6 +156,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Define.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="Frog.h" />
     <ClInclude Include="FrogBody.h" />
     <ClInclude Include="FrogGun.h" />
     <ClInclude Include="FrogWheel.h" />
