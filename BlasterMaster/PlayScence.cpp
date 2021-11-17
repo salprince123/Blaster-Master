@@ -1,3 +1,4 @@
+#pragma warning( disable : 26451 )
 #include <iostream>
 #include <fstream>
 
@@ -126,43 +127,23 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	switch (object_type)
 	{
-		case OBJECT_TYPE_MARIO:
-			if (player!=NULL) 
+		case OBJECT_TYPE_FROG:
+		{
+			if (player != NULL)
 			{
 				DebugOut(L"[ERROR] MARIO object was created before!\n");
 				return;
 			}
-			obj = new CMario(x,y); 
-			//dynamic_cast<CMario*>(obj)->gun = new FrogGun();
-			player = (CMario*)obj;  
-
+			obj = new Frog(x, y);
+			player = (Frog*)obj;
 			DebugOut(L"[INFO] Player object created!\n");
 			break;
-		case OBJECT_TYPE_FROG:
-			if (player1 != NULL)
-			{
-				DebugOut(L"[ERROR] FROG object was created before!\n");
-				return;
-			}
-			obj = new Frog(x, y);
-			player1 = (Frog*)obj;
-			//obj = new Background();
-			DebugOut(L"[INFO] FROG  object created!\n");
-			break;
+		}	
 		
 		case OBJECT_TYPE_FROG_GUN:
-		{
-			/*FrogGun* temp = new FrogGun();
-			temp->SetPosition(x, y);
-			LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
-			temp->SetAnimationSet(ani_set);
-			//staticObjects.push_back(temp);
-			if (player != NULL)
-			{
-				player->gun = temp ;
-			}*/
+		{			
 			obj = new FrogGun();
-			//dynamic_cast<FrogGun*>(obj)->player = player;
+			gun = (FrogGun*)obj;
 			break;
 		}
 		case OBJECT_TYPE_FROG_BODY:
@@ -180,7 +161,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			obj = new FrogWheel();
 			int type = atoi(tokens[4].c_str());
 			dynamic_cast<FrogWheel*>(obj)->SetType(type);
-			DebugOut(L"[STATE WHEEL] %d\n", type);
+			//DebugOut(L"[STATE WHEEL] %d\n", type);
 			if (type == FROG_WHEEL_TYPE_LEFT)
 				wheelLeft = (FrogWheel*)obj;
 			else wheelRight = (FrogWheel*)obj;
@@ -235,7 +216,8 @@ void CPlayScene::_ParseSection_QUAD(string line)
 	vector<string> tokens = split(line);
 	DebugOut(L"--> %s\n", ToWSTR(line).c_str());
 	LPCWSTR path = ToLPCWSTR(tokens[0]);
-	quadtree = new Quadtree(path);	
+	quadtree = new Quadtree(path);
+	//this->objects = quadtree->getAll();
 	quadtree->Split();
 }
 void CPlayScene::Load()
@@ -284,7 +266,7 @@ void CPlayScene::Load()
 	f.close();
 
 	CTextures::GetInstance()->Add(ID_TEX_BBOX, L"textures\\bbox.png", D3DCOLOR_XRGB(255, 255, 255));
-
+	
 	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
 }
 
@@ -292,6 +274,7 @@ void CPlayScene::Update(DWORD dt)
 {
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
 	// TO-DO: This is a "dirty" way, need a more organized way 
+	
 	Camera* camera = CGame::getCamera();
 	CGame* game = CGame::GetInstance();
 	vector<LPGAMEOBJECT> coObjects;
@@ -305,9 +288,9 @@ void CPlayScene::Update(DWORD dt)
 	float camHeight = game->GetScreenHeight();
 	//DebugOut(L"[CAMPOS] %f %f\n", camera->getCamPosX(), camera->getCamPosY());
 	vector<LPGAMEOBJECT> topLeft = quadtree->search(camX, camY);
-	vector<LPGAMEOBJECT> topRight = quadtree->search((float)(camX+camWidth), camY);
-	vector<LPGAMEOBJECT> botLeft = quadtree->search(camX, (float)(camY+camHeight));
-	vector<LPGAMEOBJECT> botRight = quadtree->search((float)(camX+camWidth), (float)(camY+camHeight));
+	vector<LPGAMEOBJECT> topRight = quadtree->search((camX+camWidth), camY);
+	vector<LPGAMEOBJECT> botLeft = quadtree->search(camX, (camY+camHeight));
+	vector<LPGAMEOBJECT> botRight = quadtree->search((camX+camWidth), (camY+camHeight));
 	//vector<LPGAMEOBJECT> quad = quadtree->botLeftTree->getAll();
 	//vector<LPGAMEOBJECT> quad1 = quadtree->topLeftTree->getAll();
 	objects.clear();
@@ -330,22 +313,8 @@ void CPlayScene::Update(DWORD dt)
 	// Update camera to follow mario
 	float cx, cy;
 	player->GetPosition(cx, cy);
-	
-	
-	
 	camera->SetSize(game->GetScreenWidth(), game->GetScreenHeight());
 	camera->Update(cx, cy);
-	/*
-	* ================OLD CODE CAMERA=====================
-		//cx -= game->GetScreenWidth() / 2;
-		//cy -= game->GetScreenHeight() / 2;
-	
-		//_dy = abs(cy - CGame::getCamera()->getCamPosY());
-
-		//if(cx<=10 && cy< CGame::GetInstance()->GetScreenHeight()/2) CGame::getCamera()->SetCamPos(0, 0.0f);
-		//else if (_dy> CGame::GetInstance()->GetScreenHeight()*2/3) CGame::getCamera()->SetCamPos(round(cx), CGame::GetInstance()->getCamPosY()+100);
-		//else CGame::getCamera()->SetCamPos(round(cx), round(cy));
-	*/
 	
 }
 
@@ -374,13 +343,11 @@ void CPlayScene::Unload()
 
 void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 {
-	//DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
-
-	CMario *mario = ((CPlayScene*)scence)->GetPlayer();
+	Frog*mario = ((CPlayScene*)scence)->GetPlayer();
 	switch (KeyCode)
 	{
 	case DIK_S:
-		mario->SetState(MARIO_STATE_JUMP);
+		mario->SetState(FROG_STATE_JUMP);
 		break;
 	case DIK_R: 
 		mario->Reset();
@@ -391,14 +358,17 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 void CPlayScenceKeyHandler::KeyState(BYTE *states)
 {
 	CGame *game = CGame::GetInstance();
-	CMario *mario = ((CPlayScene*)scence)->GetPlayer();
-
+	Frog* mario = ((CPlayScene*)scence)->GetPlayer();
 	// disable control key when Mario die 
-	if (mario->GetState() == MARIO_STATE_DIE) return;
+	if (mario->GetState() == FROG_STATE_DIE) return;
 	if (game->IsKeyDown(DIK_RIGHT))
-		mario->SetState(MARIO_STATE_WALKING_RIGHT);
+		mario->SetState(FROG_STATE_WALKING_RIGHT);
 	else if (game->IsKeyDown(DIK_LEFT))
-		mario->SetState(MARIO_STATE_WALKING_LEFT);
+		mario->SetState(FROG_STATE_WALKING_LEFT);
 	else
-		mario->SetState(MARIO_STATE_IDLE);
+	{
+		//DebugOut(L"KEYSTATE %f \n", mario->vx);
+		mario->SetState(FROG_STATE_IDLE);
+	}
+		
 }

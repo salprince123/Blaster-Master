@@ -69,9 +69,6 @@
     <ClCompile Include="Utils.cpp">
       <Filter>Source Files\General</Filter>
     </ClCompile>
-    <ClCompile Include="CMario.cpp">
-      <Filter>Source Files\Player</Filter>
-    </ClCompile>
     <ClCompile Include="Animations.cpp">
       <Filter>Source Files\General</Filter>
     </ClCompile>
@@ -145,9 +142,6 @@
     </ClInclude>
     <ClInclude Include="Utils.h">
       <Filter>Header Files\General</Filter>
-    </ClInclude>
-    <ClInclude Include="Mario.h">
-      <Filter>Header Files\Player</Filter>
     </ClInclude>
     <ClInclude Include="Brick.h">
       <Filter>Header Files\Object</Filter>

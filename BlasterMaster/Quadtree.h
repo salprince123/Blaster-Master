@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include <iostream>
-#include <fstream>;
+#include <fstream>
 #include "Utils.h"
 #include "GameObject.h"
 #include "Define.h"

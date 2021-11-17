@@ -2,9 +2,9 @@
 #include "PlayScence.h"
 FrogBody::FrogBody()
 {
-	if(type== FROG_BODY_TYPE_UP)
-		this->SetState(FROG_BODY_UP_STATE_LEFT);
-	this->SetState(FROG_BODY_DOWN_STATE_LEFT_RIGHT);
+	if(this->type == FROG_BODY_TYPE_UP)
+		this->SetState(FROG_BODY_UP_STATE_RIGHT);
+	else this->SetState(FROG_BODY_DOWN_STATE_LEFT_RIGHT);
 }
 void FrogBody::Render()
 {
@@ -112,30 +112,50 @@ void FrogBody::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			break;
 		}
 	}*/
+	
 	if (type == FROG_BODY_TYPE_UP)
 	{
-		CMario* mario = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+		Frog* mario = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+		//DebugOut(L"Frog state: %d %f\n", mario->GetState(), mario->vx);
 		switch (mario->GetState())
 		{
-			case MARIO_STATE_WALKING_LEFT:
-			{
+			case FROG_STATE_WALKING_LEFT:
+			{				
 				this->SetState(FROG_BODY_UP_STATE_LEFT);
 				if (this->type == FROG_BODY_TYPE_DOWN)
 					this->SetState(FROG_BODY_DOWN_STATE_LEFT_RIGHT);
-				this->x = mario->x + DISTANCE_FROM_FROG_STATIC_LEFT_X_UP*2;
+				this->x = mario->x+FROG_GUN_BBOX_WIDTH - 0.5 * FROG_WHEEL_BBOX_WIDTH;
 				
 				break;
 			}
-			case MARIO_STATE_WALKING_RIGHT:
+			case FROG_STATE_WALKING_RIGHT:
 			{
 				this->SetState(FROG_BODY_UP_STATE_RIGHT);
 				if (this->type == FROG_BODY_TYPE_DOWN)
 					this->SetState(FROG_BODY_DOWN_STATE_LEFT_RIGHT);
-				this->x = mario->x - DISTANCE_FROM_FROG_STATIC_LEFT_X_UP * 2;
+				this->x = mario->x+0.5* FROG_WHEEL_BBOX_WIDTH;
 				break;
 			}	
+			case FROG_STATE_IDLE:
+			{
+				if (mario->nx < 0)
+				{
+					this->SetState(FROG_BODY_UP_STATE_LEFT);
+					if (this->type == FROG_BODY_TYPE_DOWN)
+						this->SetState(FROG_BODY_DOWN_STATE_LEFT_RIGHT);
+					this->x = mario->x + FROG_GUN_BBOX_WIDTH - 0.5 * FROG_WHEEL_BBOX_WIDTH;
+				}
+				else
+				{
+					this->SetState(FROG_BODY_UP_STATE_RIGHT);
+					if (this->type == FROG_BODY_TYPE_DOWN)
+						this->SetState(FROG_BODY_DOWN_STATE_LEFT_RIGHT);
+					this->x = mario->x + 0.5 * FROG_WHEEL_BBOX_WIDTH;
+				}
+				break;
+			}
 		}
-		this->y = mario->y - 50;
+		this->y = mario->y ;
 	}
 	else if (type == FROG_BODY_TYPE_DOWN)
 	{

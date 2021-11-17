@@ -61,8 +61,7 @@ void FrogWheel::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 	FrogBody* bodyDown = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetBodyDown();
 	if (this->type == FROG_WHEEL_TYPE_LEFT)
-	{
-		
+	{		
 		this->x = bodyDown->x - FROG_WHEEL_BBOX_WIDTH;
 		this->y = bodyDown->y + 0.5 * FROG_BODY_DOWN_BBOX_HEIGHT;
 	}
@@ -71,5 +70,7 @@ void FrogWheel::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		this->x = bodyDown->x + FROG_BODY_DOWN_BBOX_WIDTH;
 		this->y = bodyDown->y + 0.5 * FROG_BODY_DOWN_BBOX_HEIGHT;
 	}
+	/*if (((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer()->GetState() == FROG_STATE_JUMP)
+		this->y += 50;*/
 	CGameObject::Update(dt, coObjects);
 }

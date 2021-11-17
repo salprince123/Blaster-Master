@@ -4,7 +4,6 @@ Frog::Frog(float x, float y) : CGameObject()
 	level = FROG_LEVEL;
 	untouchable = 0;
 	SetState(FROG_STATE_IDLE);
-
 	start_x = x;
 	start_y = y;
 	this->x = x;
@@ -17,7 +16,7 @@ void Frog::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CGameObject::Update(dt);
 
 	// Simple fall down
-	vy += FROG_GRAVITY * dt;
+	vy += FROG_GRAVITY*dt ;
 	//if (x <= 0 && y> CGame::GetInstance()->GetScreenHeight() / 2) x = 0;
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
@@ -76,41 +75,10 @@ void Frog::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 }
 
 void Frog::Render()
-{
-	/*int ani = -1;
-	if (state == FROG_STATE_DIE)
-		ani = FROG_ANI_DIE;
-	else
-		if (level == FROG_LEVEL)
-		{
-			if (vx == 0)
-			{
-				if (nx > 0) ani = FROG_ANI_IDLE_RIGHT;
-				else ani = FROG_ANI_IDLE_LEFT;
-			}
-			else if (vx > 0)
-				ani = FROG_ANI_WALKING_RIGHT;
-			else ani = FROG_ANI_WALKING_LEFT;
-		}
-		else if (level == PRINCE_LEVEL)
-		{
-			/*if (vx == 0)
-			{
-				if (nx > 0) ani = FROG_ANI_SMALL_IDLE_RIGHT;
-				else ani = FROG_ANI_SMALL_IDLE_LEFT;
-			}
-			else if (vx > 0)
-				ani = FROG_ANI_SMALL_WALKING_RIGHT;
-			else ani = FROG_ANI_SMALL_WALKING_LEFT;
-			//render here
-		}
-
-	int alpha = 255;
-	if (untouchable) alpha = 128;
-
-	animation_set->at(ani)->Render(x, y, alpha);
-
-	//RenderBoundingBox();*/
+{	
+	//int alpha = 255;
+	//animation_set->at(0)->Render(x, y, alpha);
+	//RenderBoundingBox();
 }
 
 void Frog::SetState(int state)
@@ -150,9 +118,6 @@ void Frog::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 	}
 }
 
-/*
-	Reset Mario status to the beginning state of a scene
-*/
 void Frog::Reset()
 {
 	SetState(FROG_STATE_IDLE);

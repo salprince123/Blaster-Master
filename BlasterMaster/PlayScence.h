@@ -1,4 +1,5 @@
 #pragma once
+
 #include "Game.h"
 #include "Textures.h"
 #include "Scence.h"
@@ -17,8 +18,7 @@ using namespace std;
 class CPlayScene: public CScene
 {
 protected: 
-	CMario *player;					// A play scene has to have player, right? 
-	Frog* player1;
+	Frog* player;
 	FrogGun* gun;
 	FrogBody* bodyUp;
 	FrogBody* bodyDown;
@@ -42,10 +42,9 @@ public:
 	virtual void Render();
 	virtual void Unload();
 
-	CMario * GetPlayer() { return player; } 
+	Frog* GetPlayer() { return player; }
 	FrogBody* GetBodyUp() { return bodyUp; }
 	FrogBody* GetBodyDown() { return bodyDown; }
-	Frog* GetPlayer1() { return player1; }
 	//friend class CPlayScenceKeyHandler;
 };
 
