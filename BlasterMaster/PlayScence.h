@@ -19,6 +19,11 @@ class CPlayScene: public CScene
 protected: 
 	CMario *player;					// A play scene has to have player, right? 
 	Frog* player1;
+	FrogGun* gun;
+	FrogBody* bodyUp;
+	FrogBody* bodyDown;
+	FrogWheel* wheelLeft;
+	FrogWheel* wheelRight;
 	vector<LPGAMEOBJECT> objects;
 	vector<LPGAMEOBJECT> staticObjects;
 	Quadtree* quadtree;
@@ -38,6 +43,8 @@ public:
 	virtual void Unload();
 
 	CMario * GetPlayer() { return player; } 
+	FrogBody* GetBodyUp() { return bodyUp; }
+	FrogBody* GetBodyDown() { return bodyDown; }
 	Frog* GetPlayer1() { return player1; }
 	//friend class CPlayScenceKeyHandler;
 };

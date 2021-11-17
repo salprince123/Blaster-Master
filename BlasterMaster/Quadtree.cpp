@@ -131,6 +131,7 @@ void Quadtree::Split()
         botLeftTree->AddObject(object[i]);
         botRightTree->AddObject(object[i]);
     }
+    //
     if (width <= MIN_WIDTH_OF_QUADTREE)
     {
         //DebugOut(L"LEVEL %d LEFT: %d, RIGHT: %d, TOP %d, BOTTOM %d \n", this->level, topLeftTree->getAll().size(), topRightTree->getAll().size(), botLeftTree->getAll().size(), botRightTree->getAll().size());
@@ -139,6 +140,7 @@ void Quadtree::Split()
     }
     else
     {
+        this->object.clear();
         topLeftTree->Split();
         topRightTree->Split();
         botLeftTree->Split();

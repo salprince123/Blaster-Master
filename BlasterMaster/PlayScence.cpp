@@ -114,7 +114,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	if (tokens.size() < 3) return; // skip invalid lines - an object set must have at least id, x, y
 
 	int object_type = atoi(tokens[0].c_str());
-	DebugOut(L"STATIC OBJECT TYPE= %d\n", object_type);
+	//DebugOut(L"STATIC OBJECT TYPE= %d\n", object_type);
 	float x = atof(tokens[1].c_str());
 	float y = atof(tokens[2].c_str());
 
@@ -152,26 +152,38 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		
 		case OBJECT_TYPE_FROG_GUN:
 		{
-			CGameObject* temp = new FrogGun();
+			/*FrogGun* temp = new FrogGun();
 			temp->SetPosition(x, y);
 			LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
 			temp->SetAnimationSet(ani_set);
 			//staticObjects.push_back(temp);
 			if (player != NULL)
 			{
-				player->gun = dynamic_cast<FrogGun*>(temp) ;
-			}
-			//obj = new FrogGun();
+				player->gun = temp ;
+			}*/
+			obj = new FrogGun();
+			//dynamic_cast<FrogGun*>(obj)->player = player;
 			break;
 		}
 		case OBJECT_TYPE_FROG_BODY:
 		{
 			obj = new FrogBody();
+			int type = atoi(tokens[4].c_str());
+			dynamic_cast<FrogBody*>(obj)->SetType(type);
+			if(type== FROG_BODY_TYPE_UP)
+				bodyUp = (FrogBody*)obj;
+			else bodyDown = (FrogBody*)obj;
 			break;
 		}
 		case OBJECT_TYPE_FROG_WHEEL:
 		{
 			obj = new FrogWheel();
+			int type = atoi(tokens[4].c_str());
+			dynamic_cast<FrogWheel*>(obj)->SetType(type);
+			DebugOut(L"[STATE WHEEL] %d\n", type);
+			if (type == FROG_WHEEL_TYPE_LEFT)
+				wheelLeft = (FrogWheel*)obj;
+			else wheelRight = (FrogWheel*)obj;
 			break;
 		}
 		/*case OBJECT_TYPE_FROG_BODY:
@@ -293,9 +305,9 @@ void CPlayScene::Update(DWORD dt)
 	float camHeight = game->GetScreenHeight();
 	//DebugOut(L"[CAMPOS] %f %f\n", camera->getCamPosX(), camera->getCamPosY());
 	vector<LPGAMEOBJECT> topLeft = quadtree->search(camX, camY);
-	vector<LPGAMEOBJECT> topRight = quadtree->search((float)(camX+camHeight), camY);
-	vector<LPGAMEOBJECT> botLeft = quadtree->search(camX, (float)(camY+camWidth));
-	vector<LPGAMEOBJECT> botRight = quadtree->search((float)(camX+camHeight), (float)(camY+camWidth));
+	vector<LPGAMEOBJECT> topRight = quadtree->search((float)(camX+camWidth), camY);
+	vector<LPGAMEOBJECT> botLeft = quadtree->search(camX, (float)(camY+camHeight));
+	vector<LPGAMEOBJECT> botRight = quadtree->search((float)(camX+camWidth), (float)(camY+camHeight));
 	//vector<LPGAMEOBJECT> quad = quadtree->botLeftTree->getAll();
 	//vector<LPGAMEOBJECT> quad1 = quadtree->topLeftTree->getAll();
 	objects.clear();

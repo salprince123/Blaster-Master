@@ -1,25 +1,28 @@
 #include "FrogGun.h"
-#include "Utils.h"
+#include "PlayScence.h"
 FrogGun::FrogGun()
 {
-	this->SetState(FROG_GUN_STATE_TOP_BOT);
+	this->SetState(FROG_GUN_STATE_LEFT);
 }
 void FrogGun::Render()
 {
 	int ani = 0;
 	switch (state)
 	{
-		case FROG_GUN_STATE_BOT_LEFT:
-			ani = FROG_GUN_ANI_BOT_LEFT;
+		case FROG_GUN_STATE_LEFT:
+			ani = FROG_GUN_ANI_LEFT;
 			break;
-		case FROG_GUN_STATE_LEFT_RIGHT:
-			ani = FROG_GUN_ANI_LEFT_RIGHT;
+		case FROG_GUN_STATE_RIGHT:
+			ani = FROG_GUN_ANI_RIGHT;
 			break;
-		case FROG_GUN_STATE_TOP_LEFT:
-			ani = FROG_GUN_ANI_TOP_LEFT;
+		case FROG_GUN_STATE_UP:
+			ani = FROG_GUN_ANI_UP;
 			break;
-		case FROG_GUN_STATE_TOP_BOT:
-			ani = FROG_GUN_ANI_TOP_BOT;
+		case FROG_GUN_STATE_LEFT_UP:
+			ani = FROG_GUN_ANI_LEFT_UP;
+			break;
+		case FROG_GUN_STATE_RIGHT_UP:
+			ani = FROG_GUN_ANI_RIGHT_UP;
 			break;
 	}
 	animation_set->at(ani)->Render(x, y);
@@ -36,7 +39,7 @@ void FrogGun::GetBoundingBox(float& l, float& t, float& r, float& b)
 void FrogGun::SetState(int state)
 {
 	this->state = state;
-	switch (this->state)
+	/*switch (this->state)
 	{
 		case FROG_GUN_STATE_BOT_LEFT:
 			break;
@@ -46,56 +49,69 @@ void FrogGun::SetState(int state)
 			break;
 		case FROG_GUN_STATE_TOP_BOT:
 			break;
-	}
+	}*/
 }
-void FrogGun::UpdateWithPlayer(DWORD dt, vector<LPGAMEOBJECT>* coObjects, float pX, float pY)
-{	
-	switch (state)
-	{
-	case FROG_GUN_STATE_BOT_LEFT:
-	{
-		break;
-	}
-	case FROG_GUN_STATE_LEFT_RIGHT:
-	{
-		break;
-	}
-	case FROG_GUN_STATE_TOP_LEFT:
-	{
-		break;
-	}
-	case FROG_GUN_STATE_TOP_BOT:
-	{
-		break;
-	}
-	}
-	this->x = pX;
-	this->y = pY;
-	DebugOut(L"GUN GOU %f %f\n", pX, pY);
-	CGameObject::Update(dt, coObjects);
-}
+
 void FrogGun::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	DebugOut(L"STATE %d\n", state);
-	switch (state)
+	//DebugOut(L"STATE %d\n", state);
+	FrogBody* bodyUp = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetBodyUp();
+	/*switch (state)
 	{
-	case FROG_GUN_STATE_BOT_LEFT:
+		case FROG_GUN_STATE_BOT_LEFT:
+		{
+			break;
+		}
+		case FROG_GUN_STATE_LEFT_RIGHT:
+		{
+			break;
+		}
+		case FROG_GUN_STATE_TOP_LEFT:
+		{
+			break;
+		}
+		case FROG_GUN_STATE_TOP_BOT:
+		{
+			break;
+		}
+	}*/
+	switch (bodyUp->GetState())
 	{
-		break;
+		case FROG_BODY_UP_STATE_LEFT:
+		{
+			this->SetState(FROG_GUN_STATE_LEFT);
+			this->x = bodyUp->x - FROG_GUN_BBOX_WIDTH;
+			this->y = bodyUp->y + 0.5 * FROG_BODY_UP_BBOX_HEIGHT;
+			break;
+		}
+		case FROG_BODY_UP_STATE_RIGHT:
+		{
+			this->SetState(FROG_GUN_STATE_RIGHT);
+			this->x = bodyUp->x + FROG_BODY_UP_BBOX_WIDTH*0.6 + FROG_GUN_BBOX_WIDTH;
+			this->y = bodyUp->y + 0.5 * FROG_BODY_UP_BBOX_HEIGHT;
+			break;
+		}
+		case FROG_BODY_UP_STATE_UP:
+		{
+			this->SetState(FROG_GUN_STATE_UP);
+			this->x = bodyUp->x + 0.5*FROG_BODY_UP_BBOX_WIDTH;
+			this->y = bodyUp->y - FROG_GUN_BBOX_HEIGHT;
+			break;
+		}
+		case FROG_BODY_UP_STATE_LEFT_UP:
+		{
+			this->SetState(FROG_GUN_STATE_LEFT_UP);
+			this->x = bodyUp->x - FROG_GUN_BBOX_WIDTH;
+			this->y = bodyUp->y - FROG_GUN_BBOX_HEIGHT;
+			break;
+		}
+		case FROG_BODY_UP_STATE_RIGHT_UP:
+		{
+			this->SetState(FROG_GUN_STATE_RIGHT_UP);
+			this->x = bodyUp->x + FROG_GUN_BBOX_WIDTH+ FROG_BODY_UP_BBOX_WIDTH;
+			this->y = bodyUp->y ;
+			break;
+		}
 	}
-	case FROG_GUN_STATE_LEFT_RIGHT:
-	{
-		break;
-	}
-	case FROG_GUN_STATE_TOP_LEFT:
-	{
-		break;
-	}
-	case FROG_GUN_STATE_TOP_BOT:
-	{
-		break;
-	}
-	}
-	this->x += 1;
 	CGameObject::Update(dt, coObjects);
 }

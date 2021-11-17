@@ -1,8 +1,5 @@
 #pragma once
 #include "GameObject.h"
-#include "FrogGun.h"
-#include "FrogBody.h"
-#include "FrogWheel.h"
 
 #define MARIO_WALKING_SPEED		0.15f 
 //0.1f
@@ -52,11 +49,11 @@ class CMario : public CGameObject
 
 	
 public: 
-	FrogGun* gun;
+	/*FrogGun* gun;
 	FrogBody* bodyUp;
 	FrogBody* bodyDown;
 	FrogWheel* wheelLeft;
-	FrogWheel* wheelRight;
+	FrogWheel* wheelRight;*/
 	CMario(float x = 0.0f, float y = 0.0f);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *colliable_objects = NULL);
 	virtual void Render();
