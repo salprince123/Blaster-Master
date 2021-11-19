@@ -158,10 +158,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		}
 		case OBJECT_TYPE_FROG_WHEEL:
 		{
-			obj = new FrogWheel();
 			int type = atoi(tokens[4].c_str());
-			dynamic_cast<FrogWheel*>(obj)->SetType(type);
-			//DebugOut(L"[STATE WHEEL] %d\n", type);
+			obj = new FrogWheel(type);	
 			if (type == FROG_WHEEL_TYPE_LEFT)
 				wheelLeft = (FrogWheel*)obj;
 			else wheelRight = (FrogWheel*)obj;
