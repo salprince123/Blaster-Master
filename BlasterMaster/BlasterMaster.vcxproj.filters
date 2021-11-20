@@ -108,10 +108,10 @@
     <ClCompile Include="FrogBody.cpp">
       <Filter>Source Files\Player</Filter>
     </ClCompile>
-    <ClCompile Include="FrogGun.cpp">
+    <ClCompile Include="Frog.cpp">
       <Filter>Source Files\Player</Filter>
     </ClCompile>
-    <ClCompile Include="Frog.cpp">
+    <ClCompile Include="FrogGun.cpp">
       <Filter>Source Files\Player</Filter>
     </ClCompile>
   </ItemGroup>

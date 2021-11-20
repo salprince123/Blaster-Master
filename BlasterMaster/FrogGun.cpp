@@ -66,28 +66,26 @@ void FrogGun::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 		case FROG_BODY_UP_STATE_RIGHT:
 		{
-			this->x = bodyUp->x + FROG_BODY_UP_BBOX_WIDTH * 0.6 + FROG_GUN_BBOX_WIDTH;
-			this->y = bodyUp->y + 0.5 * FROG_BODY_UP_BBOX_HEIGHT;
-			this->SetState(FROG_GUN_STATE_RIGHT);
+			this->x = bodyUp->x - FROG_GUN_BBOX_WIDTH;
+			this->y = bodyUp->y;
 			break;
 		}
 		case FROG_BODY_UP_STATE_UP:
 		{
-			this->x = bodyUp->x + 0.5 * FROG_BODY_UP_BBOX_WIDTH;
-			this->y = bodyUp->y - FROG_GUN_BBOX_HEIGHT;
-			this->SetState(FROG_GUN_STATE_UP);
+			this->y = bodyUp->y + 0.5 * FROG_BODY_UP_BBOX_HEIGHT;
+			this->SetState(FROG_GUN_STATE_LEFT);
 			break;
 		}
 		case FROG_BODY_UP_STATE_LEFT_UP:
 		{
-			this->x = bodyUp->x - FROG_GUN_BBOX_WIDTH;
-			this->y = bodyUp->y - FROG_GUN_BBOX_HEIGHT;
-			this->SetState(FROG_GUN_STATE_LEFT_UP);
+			this->x = bodyUp->x - FROG_GUN_BBOX_WIDTH;			
+			this->y = bodyUp->y + 0.5 * FROG_BODY_UP_BBOX_HEIGHT;
+			this->SetState(FROG_GUN_STATE_LEFT);
 			break;
 		}
 		case FROG_BODY_UP_STATE_RIGHT_UP:
 		{
-			this->x = bodyUp->x + FROG_GUN_BBOX_WIDTH + FROG_BODY_UP_BBOX_WIDTH;
+			this->x = bodyUp->x;
 			this->y = bodyUp->y;
 			this->SetState(FROG_GUN_STATE_RIGHT_UP);
 			break;
