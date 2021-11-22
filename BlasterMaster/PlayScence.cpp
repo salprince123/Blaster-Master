@@ -341,14 +341,15 @@ void CPlayScene::Unload()
 
 void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 {
-	Frog*mario = ((CPlayScene*)scence)->GetPlayer();
+	Frog* frog = ((CPlayScene*)scence)->GetPlayer();
 	switch (KeyCode)
 	{
 	case DIK_S:
-		mario->SetState(FROG_STATE_JUMP);
+		if(frog->GetState() != FROG_STATE_FALLING_DOWN && frog->GetState() != FROG_STATE_JUMPING_UP)
+			frog->SetState(FROG_STATE_JUMP);
 		break;
 	case DIK_R: 
-		mario->Reset();
+		frog->Reset();
 		break;
 	}
 }
@@ -356,17 +357,18 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 void CPlayScenceKeyHandler::KeyState(BYTE *states)
 {
 	CGame *game = CGame::GetInstance();
-	Frog* mario = ((CPlayScene*)scence)->GetPlayer();
+	Frog* frog = ((CPlayScene*)scence)->GetPlayer();
 	// disable control key when Mario die 
-	if (mario->GetState() == FROG_STATE_DIE) return;
+	if (frog->GetState() == FROG_STATE_DIE) return;
 	if (game->IsKeyDown(DIK_RIGHT))
-		mario->SetState(FROG_STATE_WALKING_RIGHT);
+		frog->SetState(FROG_STATE_WALKING_RIGHT);
 	else if (game->IsKeyDown(DIK_LEFT))
-		mario->SetState(FROG_STATE_WALKING_LEFT);
+		frog->SetState(FROG_STATE_WALKING_LEFT);
 	else
 	{
+		if(frog->GetState() != FROG_STATE_FALLING_DOWN && frog->GetState() != FROG_STATE_JUMPING_UP)
 		//DebugOut(L"KEYSTATE %f \n", mario->vx);
-		mario->SetState(FROG_STATE_IDLE);
+			frog->SetState(FROG_STATE_IDLE);
 	}
 		
 }

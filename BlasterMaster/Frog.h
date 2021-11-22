@@ -1,7 +1,9 @@
 #pragma once
 #include "GameObject.h"
+#include "Brick.h"
 
-#define FROG_WALKING_SPEED		0.25f 
+#include "Utils.h"
+#define FROG_WALKING_SPEED		0.15f 
 #define FROG_JUMP_SPEED_Y		0.5f
 #define FROG_JUMP_DEFLECT_SPEED 0.2f
 #define FROG_GRAVITY			0.002f
@@ -10,7 +12,10 @@
 #define FROG_STATE_WALKING_RIGHT	200
 #define FROG_STATE_WALKING_LEFT	300
 #define FROG_STATE_JUMP			400
-#define FROG_STATE_DIE				500
+#define FROG_STATE_JUMPING_UP	500
+#define FROG_STATE_FALLING_DOWN	600
+#define FROG_STATE_DIE				9000
+
 #define	FROG_LEVEL	1
 #define	PRINCE_LEVEL	2
 

@@ -12,28 +12,31 @@ Frog::Frog(float x, float y) : CGameObject()
 
 void Frog::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	DebugOut(L"FROG STATE: %d\n", GetState());
 	// Calculate dx, dy 
 	CGameObject::Update(dt);
 
 	// Simple fall down
 	vy += FROG_GRAVITY*dt ;
-	//if (x <= 0 && y> CGame::GetInstance()->GetScreenHeight() / 2) x = 0;
+	//Handle update state for Frog
+	if (GetState() == FROG_STATE_JUMPING_UP)
+	{
+		if (vy >= 0)
+			SetState(FROG_STATE_FALLING_DOWN);
+	}
+	//
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
-
 	coEvents.clear();
-
 	// turn off collision when die 
 	if (state != FROG_STATE_DIE)
 		CalcPotentialCollisions(coObjects, coEvents);
-
 	// reset untouchable timer if untouchable time has passed
 	if (GetTickCount64() - untouchable_start > FROG_UNTOUCHABLE_TIME)
 	{
 		untouchable_start = 0;
 		untouchable = 0;
 	}
-
 	// No collision occured, proceed normally
 	if (coEvents.size() == 0)
 	{
@@ -45,32 +48,21 @@ void Frog::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		float min_tx, min_ty, nx = 0, ny;
 		float rdx = 0;
 		float rdy = 0;
-
-		// TODO: This is a very ugly designed function!!!!
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
-
-		// how to push back Mario if collides with a moving objects, what if Mario is pushed this way into another object?
-		//if (rdx != 0 && rdx!=dx)
-		//	x += nx*abs(rdx); 
-
-		// block every object first!
 		x += min_tx * dx + nx * 0.4f;
 		y += min_ty * dy + ny * 0.4f;
-
 		if (nx != 0) vx = 0;
 		if (ny != 0) vy = 0;
-
-
-		//
-		// Collision logic with other objects
-		//
-		/*for (UINT i = 0; i < coEventsResult.size(); i++)
+		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
-		}*/
+			if (dynamic_cast<CBrick*>(e->obj))
+			{
+				if (GetState() == FROG_STATE_FALLING_DOWN)
+					SetState(FROG_STATE_IDLE);
+			}
+		}
 	}
-
-	// clean up collision events
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
 }
 
@@ -87,22 +79,27 @@ void Frog::SetState(int state)
 
 	switch (state)
 	{
-	case FROG_STATE_WALKING_RIGHT:
-		vx = FROG_WALKING_SPEED;
-		nx = 1;
-		break;
-	case FROG_STATE_WALKING_LEFT:
-		vx = -FROG_WALKING_SPEED;
-		nx = -1;
-		break;
-	case FROG_STATE_JUMP:
-		vy = -FROG_JUMP_SPEED_Y;
-		break;
-	case FROG_STATE_IDLE:
-		vx = 0;
-		break;
-	case FROG_STATE_DIE:
-		break;
+		case FROG_STATE_WALKING_RIGHT:
+			vx = FROG_WALKING_SPEED;
+			nx = 1;
+			break;
+		case FROG_STATE_WALKING_LEFT:
+			vx = -FROG_WALKING_SPEED;
+			nx = -1;
+			break;
+		case FROG_STATE_JUMP:
+			vy = -FROG_JUMP_SPEED_Y;
+			SetState(FROG_STATE_JUMPING_UP);
+			break;
+		case FROG_STATE_JUMPING_UP:
+			break;
+		case FROG_STATE_FALLING_DOWN:
+			break;
+		case FROG_STATE_IDLE:
+			vx = 0;
+			break;
+		case FROG_STATE_DIE:
+			break;
 	}
 }
 

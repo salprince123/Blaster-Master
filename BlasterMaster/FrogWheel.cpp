@@ -13,7 +13,7 @@ FrogWheel::FrogWheel(int type)
 void FrogWheel::Render()
 {
 	int ani = FROG_WHEEL_ANI_UP_RIGHT;
-	DebugOut(L"WHeel STATE: %d\n", this->state);
+	//DebugOut(L"WHeel STATE: %d\n", this->state);
 	switch (state)
 	{
 		case FROG_WHEEL_STATE_UP_RIGHT:
@@ -88,6 +88,7 @@ void FrogWheel::GetBoundingBox(float& l, float& t, float& r, float& b)
 	t = y;
 	r = x + FROG_WHEEL_BBOX_WIDTH;
 	b = y + FROG_WHEEL_BBOX_HEIGHT;
+
 }
 void FrogWheel::SetState(int state)
 {
@@ -123,9 +124,10 @@ void FrogWheel::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		this->AutoChangeStateWithTime(200);
 	}
 	else this->lastTime = 0;
-	
 
-	/*if (((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer()->GetState() == FROG_STATE_JUMP)
-		this->y += 50;*/
+	if (((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer()->GetState() == FROG_STATE_JUMPING_UP)
+		this->y += 2;
+	else if (((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer()->GetState() == FROG_STATE_FALLING_DOWN)
+		this->y -= 3;
 	CGameObject::Update(dt, coObjects);
 }
