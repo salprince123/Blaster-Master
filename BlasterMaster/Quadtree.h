@@ -42,6 +42,7 @@ public:
 	vector<LPGAMEOBJECT> search(double x, double y);
 	bool inBoundary(double x, double y);
 	void _ParseSection_OBJECTS(string line);
+	void _ParseSection_SIZE(string line);
 	vector<LPGAMEOBJECT> getAll() { return object; }
 };
 

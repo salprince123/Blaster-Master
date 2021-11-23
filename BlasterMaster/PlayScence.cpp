@@ -348,7 +348,7 @@ void CPlayScene::Update(DWORD dt)
 	objects.insert(objects.end(), topRight.begin(), topRight.end());
 	objects.insert(objects.end(), botLeft.begin(), botLeft.end());
 	objects.insert(objects.end(), botRight.begin(), botRight.end());
-	DebugOut(L"\n");
+	//DebugOut(L"\n");
 	//DebugOut(L"topLeft have %d, topRight have %d, botLeft have %d, botRight have %d\n", topLeft.size(), topRight.size(), botLeft.size(), botRight.size());
 	for (size_t i = 0; i < objects.size(); i++)
 	{

@@ -42,9 +42,13 @@ Quadtree::Quadtree(LPCWSTR path)
         if (line == "[OBJECTS]") {
             section = QUAD_SECTION_OBJECTS; continue;
         }
+        if (line == "[SIZE]") {
+            section = QUAD_SECTION_SIZE; continue;
+        }
         switch (section)
         {
             case QUAD_SECTION_OBJECTS: _ParseSection_OBJECTS(line); break;
+            case QUAD_SECTION_SIZE: _ParseSection_SIZE(line); break;
         }
     }
    
@@ -105,6 +109,15 @@ void Quadtree::_ParseSection_OBJECTS(string line)
     
     this->object.push_back(obj);    
 }
+void Quadtree::_ParseSection_SIZE(string line)
+{
+    vector<string> tokens = split(line, " ");
+
+    if (tokens.size() < 1) return; 
+
+    int maxHeight = atoi(tokens[0].c_str());
+    this->size.width = maxHeight;
+}
     
 bool Quadtree::isConstain(float objX, float objY)
 {
@@ -131,11 +144,11 @@ void Quadtree::Split()
         botLeftTree->AddObject(object[i]);
         botRightTree->AddObject(object[i]);
     }
-    DebugOut(L"CHILDDDDD LEVEL %d SIZE %d %f %f\n", this->level, this->object.size(), this->size.x, this->size.y);
+    
+    DebugOut(L"CHILDDDDD LEVEL %d SIZE %d %f\n", this->level, this->object.size(), this->size.width);
+    //DebugOut(L"CHILDDDDD LEVEL %d SIZE %d %f\n", this->topLeftTree->level, this->topLeftTree->object.size(), this->topLeftTree->size.width);
     if (width <= MIN_WIDTH_OF_QUADTREE)
     {
-        //DebugOut(L"LEVEL %d LEFT: %d, RIGHT: %d, TOP %d, BOTTOM %d \n", this->level, topLeftTree->getAll().size(), topRightTree->getAll().size(), botLeftTree->getAll().size(), botRightTree->getAll().size());
-        //DebugOut(L"RRRRRR LEVEL %d SIZE %d %f %f\n", this->level, this->object.size(), this->size.x, this->size.y);
         return;
     }
     else
@@ -174,7 +187,7 @@ vector<LPGAMEOBJECT> Quadtree::search(double x, double y)
     // We cannot subdivide this quad further
     if (object.size() > 0)
     {
-        DebugOut(L"THIS IS LEVEL %d SIZE %d %f %f\n", this->level, this->object.size(), this->size.x, this->size.y);
+       // DebugOut(L"THIS IS LEVEL %d SIZE %d %f %f\n", this->level, this->object.size(), this->size.x, this->size.y);
         return object;
     }
         
