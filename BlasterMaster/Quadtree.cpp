@@ -131,7 +131,7 @@ void Quadtree::Split()
         botLeftTree->AddObject(object[i]);
         botRightTree->AddObject(object[i]);
     }
-    //
+    DebugOut(L"CHILDDDDD LEVEL %d SIZE %d %f %f\n", this->level, this->object.size(), this->size.x, this->size.y);
     if (width <= MIN_WIDTH_OF_QUADTREE)
     {
         //DebugOut(L"LEVEL %d LEFT: %d, RIGHT: %d, TOP %d, BOTTOM %d \n", this->level, topLeftTree->getAll().size(), topRightTree->getAll().size(), botLeftTree->getAll().size(), botRightTree->getAll().size());
@@ -145,6 +145,7 @@ void Quadtree::Split()
         topRightTree->Split();
         botLeftTree->Split();
         botRightTree->Split();
+        
         //DebugOut(L"LEVEL %d SIZE %d %f %f\n", this->level, this->object.size(), this->size.x, this->size.y);
     }
         
@@ -171,8 +172,12 @@ vector<LPGAMEOBJECT> Quadtree::search(double x, double y)
 
     // We are at a quad of unit length
     // We cannot subdivide this quad further
-    if (object.size()>0)
+    if (object.size() > 0)
+    {
+        DebugOut(L"THIS IS LEVEL %d SIZE %d %f %f\n", this->level, this->object.size(), this->size.x, this->size.y);
         return object;
+    }
+        
 
     if ((size.x + botRight.x) / 2 >= x)
     {

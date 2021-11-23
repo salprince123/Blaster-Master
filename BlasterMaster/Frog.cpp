@@ -12,7 +12,7 @@ Frog::Frog(float x, float y) : CGameObject()
 
 void Frog::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	DebugOut(L"FROG STATE: %d\n", GetState());
+	//DebugOut(L"FROG STATE: %d\n", GetState());
 	// Calculate dx, dy 
 	CGameObject::Update(dt);
 
