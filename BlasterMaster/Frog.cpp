@@ -15,7 +15,7 @@ void Frog::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	//DebugOut(L"FROG STATE: %d\n", GetState());
 	// Calculate dx, dy 
 	CGameObject::Update(dt);
-
+	if(x <= 0) x = 0;
 	// Simple fall down
 	vy += FROG_GRAVITY*dt ;
 	//Handle update state for Frog
