@@ -1,4 +1,5 @@
 #include "LadyBird.h"
+#include "PlayScence.h"
 LadyBird::LadyBird(int x0, int y0, int x1, int y1)
 {
 	this->x0 = x0;
@@ -23,62 +24,72 @@ void LadyBird::GetBoundingBox(float& left, float& top, float& right, float& bott
 }
 void LadyBird::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	// Calculate dx, dy 
-
-	//DebugOut(L"[LADYBIRD] %d %d %d %d \n", x0, y0, x1, y1);
-
-	/*if (vx < 0 && x < x0) {
-		x = x0; vx = -vx;
-	}
-	if (vx > 0 && x > x1) {
-		x = x1; vx = -vx;
-
-	}
-	if (vy < 0 && y < y0) {
-		y = y0; vy = -vy;
-	}
-	if (vy > 0 && y > y1) {
-		y = y1; vy = -vy;
+	float pX, pY;
+	Frog* player = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+	player->GetPosition(pX, pY);
+	if (abs(x - pX) > 150) return;
+	/*if (y - pY > 40)
+	{
+		Enemy::Update(dt, coObjects);
+		x = -100, y = -100;
+		return;
 	}*/
 	switch (state)
 	{
-	case LADYBIRD_STATE_WALKING_RIGHT:
-	{
-		if (vx > 0 && x > x1)
+		case LADYBIRD_STATE_WALKING_RIGHT:
 		{
-			this->SetState(LADYBIRD_STATE_WALKING_DOWN);
-			x = x1; vx = 0; vy = LADYBIRD_FLYING_UP_SPEED;
+			if (y0 != y1)//di theo parapol
+			{
+
+			}
+			else
+			{
+				vy = 0;
+				if (vx > 0 && x > x1)
+				{
+					this->SetState(LADYBIRD_STATE_WALKING_LEFT);
+					x = x1; vx = -LADYBIRD_WALKING_SPEED;
+				}
+			}
+			
 		}
 
-	}
-
-	case LADYBIRD_STATE_WALKING_DOWN:
-	{
-		if (vy > 0 && y > y1)
+		/*case LADYBIRD_STATE_WALKING_DOWN:
 		{
-			this->SetState(LADYBIRD_STATE_WALKING_LEFT);
-			y = y1; vy = 0; vx = -LADYBIRD_WALKING_SPEED;
-		}
+			if (vy > 0 && y > y1)
+			{
+				this->SetState(LADYBIRD_STATE_WALKING_LEFT);
+				y = y1; vy = 0; vx = -LADYBIRD_WALKING_SPEED;
+			}
 
-	}
-	case LADYBIRD_STATE_WALKING_LEFT:
-	{
-		if (vx < 0 && x < x0)
+		}*/
+		case LADYBIRD_STATE_WALKING_LEFT:
 		{
-			this->SetState(LADYBIRD_STATE_WALKING_UP);
-			x = x0; vx = 0; vy = -LADYBIRD_FLYING_UP_SPEED;
-		}
+			if (y0 != y1)//di theo parapol
+			{
 
-	}
-	case LADYBIRD_STATE_WALKING_UP:
-	{
-		if (vy < 0 && y < y0)
+			}
+			else
+			{
+				vy = 0;
+				if (vx < 0 && x < x0 && y0 == y1)
+				{
+					this->SetState(LADYBIRD_STATE_WALKING_RIGHT);
+					x = x0; vx = LADYBIRD_WALKING_SPEED; vy = 0;
+				}
+			}
+			
+
+		}
+		/*case LADYBIRD_STATE_WALKING_UP:
 		{
-			this->SetState(LADYBIRD_STATE_WALKING_RIGHT);
-			y = y0; vy = 0; vx = LADYBIRD_WALKING_SPEED;
-		}
+			if (vy < 0 && y < y0)
+			{
+				this->SetState(LADYBIRD_STATE_WALKING_RIGHT);
+				y = y0; vy = 0; vx = LADYBIRD_WALKING_SPEED;
+			}
 
-	}
+		}*/
 	}
 	Enemy::Update(dt, coObjects);
 }

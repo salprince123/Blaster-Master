@@ -1,5 +1,6 @@
 #include "Camera.h"
 #include "Game.h"
+#include "PlayScence.h"
 void Camera::SetCamPos(float x, float y)
 {
 	cam_x = x; cam_y = y;
@@ -18,10 +19,18 @@ float Camera::getCamPosX()
 }
 void Camera::Update(float player_x, float player_y)
 {
-	player_x -= width / 2;
-	player_y -= height / 2;
-	float _dy = abs(player_y - CGame::getCamera()->getCamPosY());
-	if (player_x < 15)
-		player_x = 0;
+	if (player_y < 383 && player_x>=1380)
+	{
+		player_x = 1380;
+		player_y -= height / 2;
+	}
+	else
+	{
+		
+		player_x -= width / 2;
+		player_y -= height / 2;
+	}
+	float _dy = abs(player_y - CGame::getCamera()->getCamPosY());	
+
 	SetCamPos(round(player_x), round(player_y));
 }

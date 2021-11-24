@@ -95,7 +95,7 @@ void CPlayScene::_ParseSection_ANIMATIONS(string line)
 	char str[MAX_QUAD_LINE];
 	while (f.getline(str, MAX_QUAD_LINE))
 	{
-		DebugOut(L"--> %s\n", ToWSTR(line).c_str());
+		//DebugOut(L"--> %s\n", ToWSTR(line).c_str());
 		string line(str);
 		if (line[0] == '#') continue;
 		vector<string> tokens = split(line, " ");

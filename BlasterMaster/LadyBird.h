@@ -2,7 +2,7 @@
 #include "Enemy.h"
 #include "Utils.h"
 #define LADYBIRD_WALKING_SPEED 0.05f;
-#define LADYBIRD_FLYING_UP_SPEED 0.05f;
+#define LADYBIRD_FLYING_UP_SPEED 0.05*0.4;
 
 #define LADYBIRD_BBOX_WIDTH 16
 #define LADYBIRD_BBOX_HEIGHT 16

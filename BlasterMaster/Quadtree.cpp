@@ -83,6 +83,12 @@ void Quadtree::_ParseSection_OBJECTS(string line)
             obj = new LadyBird(x0, y0, x1, y1);
             break;
         }
+        case OBJECT_TYPE_EYELET:
+        {
+            int nx = atof(tokens[4].c_str());
+            obj = new EyeLet(x, y, x, y,nx);
+            break;
+        }
         case OBJECT_TYPE_BOOM: obj = new Boom(); break;
         case OBJECT_TYPE_BRICK: obj = new CBrick(); break;
         case OBJECT_TYPE_BACKROUND: obj = new Background(); break;

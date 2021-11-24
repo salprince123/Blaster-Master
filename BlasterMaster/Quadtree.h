@@ -8,6 +8,7 @@
 #include "Boom.h"
 #include "Brick.h"
 #include  "Background.h"
+#include "EyeLet.h"
 #include "Portal.h"
 using namespace std;
 class Rect
