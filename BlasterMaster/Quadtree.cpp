@@ -132,7 +132,10 @@ void Quadtree::Split()
 {
     double pX = this->size.x;
     double pY = this->size.y;
+    DebugOut(L"CHILDNODE LEVEL %d SIZE %d %f\n", this->level, this->object.size(), this->size.width);    
+    if (this->object.size() == 0) return;
     float width = this->size.width / 2;    
+    if (width <= MIN_WIDTH_OF_QUADTREE) return;
     topLeftTree = new Quadtree(this->level + 1, pX, pY, width);
     topRightTree= new Quadtree(this->level + 1, pX+width, this->size.y, width);
     botLeftTree= new Quadtree(this->level + 1, pX, pY+width, width);
@@ -144,25 +147,16 @@ void Quadtree::Split()
         botLeftTree->AddObject(object[i]);
         botRightTree->AddObject(object[i]);
     }
+    this->object.clear();
+    topLeftTree->Split();
+    topRightTree->Split();
+    botLeftTree->Split();
+    botRightTree->Split();
     
-    DebugOut(L"CHILDDDDD LEVEL %d SIZE %d %f\n", this->level, this->object.size(), this->size.width);
+    
     //DebugOut(L"CHILDDDDD LEVEL %d SIZE %d %f\n", this->topLeftTree->level, this->topLeftTree->object.size(), this->topLeftTree->size.width);
-    if (width <= MIN_WIDTH_OF_QUADTREE)
-    {
-        return;
-    }
-    else
-    {
-        this->object.clear();
-        topLeftTree->Split();
-        topRightTree->Split();
-        botLeftTree->Split();
-        botRightTree->Split();
-        
-        //DebugOut(L"LEVEL %d SIZE %d %f %f\n", this->level, this->object.size(), this->size.x, this->size.y);
-    }
-        
-    //DK dừng: width =1/2 camera     
+    
+    
 }
 void Quadtree::Clear()
 {
