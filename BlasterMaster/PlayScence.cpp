@@ -170,7 +170,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	//DebugOut(L"STATIC OBJECT TYPE= %d\n", object_type);
 	float x = atof(tokens[1].c_str());
 	float y = atof(tokens[2].c_str());
-
+	int height = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetHeight();
+	int row = (height - y) / 16;
+	y = (row - 1) * 16;
 	int ani_set_id = atoi(tokens[3].c_str());
 
 	CAnimationSets * animation_sets = CAnimationSets::GetInstance();
@@ -267,7 +269,7 @@ void CPlayScene::_ParseSection_QUAD(string line)
 	DebugOut(L"--> %s\n", ToWSTR(line).c_str());
 	LPCWSTR path = ToLPCWSTR(tokens[0]);
 	quadtree = new Quadtree(path);
-	//this->objects = quadtree->getAll();
+	this->objects = quadtree->getAll();
 	quadtree->Split();
 }
 void CPlayScene::Load()
@@ -319,7 +321,6 @@ void CPlayScene::Load()
 	
 	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
 }
-
 void CPlayScene::Update(DWORD dt)
 {
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
@@ -337,19 +338,34 @@ void CPlayScene::Update(DWORD dt)
 	float camWidth = game->GetScreenWidth();
 	float camHeight = game->GetScreenHeight();
 	//DebugOut(L"[CAMPOS] %f %f\n", camera->getCamPosX(), camera->getCamPosY());
-	vector<LPGAMEOBJECT> topLeft = quadtree->search(camX, camY);
+	/*vector<LPGAMEOBJECT> topLeft = quadtree->search(camX, camY);
 	vector<LPGAMEOBJECT> topRight = quadtree->search((camX+camWidth), camY);
 	vector<LPGAMEOBJECT> botLeft = quadtree->search(camX, (camY+camHeight));
 	vector<LPGAMEOBJECT> botRight = quadtree->search((camX+camWidth), (camY+camHeight));
 	//vector<LPGAMEOBJECT> quad = quadtree->botLeftTree->getAll();
 	//vector<LPGAMEOBJECT> quad1 = quadtree->topLeftTree->getAll();
-	objects.clear();
+	objects.clear();	
+	//cout << objectID<<endl;
 	objects.insert(objects.end(), topLeft.begin(), topLeft.end());
 	objects.insert(objects.end(), topRight.begin(), topRight.end());
 	objects.insert(objects.end(), botLeft.begin(), botLeft.end());
-	objects.insert(objects.end(), botRight.begin(), botRight.end());
-	//DebugOut(L"\n");
-	//DebugOut(L"topLeft have %d, topRight have %d, botLeft have %d, botRight have %d\n", topLeft.size(), topRight.size(), botLeft.size(), botRight.size());
+	objects.insert(objects.end(), botRight.begin(), botRight.end());*/
+
+	/*for (int i = 0; i < objects.size(); i++)
+	{
+		string objectID = to_string(objects[i]->ObjectType) + to_string(objects[i]->x) + to_string(objects[i]->y);
+		auto search = mapObject.find(objectID);
+		if (search == mapObject.end()) {
+			mapObject.insert(std::pair<string, LPGAMEOBJECT>(objectID, objects[i]));
+		}
+	}
+	objects.clear();
+	map<string, LPGAMEOBJECT>::iterator it;
+	for (it = mapObject.begin(); it != mapObject.end(); ++it) {
+		objects.push_back(it->second);
+	}*/
+
+	
 	for (size_t i = 0; i < objects.size(); i++)
 	{
 		objects[i]->Update(dt, &coObjects);
@@ -365,7 +381,7 @@ void CPlayScene::Update(DWORD dt)
 	float cx, cy;
 	player->GetPosition(cx, cy);
 	camera->SetSize(game->GetScreenWidth(), game->GetScreenHeight());
-	camera->Update(cx, cy);
+	camera->Update(cx, cy,this->GetHeight());
 	
 }
 
@@ -409,7 +425,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 
 void CPlayScenceKeyHandler::KeyState(BYTE *states)
 {
-	CGame *game = CGame::GetInstance();
+	CGame* game = CGame::GetInstance();
 	Frog* frog = ((CPlayScene*)scence)->GetPlayer();
 	// disable control key when Mario die 
 	if (frog->GetState() == FROG_STATE_DIE) return;
@@ -423,5 +439,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 		//DebugOut(L"KEYSTATE %f \n", mario->vx);
 			frog->SetState(FROG_STATE_IDLE);
 	}
+	//Camera* camera = CGame::getCamera();
+	//camera->Update(camera->getCamPosX(), camera->getCamPosY(), ((CPlayScene*)scence) ->GetHeight());
 		
 }

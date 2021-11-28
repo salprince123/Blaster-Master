@@ -17,8 +17,10 @@ float Camera::getCamPosX()
 {
 	return cam_x;
 }
-void Camera::Update(float player_x, float player_y)
+void Camera::Update(float player_x, float player_y, float h)
 {
+	//player_y = h + 16 - player_y;
+	//player_y = player_y + (-2 * player_y -16+h);
 	if (player_y < 383 && player_x>=1380)
 	{
 		player_x = 1380;

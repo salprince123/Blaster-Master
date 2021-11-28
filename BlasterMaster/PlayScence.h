@@ -12,6 +12,7 @@
 #include "FrogGun.h"
 #include "FrogBody.h"
 #include "FrogWheel.h"
+#include <map>
 using namespace std;
 
 
@@ -25,8 +26,10 @@ protected:
 	FrogWheel* wheelLeft;
 	FrogWheel* wheelRight;
 	vector<LPGAMEOBJECT> objects;
+	map<string, LPGAMEOBJECT> mapObject;
 	vector<LPGAMEOBJECT> staticObjects;
 	Quadtree* quadtree;
+	int height;
 	void _ParseSection_TEXTURES(string line);
 	void _ParseSection_SPRITES(string line);
 	void _ParseSection_ANIMATIONS(string line);
@@ -41,7 +44,8 @@ public:
 	virtual void Update(DWORD dt);
 	virtual void Render();
 	virtual void Unload();
-
+	int GetHeight() { return height; }
+	void SetHeight(int h) { this->height = h; }
 	Frog* GetPlayer() { return player; }
 	FrogBody* GetBodyUp() { return bodyUp; }
 	FrogBody* GetBodyDown() { return bodyDown; }

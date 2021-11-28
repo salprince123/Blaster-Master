@@ -1,4 +1,5 @@
 ﻿#include "Quadtree.h"
+#include "PlayScence.h"
 Quadtree::Quadtree()
 {
     object = vector<LPGAMEOBJECT>();
@@ -64,7 +65,9 @@ void Quadtree::_ParseSection_OBJECTS(string line)
     int object_type = atoi(tokens[0].c_str());
     float x = atof(tokens[1].c_str());
     float y = atof(tokens[2].c_str());
-
+    int height = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetHeight();
+    int row = (height - y) / 16;
+    y = (row - 1) * 16;
     int ani_set_id = atoi(tokens[3].c_str());
 
     CAnimationSets* animation_sets = CAnimationSets::GetInstance();
@@ -121,8 +124,14 @@ void Quadtree::_ParseSection_SIZE(string line)
 
     if (tokens.size() < 1) return; 
 
-    int maxHeight = atoi(tokens[0].c_str());
-    this->size.width = maxHeight;
+    int maxWidth = atoi(tokens[0].c_str());
+    int maxHeight = atoi(tokens[1].c_str());
+    DebugOut(L"[QUAD SIZE] %d %d\n", maxWidth, maxHeight);
+    ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->SetHeight(maxHeight);
+    if(maxHeight> maxWidth)
+        this->size.width = maxHeight;
+    else 
+        this->size.width = maxWidth;
 }
     
 bool Quadtree::isConstain(float objX, float objY)

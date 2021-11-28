@@ -10,6 +10,6 @@ public:
 	void SetCamPos(float x, float y);
 	float getCamPosX();
 	float getCamPosY();
-	void Update(float player_x, float player_y);
+	void Update(float player_x, float player_y, float height);
 };
 

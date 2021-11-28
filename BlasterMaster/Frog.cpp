@@ -12,7 +12,9 @@ Frog::Frog(float x, float y) : CGameObject()
 
 void Frog::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	DebugOut(L"FROG STATE: %f %f\n", x,y);
+	//string objectID = "hahah";
+	//DebugOut(L"OBjectID %s \n", objectID);
+	//DebugOut(L"FROG POSITION: %f %f\n", x,y);
 	// Calculate dx, dy 
 	CGameObject::Update(dt);
 	if(x <= 0) x = 0;
@@ -70,7 +72,7 @@ void Frog::Render()
 {	
 	//int alpha = 255;
 	//animation_set->at(0)->Render(x, y, alpha);
-	//RenderBoundingBox();
+	RenderBoundingBox();
 }
 
 void Frog::SetState(int state)
