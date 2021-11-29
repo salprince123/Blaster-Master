@@ -129,6 +129,7 @@
     <ClCompile Include="Background.cpp" />
     <ClCompile Include="Boom.cpp" />
     <ClCompile Include="Brick.cpp" />
+    <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EyeLet.cpp" />
@@ -153,6 +154,7 @@
     <ClInclude Include="Background.h" />
     <ClInclude Include="Boom.h" />
     <ClInclude Include="Brick.h" />
+    <ClInclude Include="Bullet.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Define.h" />
     <ClInclude Include="Enemy.h" />

@@ -219,26 +219,13 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			else wheelRight = (FrogWheel*)obj;
 			break;
 		}
-		/*case OBJECT_TYPE_FROG_BODY:
+		case OBJECT_TYPE_BULLET:
 		{
-			FrogBody* temp = new FrogBody();
-			//temp->SetPosition(x, y);
-			if (player != NULL)
-			{
-				player->bodyUp = (FrogBody*)temp;
-			}
+			int id = atoi(tokens[4].c_str());
+			obj = new Bullet(id);
 			break;
 		}
-		case OBJECT_TYPE_FROG_WHEEL:
-		{
-			FrogWheel* temp = new FrogWheel();
-			//temp->SetPosition(x, y);
-			if (player != NULL)
-			{
-				player->wheelLeft = (FrogWheel*)temp;
-			}
-			break;
-		}*/
+
 		case OBJECT_TYPE_PORTAL:
 			{	
 				float r = atof(tokens[4].c_str());

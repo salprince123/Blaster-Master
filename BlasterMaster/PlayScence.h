@@ -12,6 +12,7 @@
 #include "FrogGun.h"
 #include "FrogBody.h"
 #include "FrogWheel.h"
+#include "Bullet.h"
 #include <map>
 using namespace std;
 

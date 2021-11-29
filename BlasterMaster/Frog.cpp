@@ -11,10 +11,7 @@ Frog::Frog(float x, float y) : CGameObject()
 }
 
 void Frog::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
-{
-	//string objectID = "hahah";
-	//DebugOut(L"OBjectID %s \n", objectID);
-	//DebugOut(L"FROG POSITION: %f %f\n", x,y);
+{	
 	// Calculate dx, dy 
 	CGameObject::Update(dt);
 	if(x <= 0) x = 0;
@@ -99,6 +96,8 @@ void Frog::SetState(int state)
 			break;
 		case FROG_STATE_IDLE:
 			vx = 0;
+			break;
+		case FROG_STATE_FIRE:
 			break;
 		case FROG_STATE_DIE:
 			break;
