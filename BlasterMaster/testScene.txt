@@ -17,7 +17,7 @@ AniSet.txt
 QuadtreeScene1.txt
 [OBJECTS]
 # background
-#2 0 0 2001
+2 0 768 2001
 
 #body
 772 0 0 77201 1

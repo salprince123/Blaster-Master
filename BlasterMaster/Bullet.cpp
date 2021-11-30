@@ -43,20 +43,20 @@ void Bullet::GetBoundingBox(float& l, float& t, float& r, float& b)
 }
 void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	switch (state)
+	/*switch (state)
 	{
 		case BULLET_STATE_DIE:
 			HandleStateDie();
 			break;
 		case BULLET_STATE_FIRE_LEFT:case BULLET_STATE_FIRE_RIGHT: case BULLET_STATE_FIRE_UP:
-			HandleStateFire();
+			HandleStateFire(dt,coObjects);
 			break;
 		case BULLET_STATE_NOT_FIRE:
 			HandleStateUnFire();
 			break;
 		default:
 			break;
-	}
+	}*/
 	//DebugOut(L"STATE: %d  ID %d\n", this->state, this->id);
 }
 void Bullet::HandleStateDie()
@@ -96,9 +96,15 @@ void Bullet::HandleStateDie()
 	}
 	}
 }
-void Bullet::HandleStateFire()
+void Bullet::HandleStateFire(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-
+	Frog* frog = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+	if (frog->GetState() == FROG_STATE_FIRE)
+	{
+		DebugOut(L"FROG STATE %d  \n", frog->state);
+		this->vx = BULLET_VX;
+		CGameObject::Update(dt, coObjects);
+	}
 }
 void Bullet::HandleStateUnFire()
 {

@@ -26,6 +26,8 @@
 
 #define FROG_UNTOUCHABLE_TIME 5000
 
+#define MAX_BULLET 3
+
 
 class Frog : public CGameObject
 {
@@ -35,12 +37,15 @@ class Frog : public CGameObject
 
 	float start_x;			// initial position of Mario at scene
 	float start_y;
-	int maxBullet=3;
+	int maxBullet;
+	int oldState;
 public:
 	Frog(float x = 0.0f, float y = 0.0f);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);
 	virtual void Render();
 	void SetMaxBullet(int t) { maxBullet = t; }
+	int GetMaxBullet() { return maxBullet; }
+	void SetOldState(int t) { this->oldState = t; }
 	void SetState(int state);
 	void SetLevel(int l) { level = l; }
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }

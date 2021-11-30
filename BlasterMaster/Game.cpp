@@ -74,7 +74,7 @@ void CGame::Draw(float x, float y, LPDIRECT3DTEXTURE9 texture, int left, int top
 	
 	//D3DXVECTOR3 p(x - _camera->getCamPosX(),  _camera->getCamPosY()-y, 0);
 	D3DXVECTOR3 p(x1, y1, 0);
-	//DebugOut(L" %f %f \n", x1,y1);
+	//DebugOut(L"%f %f %f %f \n",x,y, x1,y1);
 	RECT r; 
 	r.left = left;
 	r.top = top;

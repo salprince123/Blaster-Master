@@ -17,6 +17,8 @@
 #define BULLET_ANI_FIRE_UP		4
 #define BULLET_ANI_FIRE_DIE		5
 
+#define BULLET_VX 0.15
+
 class Bullet : public CGameObject
 {
 public:
@@ -27,6 +29,6 @@ public:
 	virtual void GetBoundingBox(float& l, float& t, float& r, float& b);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void HandleStateDie();
-	void HandleStateFire();
+	void HandleStateFire(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void HandleStateUnFire();
 };

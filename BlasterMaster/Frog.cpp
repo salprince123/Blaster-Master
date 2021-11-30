@@ -8,15 +8,20 @@ Frog::Frog(float x, float y) : CGameObject()
 	start_y = y;
 	this->x = x;
 	this->y = y;
+	this->maxBullet = MAX_BULLET;
 }
 
 void Frog::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {	
 	// Calculate dx, dy 
+	//if(state==FROG_STATE_FIRE)
+		
 	CGameObject::Update(dt);
 	if(x <= 0) x = 0;
 	// Simple fall down
 	vy += FROG_GRAVITY*dt ;
+	if (state == FROG_STATE_FIRE)
+		SetState(oldState);
 	//Handle update state for Frog
 	if (GetState() == FROG_STATE_JUMPING_UP)
 	{
@@ -98,6 +103,7 @@ void Frog::SetState(int state)
 			vx = 0;
 			break;
 		case FROG_STATE_FIRE:
+			//SetState(oldState);
 			break;
 		case FROG_STATE_DIE:
 			break;

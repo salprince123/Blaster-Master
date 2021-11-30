@@ -68,6 +68,7 @@ void Quadtree::_ParseSection_OBJECTS(string line)
     int height = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetHeight();
     int row = (height - y) / 16;
     y = (row - 1) * 16;
+    //DebugOut(L"INFOR %f %f \n", x, y);
     int ani_set_id = atoi(tokens[3].c_str());
 
     CAnimationSets* animation_sets = CAnimationSets::GetInstance();
@@ -101,7 +102,7 @@ void Quadtree::_ParseSection_OBJECTS(string line)
                 int type = atof(tokens[4].c_str());
                 dynamic_cast<CBrick*>(obj)->type = type;
             }               
-            DebugOut(L"%d\n", dynamic_cast<CBrick*>(obj)->type);
+            //DebugOut(L"%d\n", dynamic_cast<CBrick*>(obj)->type);
             break;
         }
         case OBJECT_TYPE_BACKROUND: obj = new Background(); break;

@@ -225,7 +225,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			obj = new Bullet(id);
 			break;
 		}
-
+		case OBJECT_TYPE_BACKROUND: obj = new Background(); break;
 		case OBJECT_TYPE_PORTAL:
 			{	
 				float r = atof(tokens[4].c_str());
@@ -256,7 +256,7 @@ void CPlayScene::_ParseSection_QUAD(string line)
 	DebugOut(L"--> %s\n", ToWSTR(line).c_str());
 	LPCWSTR path = ToLPCWSTR(tokens[0]);
 	quadtree = new Quadtree(path);
-	this->objects = quadtree->getAll();
+	//this->objects = quadtree->getAll();
 	quadtree->Split();
 }
 void CPlayScene::Load()
@@ -324,19 +324,19 @@ void CPlayScene::Update(DWORD dt)
 	float camY = camera->getCamPosY();
 	float camWidth = game->GetScreenWidth();
 	float camHeight = game->GetScreenHeight();
-	//DebugOut(L"[CAMPOS] %f %f\n", camera->getCamPosX(), camera->getCamPosY());
-	/*vector<LPGAMEOBJECT> topLeft = quadtree->search(camX, camY);
+	//DebugOut(L"[CAMPOS] %f %f %f %f\n", camera->getCamPosX(), camera->getCamPosY(), player->x, player->y);
+	//int row = (GetHeight() - camera->getCamPosY()) / 16;
+	//int temp = (row ) * 16;
+	//vector<LPGAMEOBJECT> topLeft = quadtree->search(player->x, player->y);
+	vector<LPGAMEOBJECT> topLeft = quadtree->search(camX, camY);
 	vector<LPGAMEOBJECT> topRight = quadtree->search((camX+camWidth), camY);
-	vector<LPGAMEOBJECT> botLeft = quadtree->search(camX, (camY+camHeight));
-	vector<LPGAMEOBJECT> botRight = quadtree->search((camX+camWidth), (camY+camHeight));
-	//vector<LPGAMEOBJECT> quad = quadtree->botLeftTree->getAll();
-	//vector<LPGAMEOBJECT> quad1 = quadtree->topLeftTree->getAll();
+	vector<LPGAMEOBJECT> botLeft = quadtree->search(camX, (camY +camHeight));
+	vector<LPGAMEOBJECT> botRight = quadtree->search((camX+camWidth), (camY +camHeight));
 	objects.clear();	
-	//cout << objectID<<endl;
 	objects.insert(objects.end(), topLeft.begin(), topLeft.end());
 	objects.insert(objects.end(), topRight.begin(), topRight.end());
 	objects.insert(objects.end(), botLeft.begin(), botLeft.end());
-	objects.insert(objects.end(), botRight.begin(), botRight.end());*/
+	objects.insert(objects.end(), botRight.begin(), botRight.end());
 
 	/*for (int i = 0; i < objects.size(); i++)
 	{
@@ -404,6 +404,17 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 		if(frog->GetState() != FROG_STATE_FALLING_DOWN && frog->GetState() != FROG_STATE_JUMPING_UP)
 			frog->SetState(FROG_STATE_JUMP);
 		break;
+	case DIK_A:
+		{
+			int oldState = frog->GetState();
+			frog->SetState(FROG_STATE_FIRE);
+			frog->SetMaxBullet(frog->GetMaxBullet() - 1);
+			if (frog->GetMaxBullet() == 0)
+				frog->SetMaxBullet(MAX_BULLET);
+			frog->SetOldState(oldState);
+			break;
+		}
+		
 	case DIK_R: 
 		frog->Reset();
 		break;
