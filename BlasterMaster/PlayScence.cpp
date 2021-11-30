@@ -245,9 +245,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj->SetPosition(x, y);
 		LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
 		obj->SetAnimationSet(ani_set);
-		staticObjects.push_back(obj);
+		if (object_type == OBJECT_TYPE_BACKROUND)
+			staticObjects.insert(staticObjects.begin(), obj);
+		else
+			staticObjects.push_back(obj);
 	}	
-	//DebugOut(L"STATIC OBJECT HAVE %d\n", staticObjects.size());
 }
 
 void CPlayScene::_ParseSection_QUAD(string line)
@@ -360,6 +362,7 @@ void CPlayScene::Update(DWORD dt)
 	for (size_t i = 0; i < staticObjects.size(); i++)
 	{
 		staticObjects[i]->Update(dt, &coObjects);
+		//DebugOut(L"type %f\n", staticObjects[0]->x);
 	}
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
 	if (player == NULL) return; 

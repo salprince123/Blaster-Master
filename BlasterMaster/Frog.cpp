@@ -20,8 +20,8 @@ void Frog::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if(x <= 0) x = 0;
 	// Simple fall down
 	vy += FROG_GRAVITY*dt ;
-	if (state == FROG_STATE_FIRE)
-		SetState(oldState);
+	//if (state == FROG_STATE_FIRE)
+		//SetState(oldState);
 	//Handle update state for Frog
 	if (GetState() == FROG_STATE_JUMPING_UP)
 	{
