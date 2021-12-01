@@ -16,8 +16,7 @@ AniSet.txt
 [QUADTREE]
 QuadtreeScene1.txt
 [OBJECTS]
-# background
-2 0 768 2001
+
 
 #body
 772 0 0 77201 1
@@ -26,11 +25,12 @@ QuadtreeScene1.txt
 773 0 0 77301 10
 771 0 0 77101
 #FROG
-77 160 160 999
-
+77 1376 656 999
 #BULLET
 774 160 160 77401 1
 774 160 160 77401 2
 774 160 160 77401 3
 
+# background
+2 0 768 2001
 

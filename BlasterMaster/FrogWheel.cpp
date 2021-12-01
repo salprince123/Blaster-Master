@@ -8,12 +8,10 @@ FrogWheel::FrogWheel(int type)
 		this->SetState(FROG_WHEEL_STATE_LEFT);
 	else if (type == FROG_WHEEL_TYPE_RIGHT)
 		this->SetState(FROG_WHEEL_STATE_UP_RIGHT);
-	//DebugOut(L"WHeel TYPE: %d\n", this->type);
 }
 void FrogWheel::Render()
 {
 	int ani = FROG_WHEEL_ANI_UP_RIGHT;
-	//DebugOut(L"WHeel STATE: %d\n", this->state);
 	switch (state)
 	{
 		case FROG_WHEEL_STATE_UP_RIGHT:

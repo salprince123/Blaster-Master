@@ -55,35 +55,72 @@ void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	switch (state)
 	{
 		case BULLET_STATE_DIE:
-			SetState(BULLET_STATE_NOT_FIRE);
+			//DebugOut(L"HERE\n");
+			x += 0.1;
+			if (abs(x - x0) > 20)
+			{
+				SetState(BULLET_STATE_NOT_FIRE);
+			}
 			break;
 		case BULLET_STATE_FIRE_LEFT:case BULLET_STATE_FIRE_RIGHT: case BULLET_STATE_FIRE_UP:
 		{
-			if (abs(x - x0) > 100)
+			if (abs(x - x0) > BULLET_RANGE)
 			{
+				x0 = x;
 				SetState(BULLET_STATE_DIE);
 			}
 			else
 			{
-				CGameObject::Update(dt, coObjects);
-				x += dx;
-				y += dy;
+				CGameObject::Update(dt,coObjects);
 				break;
 			}				
 		}			
-		case BULLET_STATE_NOT_FIRE:
-			x0 = x;
-			y0 = y;
+		case BULLET_STATE_NOT_FIRE:			
 			HandleStateUnFire();
 			break;
 		default:
 			break;
 	}
-	//DebugOut(L"STATE: %d  ID %d\n", this->state, this->id);
+	vector<LPCOLLISIONEVENT> coEvents;
+	vector<LPCOLLISIONEVENT> coEventsResult;
+	coEvents.clear();
+	// turn off collision when die 
+	if (state != BULLET_STATE_DIE && state != BULLET_STATE_NOT_FIRE)
+		CalcPotentialCollisions(coObjects, coEvents);
+	// No collision occured, proceed normally
+	if (coEvents.size() == 0)
+	{
+		x += dx;
+		y += dy;
+	}
+	else
+	{
+		float min_tx, min_ty, nx = 0, ny;
+		float rdx = 0;
+		float rdy = 0;
+		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
+		x += min_tx * dx + nx * 0.4f;
+		y += min_ty * dy + ny * 0.4f;
+		if (nx != 0) vx = 0;
+		if (ny != 0) vy = 0;
+		for (UINT i = 0; i < coEventsResult.size(); i++)
+		{
+			LPCOLLISIONEVENT e = coEventsResult[i];
+			if (dynamic_cast<CBrick*>(e->obj))
+			{
+				///DebugOut(L"COLLISS %d\n",id);
+				if (state != BULLET_STATE_DIE && state != BULLET_STATE_NOT_FIRE)
+					SetState(BULLET_STATE_DIE);
+			}
+		}
+	}
+	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
 }
 
 void Bullet::HandleStateUnFire()
 {
+	x0 = x;
+	y0 = y;
 	FrogBody* bodyUp = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetBodyUp();
 	switch (bodyUp->GetState())
 	{

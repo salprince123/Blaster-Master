@@ -377,11 +377,10 @@ void CPlayScene::Update(DWORD dt)
 
 void CPlayScene::Render()
 {
-	//DebugOut(L"STATIC OBJECT HAVE %d\n", staticObjects.size());
-	for (int i = 0; i < objects.size(); i++)
-		objects[i]->Render();
 	for (size_t i = 0; i < staticObjects.size(); i++)
 		staticObjects[i]->Render();
+	for (int i = 0; i < objects.size(); i++)
+		objects[i]->Render();
 }
 
 /*

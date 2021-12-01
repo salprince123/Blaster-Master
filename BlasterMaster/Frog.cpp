@@ -25,7 +25,7 @@ void Frog::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	//Handle update state for Frog
 	if (GetState() == FROG_STATE_JUMPING_UP)
 	{
-		if (vy >= 0)
+		if (vy <= 0)
 			SetState(FROG_STATE_FALLING_DOWN);
 	}
 	//
@@ -92,7 +92,7 @@ void Frog::SetState(int state)
 			nx = -1;
 			break;
 		case FROG_STATE_JUMP:
-			vy = -FROG_JUMP_SPEED_Y;
+			vy = FROG_JUMP_SPEED_Y;
 			SetState(FROG_STATE_JUMPING_UP);
 			break;
 		case FROG_STATE_JUMPING_UP:

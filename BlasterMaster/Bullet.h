@@ -22,12 +22,15 @@
 
 #define BULLET_VX 0.15
 
+#define BULLET_RANGE				100
+
 class Bullet : public CGameObject
 {
 public:
 	int type = 0;
 	int id = 0;
 	float x0, y0;
+	DWORD lastTime;
 	Bullet(int id);
 	virtual void Render();
 	virtual void GetBoundingBox(float& l, float& t, float& r, float& b);
