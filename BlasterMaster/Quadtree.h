@@ -37,10 +37,11 @@ public:
 	Quadtree(int level,double x, double y, float width);
 	Quadtree(LPCWSTR path);
 	bool isConstain(float objX, float objY);
-	void AddObject(LPGAMEOBJECT obj);
+	bool AddObject(LPGAMEOBJECT obj);
 	void Split();
 	void Clear();
 	vector<LPGAMEOBJECT> search(double x, double y);
+	int searchLevel(double x, double y);
 	bool inBoundary(double x, double y);
 	void _ParseSection_OBJECTS(string line);
 	void _ParseSection_SIZE(string line);

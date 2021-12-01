@@ -149,10 +149,12 @@ bool Quadtree::isConstain(float objX, float objY)
 {
 	return false;
 }
-void Quadtree::AddObject(LPGAMEOBJECT obj)
+bool Quadtree::AddObject(LPGAMEOBJECT obj)
 {
-    if (inBoundary(obj->x, obj->y))
-        this->object.push_back(obj);
+    if (!inBoundary(obj->x, obj->y))
+        return false;
+    this->object.push_back(obj);
+    return true;
 }
 void Quadtree::Split()
 {
@@ -162,16 +164,16 @@ void Quadtree::Split()
     if (this->object.size() == 0) return;
     float width = this->size.width / 2;    
     if (width <= MIN_WIDTH_OF_QUADTREE) return;
-    topLeftTree = new Quadtree(this->level + 1, pX, pY, width);
-    topRightTree= new Quadtree(this->level + 1, pX+width, this->size.y, width);
-    botLeftTree= new Quadtree(this->level + 1, pX, pY+width, width);
-    botRightTree= new Quadtree(this->level + 1, pX+width, pY+width, width);
+    topLeftTree = new Quadtree(this->level*10 + 1, pX, pY, width);
+    topRightTree= new Quadtree(this->level * 10 + 2, pX+width, this->size.y, width);
+    botLeftTree= new Quadtree(this->level * 10 + 3, pX, pY+width, width);
+    botRightTree= new Quadtree(this->level * 10 + 4, pX+width, pY+width, width);
     for (int i = 0; i < object.size(); i++)
     {
-        topLeftTree->AddObject(object[i]);
-        topRightTree->AddObject(object[i]);
-        botLeftTree->AddObject(object[i]);
-        botRightTree->AddObject(object[i]);
+        if(topLeftTree->AddObject(object[i])) continue;
+        else if(topRightTree->AddObject(object[i])) continue;
+        else if (botLeftTree->AddObject(object[i])) continue;
+        else if (botRightTree->AddObject(object[i])) continue;
     }
     this->object.clear();
     topLeftTree->Split();
@@ -180,7 +182,7 @@ void Quadtree::Split()
     botRightTree->Split();
     
     
-    //DebugOut(L"CHILDDDDD LEVEL %d SIZE %d %f\n", this->topLeftTree->level, this->topLeftTree->object.size(), this->topLeftTree->size.width);
+    DebugOut(L"CHILDDDDD LEVEL %d SIZE %d %f\n", this->topLeftTree->level, this->topLeftTree->object.size(), this->topLeftTree->size.width);
     
     
 }
@@ -208,6 +210,9 @@ vector<LPGAMEOBJECT> Quadtree::search(double x, double y)
     if (object.size() > 0)
     {
        // DebugOut(L"THIS IS LEVEL %d SIZE %d %f %f\n", this->level, this->object.size(), this->size.x, this->size.y);
+        //LPGAMEOBJECT temp = object[0];
+        //temp->SetPosition(this->level, this->level);
+        //object.push_back(temp);
         return object;
     }
         
@@ -250,6 +255,63 @@ vector<LPGAMEOBJECT> Quadtree::search(double x, double y)
             if (botRightTree == NULL)
                 return {};
             return botRightTree->search(x,y);
+        }
+    }
+};
+int Quadtree::searchLevel(double x, double y)
+{
+    //DebugOut(L"YOU ARE IN SEARCH      %d\n", this->level);
+    Rect botRight(size.x + size.width, size.y + size.width);
+    // Current quad cannot contain it
+    if (!inBoundary(x, y))
+        return -1;
+
+    // We are at a quad of unit length
+    // We cannot subdivide this quad further
+    if (object.size() > 0)
+    {
+        return level;
+    }
+
+
+    if ((size.x + botRight.x) / 2 >= x)
+    {
+        // Indicates topLeftTree
+        if ((size.y + botRight.y) / 2 >= y)
+        {
+            //DebugOut(L"YOU ARE IN TOP LEFT      %d\n", this->level);
+            if (topLeftTree == NULL)
+                return {};
+            return topLeftTree->searchLevel(x, y);
+        }
+
+        // Indicates botLeftTree
+        else
+        {
+            //DebugOut(L"YOU ARE IN BOT LEFT      %d\n", this->level);
+            if (botLeftTree == NULL)
+                return {};
+            return botLeftTree->searchLevel(x, y);
+        }
+    }
+    else
+    {
+        // Indicates topRightTree
+        if ((size.y + botRight.y) / 2 >= y)
+        {
+            // DebugOut(L"YOU ARE IN TOP RIGHT      %d\n", this->level);
+            if (topRightTree == NULL)
+                return {};
+            return topRightTree->searchLevel(x, y);
+        }
+
+        // Indicates botRightTree
+        else
+        {
+            // DebugOut(L"YOU ARE IN BOT RIGHT      %d\n", this->level);
+            if (botRightTree == NULL)
+                return {};
+            return botRightTree->searchLevel(x, y);
         }
     }
 };

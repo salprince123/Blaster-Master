@@ -21,7 +21,7 @@ void Bullet::Render()
 			ani = BULLET_ANI_BIG_RIGHT;
 			break;
 		case BULLET_STATE_DIE:
-			ani = BULLET_ANI_DIE;
+			ani = BULLET_ANI_NOT_FIRE;
 			break;
 		default:
 			break;

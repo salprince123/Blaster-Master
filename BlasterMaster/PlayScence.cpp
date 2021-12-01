@@ -334,31 +334,38 @@ void CPlayScene::Update(DWORD dt)
 	vector<LPGAMEOBJECT> topRight = quadtree->search((camX+camWidth), camY);
 	vector<LPGAMEOBJECT> botLeft = quadtree->search(camX, (camY +camHeight));
 	vector<LPGAMEOBJECT> botRight = quadtree->search((camX+camWidth), (camY +camHeight));
+
+	//clear the same vector object 
+	int topLeftLevel = quadtree->searchLevel(camX, camY);
+	int topRightLevel = quadtree->searchLevel((camX + camWidth), camY);
+	int botLeftLevel = quadtree->searchLevel(camX, (camY + camHeight));
+	int botRightLevel = quadtree->searchLevel((camX + camWidth), (camY + camHeight));	
+	if (topRightLevel == topLeftLevel)
+		topRight.clear();
+	if (botLeftLevel == topLeftLevel)
+		botLeft.clear();
+	if (botRightLevel == topLeftLevel)
+		botRight.clear();
+
+	if (botLeftLevel == topRightLevel)
+		botLeft.clear();
+	if (botRightLevel == topRightLevel)
+		botRight.clear();
+
+	if (botRightLevel == botLeftLevel)
+		botRight.clear();
+	//insert object from quadtree
 	objects.clear();	
 	objects.insert(objects.end(), topLeft.begin(), topLeft.end());
 	objects.insert(objects.end(), topRight.begin(), topRight.end());
 	objects.insert(objects.end(), botLeft.begin(), botLeft.end());
 	objects.insert(objects.end(), botRight.begin(), botRight.end());
 
-	/*for (int i = 0; i < objects.size(); i++)
-	{
-		string objectID = to_string(objects[i]->ObjectType) + to_string(objects[i]->x) + to_string(objects[i]->y);
-		auto search = mapObject.find(objectID);
-		if (search == mapObject.end()) {
-			mapObject.insert(std::pair<string, LPGAMEOBJECT>(objectID, objects[i]));
-		}
-	}
-	objects.clear();
-	map<string, LPGAMEOBJECT>::iterator it;
-	for (it = mapObject.begin(); it != mapObject.end(); ++it) {
-		objects.push_back(it->second);
-	}*/
-
-	
 	for (size_t i = 0; i < objects.size(); i++)
 	{
 		objects[i]->Update(dt, &coObjects);
 	}
+	//DebugOut(L"HAVE %d LADYBIRD \n",temp);
 	for (size_t i = 0; i < staticObjects.size(); i++)
 	{
 		staticObjects[i]->Update(dt, &coObjects);

@@ -2,7 +2,7 @@
 #include "Enemy.h"
 #include "Utils.h"
 #define EYELET_WALKING_SPEED 0.05*0.5;
-#define EYELET_FLYING_UP_SPEED 0.05*0.4;
+#define EYELET_FLYING_UP_SPEED 0.05*0.4*2;
 
 #define EYELET_BBOX_WIDTH 16
 #define EYELET_BBOX_HEIGHT 16
