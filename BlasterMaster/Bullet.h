@@ -20,7 +20,7 @@
 #define BULLET_ANI_NOT_FIRE			6
 #define BULLET_ANI_DIE				7
 
-#define BULLET_VX 0.15
+#define BULLET_VX 0.3
 
 #define BULLET_RANGE				100
 

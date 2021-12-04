@@ -25,7 +25,7 @@ void FrogGun::Render()
 		ani = FROG_GUN_ANI_RIGHT_UP;
 		break;
 	}
-	animation_set->at(ani)->Render(x, y);
+	animation_set->at(ani)->Render(x, yRender);
 	//RenderBoundingBox();
 }
 
@@ -61,6 +61,7 @@ void FrogGun::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		this->x = bodyUp->x - FROG_GUN_BBOX_WIDTH;
 		this->y = bodyUp->y + 0.5 * FROG_BODY_UP_BBOX_HEIGHT;
+		this->yRender = bodyUp->yRender + 0.5 * FROG_BODY_UP_BBOX_HEIGHT;
 		this->SetState(FROG_GUN_STATE_LEFT);
 		break;
 	}
@@ -68,6 +69,7 @@ void FrogGun::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		this->x = bodyUp->x + FROG_BODY_UP_BBOX_WIDTH * 0.6 + FROG_GUN_BBOX_WIDTH;
 		this->y = bodyUp->y + 0.5 * FROG_BODY_UP_BBOX_HEIGHT;
+		this->yRender = bodyUp->yRender + 0.5 * FROG_BODY_UP_BBOX_HEIGHT;
 		this->SetState(FROG_GUN_STATE_RIGHT);
 		break;
 	}
@@ -75,6 +77,7 @@ void FrogGun::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		this->x = bodyUp->x + 0.5 * FROG_BODY_UP_BBOX_WIDTH;
 		this->y = bodyUp->y - FROG_GUN_BBOX_HEIGHT;
+		this->yRender = bodyUp->yRender - FROG_GUN_BBOX_HEIGHT;
 		this->SetState(FROG_GUN_STATE_UP);
 		break;
 	}
@@ -82,6 +85,7 @@ void FrogGun::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		this->x = bodyUp->x - FROG_GUN_BBOX_WIDTH;
 		this->y = bodyUp->y - FROG_GUN_BBOX_HEIGHT;
+		this->yRender = bodyUp->yRender - FROG_GUN_BBOX_HEIGHT;
 		this->SetState(FROG_GUN_STATE_LEFT_UP);
 		break;
 	}
@@ -89,6 +93,7 @@ void FrogGun::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		this->x = bodyUp->x + FROG_GUN_BBOX_WIDTH + FROG_BODY_UP_BBOX_WIDTH;
 		this->y = bodyUp->y;
+		this->yRender = bodyUp->yRender;
 		this->SetState(FROG_GUN_STATE_RIGHT_UP);
 		break;
 	}

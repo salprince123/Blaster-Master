@@ -65,9 +65,9 @@ void Quadtree::_ParseSection_OBJECTS(string line)
     int object_type = atoi(tokens[0].c_str());
     float x = atof(tokens[1].c_str());
     float y = atof(tokens[2].c_str());
-    int height = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetHeight();
-    int row = (height - y) / 16;
-    y = (row - 1) * 16;
+    //int height = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetHeight();
+    //int row = (height - y) / 16;
+    //y = (row - 1) * 16;
     //DebugOut(L"INFOR %f %f \n", x, y);
     int ani_set_id = atoi(tokens[3].c_str());
 

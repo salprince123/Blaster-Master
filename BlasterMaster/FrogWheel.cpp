@@ -28,7 +28,7 @@ void FrogWheel::Render()
 			break;
 	}
 	//ani = FROG_WHEEL_ANI_UP_LEFT;
-	animation_set->at(ani)->Render(x, y);
+	animation_set->at(ani)->Render(x, yRender);
 }
 void FrogWheel::AutoChangeStateWithTime(DWORD time)
 {
@@ -104,11 +104,13 @@ void FrogWheel::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{		
 		this->x = bodyDown->x - FROG_WHEEL_BBOX_WIDTH;
 		this->y = bodyDown->y + 0.5 * FROG_BODY_DOWN_BBOX_HEIGHT;
+		this->yRender = bodyDown->yRender + 0.5 * FROG_BODY_DOWN_BBOX_HEIGHT;
 	}
 	else if (this->type == FROG_WHEEL_TYPE_RIGHT)
 	{
 		this->x = bodyDown->x + FROG_BODY_DOWN_BBOX_WIDTH;
 		this->y = bodyDown->y + 0.5 * FROG_BODY_DOWN_BBOX_HEIGHT;
+		this->yRender = bodyDown->yRender + 0.5 * FROG_BODY_DOWN_BBOX_HEIGHT;
 	}
 	Frog* frog = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	//DebugOut(L"PLAYER STATE %d \n", frog->GetState());
@@ -124,8 +126,16 @@ void FrogWheel::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	else this->lastTime = 0;
 
 	if (((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer()->GetState() == FROG_STATE_JUMPING_UP)
+	{
 		this->y += 2;
+		this->yRender += 2;
+	}
+		
 	else if (((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer()->GetState() == FROG_STATE_FALLING_DOWN)
+	{
 		this->y -= 3;
+		this->yRender -= 3;
+	}
+		
 	CGameObject::Update(dt, coObjects);
 }

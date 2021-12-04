@@ -104,7 +104,7 @@ void LadyBird::Render()
 		ani = LADYBIRD_ANI_WALKING_RIGHT;
 	int alpha = 255;
 
-	animation_set->at(ani)->Render(x, y, alpha);
+	animation_set->at(ani)->Render(x, yRender, alpha);
 	//RenderBoundingBox();
 }
 void LadyBird::SetState(int state)

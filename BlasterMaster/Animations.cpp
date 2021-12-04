@@ -1,5 +1,6 @@
 #include "Animations.h"
 #include "Utils.h"
+#include "PlayScence.h"
 
 CAnimationSets * CAnimationSets::__instance = NULL;
 
@@ -38,7 +39,9 @@ void CAnimation::Render(float x, float y, int alpha)
 			if (currentFrame == frames.size()) currentFrame = 0;
 		}
 	}
-
+	/*int height = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetHeight();
+	int row = (height - y) / 16;
+	y = (row - 1) * 16;*/
 	frames[currentFrame]->GetSprite()->Draw(x, y, alpha);
 }
 

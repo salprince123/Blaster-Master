@@ -40,7 +40,7 @@ void FrogBody::Render()
 			ani = FROG_BODY_DOWN_ANI_BOT_RIGHT;
 			break;
 	}
-	animation_set->at(ani)->Render(x, y);
+	animation_set->at(ani)->Render(x, yRender);
 	//RenderBoundingBox();
 }
 
@@ -124,8 +124,7 @@ void FrogBody::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				this->SetState(FROG_BODY_UP_STATE_LEFT);
 				if (this->type == FROG_BODY_TYPE_DOWN)
 					this->SetState(FROG_BODY_DOWN_STATE_LEFT_RIGHT);
-				this->x = mario->x+FROG_GUN_BBOX_WIDTH - 0.5 * FROG_WHEEL_BBOX_WIDTH;
-				
+				this->x = mario->x+FROG_GUN_BBOX_WIDTH - 0.5 * FROG_WHEEL_BBOX_WIDTH;				
 				break;
 			}
 			case FROG_STATE_WALKING_RIGHT:
@@ -156,12 +155,14 @@ void FrogBody::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 		}
 		this->y = mario->y ;
+		this->yRender = mario->yRender;
 	}
 	else if (type == FROG_BODY_TYPE_DOWN)
 	{
 		FrogBody* bodyUp = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetBodyUp();
 		this->x = bodyUp->x + 0.5 * FROG_BODY_UP_BBOX_WIDTH - 0.5 * FROG_BODY_DOWN_BBOX_WIDTH;
 		this->y = bodyUp->y + FROG_BODY_DOWN_BBOX_HEIGHT;
+		this->yRender = bodyUp->yRender + FROG_BODY_DOWN_BBOX_HEIGHT;
 	}
 	
 	

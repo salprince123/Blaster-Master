@@ -71,7 +71,7 @@ void EyeLet::Render()
 		ani = EYELET_ANI_WALKING_DIE;
 	int alpha = 255;
 
-	animation_set->at(ani)->Render(x, y, alpha);
+	animation_set->at(ani)->Render(x, yRender, alpha);
 	//RenderBoundingBox();
 }
 void EyeLet::SetState(int state)

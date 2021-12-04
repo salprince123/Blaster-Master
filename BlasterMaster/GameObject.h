@@ -49,6 +49,7 @@ public:
 
 	float x; 
 	float y;
+	float yRender;
 
 	float dx;	// dx = vx*dt
 	float dy;	// dy = vy*dt

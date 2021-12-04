@@ -172,7 +172,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	float y = atof(tokens[2].c_str());
 	int height = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetHeight();
 	int row = (height - y) / 16;
-	y = (row - 1) * 16;
+	float yRender = (row - 1) * 16;
 	int ani_set_id = atoi(tokens[3].c_str());
 
 	CAnimationSets * animation_sets = CAnimationSets::GetInstance();
@@ -188,35 +188,53 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 				DebugOut(L"[ERROR] MARIO object was created before!\n");
 				return;
 			}
-			obj = new Frog(x, y);
+			obj = new Frog(x, y, yRender);
 			player = (Frog*)obj;
-			DebugOut(L"[INFO] Player object created!\n");
+			DebugOut(L"[INFO] Player object created! %f\n",yRender);
 			break;
 		}	
 		
 		case OBJECT_TYPE_FROG_GUN:
 		{			
 			obj = new FrogGun();
+			obj->yRender = yRender;
 			gun = (FrogGun*)obj;
+			DebugOut(L"[INFO] Player object created! %f\n", yRender);
 			break;
 		}
 		case OBJECT_TYPE_FROG_BODY:
 		{
 			obj = new FrogBody();
+			obj->yRender = yRender;
 			int type = atoi(tokens[4].c_str());
 			dynamic_cast<FrogBody*>(obj)->SetType(type);
 			if(type== FROG_BODY_TYPE_UP)
 				bodyUp = (FrogBody*)obj;
 			else bodyDown = (FrogBody*)obj;
+			DebugOut(L"[INFO] Player object created! %f\n", yRender);
 			break;
 		}
 		case OBJECT_TYPE_FROG_WHEEL:
 		{
 			int type = atoi(tokens[4].c_str());
+			
 			obj = new FrogWheel(type);	
+			obj->yRender = yRender;
 			if (type == FROG_WHEEL_TYPE_LEFT)
 				wheelLeft = (FrogWheel*)obj;
 			else wheelRight = (FrogWheel*)obj;
+			DebugOut(L"[INFO] Player object created! %f\n", yRender);
+			break;
+		}
+		case OBJECT_TYPE_BRICK:
+		{
+			obj = new CBrick();
+			if (tokens.size() == 5)
+			{
+				int type = atof(tokens[4].c_str());
+				dynamic_cast<CBrick*>(obj)->type = type;
+			}
+			//DebugOut(L"%d\n", dynamic_cast<CBrick*>(obj)->type);
 			break;
 		}
 		case OBJECT_TYPE_BULLET:
@@ -243,6 +261,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	if (obj != NULL)
 	{
 		obj->SetPosition(x, y);
+		obj->yRender = yRender;
 		LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
 		obj->SetAnimationSet(ani_set);
 		if (object_type == OBJECT_TYPE_BACKROUND)
@@ -318,10 +337,7 @@ void CPlayScene::Update(DWORD dt)
 	Camera* camera = CGame::getCamera();
 	CGame* game = CGame::GetInstance();
 	vector<LPGAMEOBJECT> coObjects;
-	for (size_t i = 1; i < objects.size(); i++)
-	{
-		coObjects.push_back(objects[i]);
-	}
+	
 	float camX = camera->getCamPosX();
 	float camY = camera->getCamPosY();
 	float camWidth = game->GetScreenWidth();
@@ -360,7 +376,14 @@ void CPlayScene::Update(DWORD dt)
 	objects.insert(objects.end(), topRight.begin(), topRight.end());
 	objects.insert(objects.end(), botLeft.begin(), botLeft.end());
 	objects.insert(objects.end(), botRight.begin(), botRight.end());
-
+	for (size_t i = 1; i < objects.size(); i++)
+	{
+		coObjects.push_back(objects[i]);
+	}
+	for (size_t i = 1; i < staticObjects.size(); i++)
+	{
+		coObjects.push_back(staticObjects[i]);
+	}
 	for (size_t i = 0; i < objects.size(); i++)
 	{
 		objects[i]->Update(dt, &coObjects);
@@ -377,6 +400,7 @@ void CPlayScene::Update(DWORD dt)
 	// Update camera to follow mario
 	float cx, cy;
 	player->GetPosition(cx, cy);
+	cy = player->yRender;
 	camera->SetSize(game->GetScreenWidth(), game->GetScreenHeight());
 	camera->Update(cx, cy,this->GetHeight());
 	

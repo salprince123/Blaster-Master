@@ -44,7 +44,7 @@ void Boom::Render()
 	}
 	int alpha = 255;
 
-	animation_set->at(ani)->Render(x, y, alpha);
+	animation_set->at(ani)->Render(x, yRender, alpha);
 
 }
 void Boom::SetState(int state)

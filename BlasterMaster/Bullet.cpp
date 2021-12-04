@@ -26,7 +26,7 @@ void Bullet::Render()
 		default:
 			break;
 	}
-	animation_set->at(ani)->Render(x, y);
+	animation_set->at(ani)->Render(x, yRender);
 }
 
 void Bullet::GetBoundingBox(float& l, float& t, float& r, float& b)

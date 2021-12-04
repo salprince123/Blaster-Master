@@ -1,4 +1,8 @@
 #pragma once
+
+#define SCREEN_WIDTH 256
+#define SCREEN_HEIGHT 224
+
 #define SCENE_SECTION_UNKNOWN -1
 #define SCENE_SECTION_TEXTURES 2
 #define SCENE_SECTION_SPRITES 3

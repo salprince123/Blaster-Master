@@ -22,15 +22,14 @@
 
 #include "Mario.h"
 #include "Brick.h"
-
+#include "Define.h"
 #include "PlayScence.h"
 
 #define WINDOW_CLASS_NAME L"Window"
 #define MAIN_WINDOW_TITLE L"BLASTER MASTER"
 
 #define BACKGROUND_COLOR D3DCOLOR_XRGB(0, 0,0)
-#define SCREEN_WIDTH 256
-#define SCREEN_HEIGHT 224
+
 
 #define MAX_FRAME_RATE 120
 

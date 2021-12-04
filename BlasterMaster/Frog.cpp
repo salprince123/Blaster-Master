@@ -1,5 +1,5 @@
 #include "Frog.h"
-Frog::Frog(float x, float y) : CGameObject()
+Frog::Frog(float x, float y, float yRender) : CGameObject()
 {
 	level = FROG_LEVEL;
 	untouchable = 0;
@@ -9,17 +9,18 @@ Frog::Frog(float x, float y) : CGameObject()
 	this->x = x;
 	this->y = y;
 	this->maxBullet = MAX_BULLET;
+	this->yRender= yRender;
 }
 
 void Frog::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {	
 	// Calculate dx, dy 
 	//if(state==FROG_STATE_FIRE)
-		
+	//DebugOut(L"%f %f\n", x, y);
 	CGameObject::Update(dt);
 	if(x <= 0) x = 0;
 	// Simple fall down
-	vy += FROG_GRAVITY*dt ;
+	//vy += FROG_GRAVITY*dt ;
 	//if (state == FROG_STATE_FIRE)
 		//SetState(oldState);
 	//Handle update state for Frog
@@ -46,6 +47,7 @@ void Frog::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		x += dx;
 		y += dy;
+		yRender += dy;
 	}
 	else
 	{
