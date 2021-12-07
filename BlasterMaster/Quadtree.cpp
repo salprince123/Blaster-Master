@@ -65,6 +65,9 @@ void Quadtree::_ParseSection_OBJECTS(string line)
     int object_type = atoi(tokens[0].c_str());
     float x = atof(tokens[1].c_str());
     float y = atof(tokens[2].c_str());
+    int height = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetHeight();
+    int row = (height - y) / 16;
+    float yRender = (row - 1) * 16;
     //int height = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetHeight();
     //int row = (height - y) / 16;
     //y = (row - 1) * 16;
@@ -122,7 +125,8 @@ void Quadtree::_ParseSection_OBJECTS(string line)
 
     // General object setup
     obj->SetPosition(x, y);
-
+    obj->yRender = yRender;
+    DebugOut(L"yRender %f\n", yRender);
     LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
 
     obj->SetAnimationSet(ani_set);

@@ -339,7 +339,7 @@ void CPlayScene::Update(DWORD dt)
 	vector<LPGAMEOBJECT> coObjects;
 	
 	float camX = camera->getCamPosX();
-	float camY = camera->getCamPosY();
+	float camY = camera->getRealCamPosY();
 	float camWidth = game->GetScreenWidth();
 	float camHeight = game->GetScreenHeight();
 	//DebugOut(L"[CAMPOS] %f %f %f %f\n", camera->getCamPosX(), camera->getCamPosY(), player->x, player->y);
@@ -402,6 +402,7 @@ void CPlayScene::Update(DWORD dt)
 	player->GetPosition(cx, cy);
 	cy = player->yRender;
 	camera->SetSize(game->GetScreenWidth(), game->GetScreenHeight());
+	camera->setRealCamY(player->y);
 	camera->Update(cx, cy,this->GetHeight());
 	
 }

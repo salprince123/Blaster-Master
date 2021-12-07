@@ -20,7 +20,7 @@ void Frog::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CGameObject::Update(dt);
 	if(x <= 0) x = 0;
 	// Simple fall down
-	//vy += FROG_GRAVITY*dt ;
+	vy += FROG_GRAVITY*dt ;
 	//if (state == FROG_STATE_FIRE)
 		//SetState(oldState);
 	//Handle update state for Frog
@@ -47,7 +47,8 @@ void Frog::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		x += dx;
 		y += dy;
-		yRender += dy;
+		yRender -= dy;
+		//DebugOut(L"NOT Colis \n", dt);
 	}
 	else
 	{
@@ -64,9 +65,10 @@ void Frog::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			LPCOLLISIONEVENT e = coEventsResult[i];
 			if (dynamic_cast<CBrick*>(e->obj))
 			{
+				//DebugOut(L"Colis brick at %f\n", dt);
 				if (GetState() == FROG_STATE_FALLING_DOWN)
 					SetState(FROG_STATE_IDLE);
-			}
+			}			
 		}
 	}
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];

@@ -73,10 +73,10 @@ void CGame::Draw(float x, float y, LPDIRECT3DTEXTURE9 texture, int left, int top
 	int height = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetHeight();
 	int row = (height - y) / 16;
 	//y = (row - 1) * 16;
-	DebugOut(L"%f %f	", y, _camera->getCamPosY());
+	//DebugOut(L"%f %f	", y, _camera->getCamPosY());
 	float y1 = y- _camera->getCamPosY();
 	//y1 = SCREEN_HEIGHT - y1;
-	DebugOut(L"%f \n", y1);
+	//DebugOut(L"%f \n", y1);
 	//D3DXVECTOR3 p(x - _camera->getCamPosX(),  _camera->getCamPosY()-y, 0);
 	D3DXVECTOR3 p(x1 , y1, 0);
 	//D3DXVECTOR3 p(x1, y1, 0);
@@ -265,17 +265,26 @@ void CGame::SweptAABB(
 	}
 
 
-	if (dy > 0)
+	/*if (dy < 0)
 	{
 		dy_entry = st - mb;
 		dy_exit = sb - mt;
 	}
-	else if (dy < 0)
+	else if (dy > 0)
 	{
 		dy_entry = sb - mt;
 		dy_exit = st - mb;
+	}*/
+	if (dy > 0)
+	{
+		dy_entry = sb - mt;
+		dy_exit = st-mb;
 	}
-
+	else if (dy < 0)
+	{
+		dy_entry = mb-st;
+		dy_exit = mt-sb;
+	}
 	if (dx == 0)
 	{
 		tx_entry = -999999.0f;
