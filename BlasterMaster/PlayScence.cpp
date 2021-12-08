@@ -258,7 +258,7 @@ void CPlayScene::_ParseSection_QUAD(string line)
 	DebugOut(L"--> %s\n", ToWSTR(line).c_str());
 	LPCWSTR path = ToLPCWSTR(tokens[0]);
 	quadtree = new Quadtree(path);
-	this->objects = quadtree->getAll();
+	//this->objects = quadtree->getAll();
 	quadtree->Split();
 }
 void CPlayScene::Load()
@@ -330,16 +330,16 @@ void CPlayScene::Update(DWORD dt)
 	//int row = (GetHeight() - camera->getCamPosY()) / 16;
 	//int temp = (row ) * 16;
 	//vector<LPGAMEOBJECT> topLeft = quadtree->search(player->x, player->y);
-	/*vector<LPGAMEOBJECT> topLeft = quadtree->search(camX, camY);
-	vector<LPGAMEOBJECT> topRight = quadtree->search((camX+camWidth), camY);
-	vector<LPGAMEOBJECT> botLeft = quadtree->search(camX, (camY +camHeight));
-	vector<LPGAMEOBJECT> botRight = quadtree->search((camX+camWidth), (camY +camHeight));
+	vector<LPGAMEOBJECT> topLeft = quadtree->search(camX, height-camY);
+	vector<LPGAMEOBJECT> topRight = quadtree->search((camX+camWidth), height - camY);
+	vector<LPGAMEOBJECT> botLeft = quadtree->search(camX, height - (camY +camHeight));
+	vector<LPGAMEOBJECT> botRight = quadtree->search((camX+camWidth), height - (camY +camHeight));
 
 	//clear the same vector object 
-	int topLeftLevel = quadtree->searchLevel(camX, camY);
-	int topRightLevel = quadtree->searchLevel((camX + camWidth), camY);
-	int botLeftLevel = quadtree->searchLevel(camX, (camY + camHeight));
-	int botRightLevel = quadtree->searchLevel((camX + camWidth), (camY + camHeight));	
+	int topLeftLevel = quadtree->searchLevel(camX, height - camY);
+	int topRightLevel = quadtree->searchLevel((camX + camWidth), height - camY);
+	int botLeftLevel = quadtree->searchLevel(camX, height - (camY + camHeight));
+	int botRightLevel = quadtree->searchLevel((camX + camWidth), height - (camY + camHeight));
 	if (topRightLevel == topLeftLevel)
 		topRight.clear();
 	if (botLeftLevel == topLeftLevel)
@@ -359,7 +359,7 @@ void CPlayScene::Update(DWORD dt)
 	objects.insert(objects.end(), topLeft.begin(), topLeft.end());
 	objects.insert(objects.end(), topRight.begin(), topRight.end());
 	objects.insert(objects.end(), botLeft.begin(), botLeft.end());
-	objects.insert(objects.end(), botRight.begin(), botRight.end());*/
+	objects.insert(objects.end(), botRight.begin(), botRight.end());
 
 	for (size_t i = 0; i < objects.size(); i++)
 	{
@@ -380,7 +380,7 @@ void CPlayScene::Update(DWORD dt)
 	cy = height - cy;
 	camera->SetSize(game->GetScreenWidth(), game->GetScreenHeight());
 	camera->Update(cx, cy,this->GetHeight());
-	
+	//DebugOut(L" %d  %d\n", staticObjects.size(), objects.size());	
 }
 
 void CPlayScene::Render()

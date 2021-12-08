@@ -43,6 +43,7 @@ void Bullet::GetBoundingBox(float& l, float& t, float& r, float& b)
 		r = x + BULLET_BBOX_WIDTH_HORIZONTAL;
 		b = y + BULLET_BBOX_HEIGHT_HORIZONTAL;
 	}
+	//DebugOut(L"BBX BULLET : %f %f %f %f %f\n", l, t, r, b, y);
 }
 void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -114,9 +115,29 @@ void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 			if (dynamic_cast<Boom*>(e->obj))
 			{
-				DebugOut(L"COLLISS %d\n",id);
-				//if (state != BULLET_STATE_DIE && state != BULLET_STATE_NOT_FIRE)
+				//DebugOut(L"COLLISS %d\n",id);
+				if (state != BULLET_STATE_DIE && state != BULLET_STATE_NOT_FIRE)
+				{
 					dynamic_cast<Boom*>(e->obj)->SetState(BOOM_STATE_DIE);
+					SetState(BULLET_STATE_DIE);
+				}
+					
+			}
+			if (dynamic_cast<LadyBird*>(e->obj))
+			{
+				if (state != BULLET_STATE_DIE && state != BULLET_STATE_NOT_FIRE)
+				{
+					dynamic_cast<LadyBird*>(e->obj)->SetState(LADYBIRD_STATE_DIE);
+					SetState(BULLET_STATE_DIE);
+				}
+			}
+			if (dynamic_cast<EyeLet*>(e->obj))
+			{
+				if (state != BULLET_STATE_DIE && state != BULLET_STATE_NOT_FIRE)
+				{
+					dynamic_cast<EyeLet*>(e->obj)->SetState(EYELET_STATE_DIE);
+					SetState(BULLET_STATE_DIE);
+				}
 			}
 		}
 	}
