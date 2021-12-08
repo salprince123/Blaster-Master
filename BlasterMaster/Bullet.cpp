@@ -112,6 +112,12 @@ void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (state != BULLET_STATE_DIE && state != BULLET_STATE_NOT_FIRE)
 					SetState(BULLET_STATE_DIE);
 			}
+			if (dynamic_cast<Boom*>(e->obj))
+			{
+				DebugOut(L"COLLISS %d\n",id);
+				//if (state != BULLET_STATE_DIE && state != BULLET_STATE_NOT_FIRE)
+					dynamic_cast<Boom*>(e->obj)->SetState(BOOM_STATE_DIE);
+			}
 		}
 	}
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];

@@ -1,8 +1,7 @@
 #pragma once
 #include "GameObject.h"
+#include "Define.h"
 
-#define BACKGROUND_BBOX_WIDTH  16
-#define BACKGROUND_BBOX_HEIGHT 16
 
 class Background : public CGameObject
 {
