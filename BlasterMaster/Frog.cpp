@@ -1,4 +1,5 @@
 #include "Frog.h"
+#include "Boom.h"
 Frog::Frog(float x, float y) : CGameObject()
 {
 	level = FROG_LEVEL;
@@ -64,7 +65,16 @@ void Frog::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				if (GetState() == FROG_STATE_FALLING_DOWN)
 					SetState(FROG_STATE_IDLE);
+				if (nx < 0)
+					x-=3;
+				else if (nx > 0)
+					x += 3;
+				//DebugOut(L"%f %f\n", nx, ny);
 			}
+			/*if (dynamic_cast<Boom*>(e->obj))
+			{				
+					dynamic_cast<Boom*>(e->obj)->SetState(BOOM_STATE_DIE);
+			}*/
 		}
 	}
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];

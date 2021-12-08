@@ -170,9 +170,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	//DebugOut(L"STATIC OBJECT TYPE= %d\n", object_type);
 	float x = atof(tokens[1].c_str());
 	float y = atof(tokens[2].c_str());
-	int height = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetHeight();
+	/*int height = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetHeight();
 	int row = (height - y) / 16;
-	y = (row - 1) * 16;
+	y = (row - 1) * 16;*/
 	int ani_set_id = atoi(tokens[3].c_str());
 
 	CAnimationSets * animation_sets = CAnimationSets::GetInstance();
@@ -258,7 +258,7 @@ void CPlayScene::_ParseSection_QUAD(string line)
 	DebugOut(L"--> %s\n", ToWSTR(line).c_str());
 	LPCWSTR path = ToLPCWSTR(tokens[0]);
 	quadtree = new Quadtree(path);
-	//this->objects = quadtree->getAll();
+	this->objects = quadtree->getAll();
 	quadtree->Split();
 }
 void CPlayScene::Load()
@@ -330,7 +330,7 @@ void CPlayScene::Update(DWORD dt)
 	//int row = (GetHeight() - camera->getCamPosY()) / 16;
 	//int temp = (row ) * 16;
 	//vector<LPGAMEOBJECT> topLeft = quadtree->search(player->x, player->y);
-	vector<LPGAMEOBJECT> topLeft = quadtree->search(camX, camY);
+	/*vector<LPGAMEOBJECT> topLeft = quadtree->search(camX, camY);
 	vector<LPGAMEOBJECT> topRight = quadtree->search((camX+camWidth), camY);
 	vector<LPGAMEOBJECT> botLeft = quadtree->search(camX, (camY +camHeight));
 	vector<LPGAMEOBJECT> botRight = quadtree->search((camX+camWidth), (camY +camHeight));
@@ -359,7 +359,7 @@ void CPlayScene::Update(DWORD dt)
 	objects.insert(objects.end(), topLeft.begin(), topLeft.end());
 	objects.insert(objects.end(), topRight.begin(), topRight.end());
 	objects.insert(objects.end(), botLeft.begin(), botLeft.end());
-	objects.insert(objects.end(), botRight.begin(), botRight.end());
+	objects.insert(objects.end(), botRight.begin(), botRight.end());*/
 
 	for (size_t i = 0; i < objects.size(); i++)
 	{
@@ -377,6 +377,7 @@ void CPlayScene::Update(DWORD dt)
 	// Update camera to follow mario
 	float cx, cy;
 	player->GetPosition(cx, cy);
+	cy = height - cy;
 	camera->SetSize(game->GetScreenWidth(), game->GetScreenHeight());
 	camera->Update(cx, cy,this->GetHeight());
 	

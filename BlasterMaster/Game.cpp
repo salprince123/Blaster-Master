@@ -66,9 +66,10 @@ void CGame::Init(HWND hWnd)
 */
 void CGame::Draw(float x, float y, LPDIRECT3DTEXTURE9 texture, int left, int top, int right, int bottom, int alpha)
 {
-	//int height = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetHeight();
+	int height = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetHeight();
 	//int row = (height - y) / 16;
 	//y = (row-1) * 16;
+	y = height - y;
 	float x1 = x - _camera->getCamPosX();
 	float y1 = y- _camera->getCamPosY();
 	

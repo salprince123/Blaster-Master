@@ -32,5 +32,5 @@ QuadtreeScene1.txt
 774 160 160 77401 3
 
 # background
-2 0 768 2001
+2 0 784 2001
 

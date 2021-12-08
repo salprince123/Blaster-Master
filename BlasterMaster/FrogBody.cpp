@@ -161,7 +161,7 @@ void FrogBody::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		FrogBody* bodyUp = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetBodyUp();
 		this->x = bodyUp->x + 0.5 * FROG_BODY_UP_BBOX_WIDTH - 0.5 * FROG_BODY_DOWN_BBOX_WIDTH;
-		this->y = bodyUp->y + FROG_BODY_DOWN_BBOX_HEIGHT;
+		this->y = bodyUp->y - FROG_BODY_DOWN_BBOX_HEIGHT;
 	}
 	
 	
