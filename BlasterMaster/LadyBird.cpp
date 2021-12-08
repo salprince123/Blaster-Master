@@ -34,15 +34,16 @@ void LadyBird::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		{
 			if (y0 != y1)//di theo parapol
 			{
-
+				vy = LADYBIRD_FLYING_DOWN_SPEED;
 			}
 			else
 			{
 				vy = 0;
-				if (vx > 0 && x > x1)
+				if (vx >= 0 && x >= x1)
 				{
 					this->SetState(LADYBIRD_STATE_WALKING_LEFT);
 					x = x1; vx = -LADYBIRD_WALKING_SPEED;
+					
 				}
 			}
 			
@@ -51,17 +52,17 @@ void LadyBird::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		{
 			if (y0 != y1)//di theo parapol
 			{
-
+				vy = LADYBIRD_FLYING_DOWN_SPEED;
 			}
 			else
 			{
 				vy = 0;
-				if (vx < 0 && x < x0 && y0 == y1)
+				if (vx <= 0 && x <= x0 && y0 == y1)
 				{
 					this->SetState(LADYBIRD_STATE_WALKING_RIGHT);
 					x = x0; vx = LADYBIRD_WALKING_SPEED; vy = 0;
+					
 				}
-				else vx = 0;
 			}
 		}
 	}
@@ -98,7 +99,15 @@ void LadyBird::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	//	}
 	//}
 	//for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
-	Enemy::Update(dt, coObjects);
+	if(y0==y1)
+		Enemy::Update(dt, coObjects);
+	else
+	{
+		dx = vx * dt;
+		dy = (vy/(8*vx*vx))*dx*dx;
+	}
+	x += 2*dx;
+	y += dy;
 }
 void LadyBird::Render()
 {
