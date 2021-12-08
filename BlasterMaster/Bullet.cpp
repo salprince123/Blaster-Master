@@ -52,6 +52,13 @@ void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{		
 		SetState(frog->nx * BULLET_STATE_FIRE_RIGHT);
 		this->vx = frog->nx*BULLET_VX;
+		this->vy = 0;
+	}
+	else if (frog->GetState() == FROG_STATE_FIRE_UP && frog->GetMaxBullet() == this->id)
+	{
+		SetState(BULLET_STATE_FIRE_UP);
+		this->vy = BULLET_VY;
+		this->vx = 0;
 	}
 	switch (state)
 	{
@@ -62,8 +69,12 @@ void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				SetState(BULLET_STATE_NOT_FIRE);
 			}
+			else if (abs(y - y0) > 20)
+			{
+				SetState(BULLET_STATE_NOT_FIRE);
+			}
 			break;
-		case BULLET_STATE_FIRE_LEFT:case BULLET_STATE_FIRE_RIGHT: case BULLET_STATE_FIRE_UP:
+		case BULLET_STATE_FIRE_LEFT:case BULLET_STATE_FIRE_RIGHT: 
 		{
 			if (abs(x - x0) > BULLET_RANGE)
 			{
@@ -75,7 +86,20 @@ void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				CGameObject::Update(dt,coObjects);
 				break;
 			}				
-		}			
+		}		
+		case BULLET_STATE_FIRE_UP:
+		{
+			if (abs(y - y0) > BULLET_RANGE)
+			{
+				y0 = y;
+				SetState(BULLET_STATE_DIE);
+			}
+			else
+			{
+				CGameObject::Update(dt, coObjects);
+				break;
+			}
+		}
 		case BULLET_STATE_NOT_FIRE:			
 			HandleStateUnFire();
 			break;
@@ -153,17 +177,27 @@ void Bullet::HandleStateUnFire()
 	{
 		case FROG_BODY_UP_STATE_LEFT:
 		{
-			this->x = bodyUp->x - FROG_GUN_BBOX_WIDTH;
-			this->y = bodyUp->y + 0.5 * FROG_BODY_UP_BBOX_HEIGHT;
+			//this->x = bodyUp->x - FROG_GUN_BBOX_WIDTH;
+			//this->y = bodyUp->y + 0.5 * FROG_BODY_UP_BBOX_HEIGHT;
+			this->x = bodyUp->x;
+			this->y = bodyUp->y;
 			break;
 		}
 		case FROG_BODY_UP_STATE_RIGHT:
 		{
-			this->x = bodyUp->x + FROG_BODY_UP_BBOX_WIDTH * 0.6 + FROG_GUN_BBOX_WIDTH;
-			this->y = bodyUp->y + 0.5 * FROG_BODY_UP_BBOX_HEIGHT;
+			//this->x = bodyUp->x + FROG_BODY_UP_BBOX_WIDTH * 0.6 + FROG_GUN_BBOX_WIDTH;
+			//this->y = bodyUp->y + 0.5 * FROG_BODY_UP_BBOX_HEIGHT;
+			this->x = bodyUp->x;
+			this->y = bodyUp->y ;
 			break;
 		}
-		case FROG_BODY_UP_STATE_UP:
+		case FROG_BODY_UP_STATE_UP_RIGHT:
+		{
+			this->x = bodyUp->x + 0.5 * FROG_BODY_UP_BBOX_WIDTH;
+			this->y = bodyUp->y - FROG_GUN_BBOX_HEIGHT;
+			break;
+		}
+		case FROG_BODY_UP_STATE_UP_LEFT:
 		{
 			this->x = bodyUp->x + 0.5 * FROG_BODY_UP_BBOX_WIDTH;
 			this->y = bodyUp->y - FROG_GUN_BBOX_HEIGHT;

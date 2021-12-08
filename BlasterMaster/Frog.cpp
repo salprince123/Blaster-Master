@@ -16,7 +16,7 @@ void Frog::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {	
 	// Calculate dx, dy 
 	//if(state==FROG_STATE_FIRE)
-		
+	DebugOut(L"STATE %d %d\n", state, nx);
 	CGameObject::Update(dt);
 	if(x <= 0) x = 0;
 	// Simple fall down

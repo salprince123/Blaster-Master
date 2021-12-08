@@ -326,10 +326,8 @@ void CPlayScene::Update(DWORD dt)
 	float camY = camera->getCamPosY();
 	float camWidth = game->GetScreenWidth();
 	float camHeight = game->GetScreenHeight();
-	//DebugOut(L"[CAMPOS] %f %f %f %f\n", camera->getCamPosX(), camera->getCamPosY(), player->x, player->y);
-	//int row = (GetHeight() - camera->getCamPosY()) / 16;
-	//int temp = (row ) * 16;
-	//vector<LPGAMEOBJECT> topLeft = quadtree->search(player->x, player->y);
+	
+
 	vector<LPGAMEOBJECT> topLeft = quadtree->search(camX, height-camY);
 	vector<LPGAMEOBJECT> topRight = quadtree->search((camX+camWidth), height - camY);
 	vector<LPGAMEOBJECT> botLeft = quadtree->search(camX, height - (camY +camHeight));
@@ -417,14 +415,15 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_A:
 		{
 			int oldState = frog->GetState();
-			frog->SetState(FROG_STATE_FIRE);
+			if(oldState==FROG_STATE_UP_LEFT || oldState == FROG_STATE_UP_RIGHT)
+				frog->SetState(FROG_STATE_FIRE_UP);
+			else frog->SetState(FROG_STATE_FIRE);
 			frog->SetMaxBullet(frog->GetMaxBullet() - 1);
 			if (frog->GetMaxBullet() == 0)
 				frog->SetMaxBullet(MAX_BULLET);
 			frog->SetOldState(oldState);
 			break;
-		}
-		
+		}	
 	case DIK_R: 
 		frog->Reset();
 		break;
@@ -441,6 +440,14 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 		frog->SetState(FROG_STATE_WALKING_RIGHT);
 	else if (game->IsKeyDown(DIK_LEFT))
 		frog->SetState(FROG_STATE_WALKING_LEFT);
+	else if (game->IsKeyDown(DIK_UP))
+	{
+		if(frog->nx<0)
+			frog->SetState(FROG_STATE_UP_LEFT);
+		else if (frog->nx > 0)
+			frog->SetState(FROG_STATE_UP_RIGHT);
+	}
+		
 	else
 	{
 		if(frog->GetState() != FROG_STATE_FALLING_DOWN && frog->GetState() != FROG_STATE_JUMPING_UP)
