@@ -2,7 +2,7 @@
 #include "Boom.h"
 Frog::Frog(float x, float y) : CGameObject()
 {
-	level = FROG_LEVEL;
+	level = PRINCE_LEVEL;
 	untouchable = 0;
 	SetState(FROG_STATE_IDLE);
 	start_x = x;
@@ -16,7 +16,7 @@ void Frog::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {	
 	// Calculate dx, dy 
 	//if(state==FROG_STATE_FIRE)
-	DebugOut(L"STATE %d %d\n", state, nx);
+	//DebugOut(L"STATE %d %d\n", state, nx);
 	CGameObject::Update(dt);
 	if(x <= 0) x = 0;
 	// Simple fall down
@@ -84,7 +84,24 @@ void Frog::Render()
 {	
 	//int alpha = 255;
 	//animation_set->at(0)->Render(x, y, alpha);
-	RenderBoundingBox();
+	
+	if (level == PRINCE_LEVEL)
+	{
+		int ani = 1;
+		DebugOut(L"%d %d %d\n", state, nx,ani);
+		if (state == FROG_STATE_IDLE)
+		{
+			if(nx<0)
+				ani = PRINCE_ANI_IDLE_LEFT;
+			else ani = PRINCE_ANI_IDLE_RIGHT;
+		}			
+		else if (state == FROG_STATE_WALKING_RIGHT)
+			ani = PRINCE_ANI_WALKING_RIGHT;
+		else if (state == FROG_STATE_WALKING_LEFT)
+			ani = PRINCE_ANI_WALKING_LEFT;
+		animation_set->at(ani)->Render(x, y, 255);
+	}
+	//RenderBoundingBox();
 }
 
 void Frog::SetState(int state)
@@ -126,6 +143,11 @@ void Frog::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 	top = y;
 
 	if (level == FROG_LEVEL)
+	{
+		right = x + FROG_BBOX_WIDTH;
+		bottom = y + FROG_BBOX_HEIGHT;
+	}
+	else if (level == PRINCE_LEVEL)
 	{
 		right = x + FROG_BBOX_WIDTH;
 		bottom = y + FROG_BBOX_HEIGHT;

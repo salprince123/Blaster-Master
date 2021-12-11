@@ -93,6 +93,7 @@ void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				y0 = y;
 				SetState(BULLET_STATE_DIE);
+				DebugOut(L"Out ò range %f\n",dt);
 			}
 			else
 			{
@@ -134,6 +135,12 @@ void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			if (dynamic_cast<CBrick*>(e->obj))
 			{
 				///DebugOut(L"COLLISS %d\n",id);
+				
+				float l, t, r, b;
+				e->obj->GetBoundingBox(l, t, r, b);
+				DebugOut(L"Colide with brick \n%f %f %f %f\n", l,t,r,b);
+				this->GetBoundingBox(l, t, r, b);
+				DebugOut(L" %f %f %f %f\n", l, t, r, b);
 				if (state != BULLET_STATE_DIE && state != BULLET_STATE_NOT_FIRE)
 					SetState(BULLET_STATE_DIE);
 			}
