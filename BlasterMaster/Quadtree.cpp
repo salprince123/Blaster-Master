@@ -139,6 +139,7 @@ void Quadtree::_ParseSection_SIZE(string line)
     int maxHeight = atoi(tokens[1].c_str());
     DebugOut(L"[QUAD SIZE] %d %d\n", maxWidth, maxHeight);
     ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->SetHeight(maxHeight);
+    ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->SetWidth(maxWidth);
     if(maxHeight> maxWidth)
         this->size.width = maxHeight;
     else 

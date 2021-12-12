@@ -363,11 +363,9 @@ void CPlayScene::Update(DWORD dt)
 	{
 		objects[i]->Update(dt, &coObjects);
 	}
-	//DebugOut(L"HAVE %d LADYBIRD \n",temp);
 	for (size_t i = 0; i < staticObjects.size(); i++)
 	{
 		staticObjects[i]->Update(dt, &coObjects);
-		//DebugOut(L"type %f\n", staticObjects[0]->x);
 	}
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
 	if (player == NULL) return; 
@@ -378,7 +376,7 @@ void CPlayScene::Update(DWORD dt)
 	cy = height - cy;
 	camera->SetSize(game->GetScreenWidth(), game->GetScreenHeight());
 	camera->Update(cx, cy,this->GetHeight());
-	//DebugOut(L" %d  %d\n", staticObjects.size(), objects.size());	
+
 }
 
 void CPlayScene::Render()
@@ -406,11 +404,15 @@ void CPlayScene::Unload()
 void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 {
 	Frog* frog = ((CPlayScene*)scence)->GetPlayer();
+	int id = ((CPlayScene*)scence)->GetId();
 	switch (KeyCode)
 	{
 	case DIK_S:
-		if(frog->GetState() != FROG_STATE_FALLING_DOWN && frog->GetState() != FROG_STATE_JUMPING_UP)
-			frog->SetState(FROG_STATE_JUMP);
+		if (id == 1)
+		{
+			if (frog->GetState() != FROG_STATE_FALLING_DOWN && frog->GetState() != FROG_STATE_JUMPING_UP)
+				frog->SetState(FROG_STATE_JUMP);
+		}		
 		break;
 	case DIK_A:
 		{
@@ -437,26 +439,49 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 {
 	CGame* game = CGame::GetInstance();
 	Frog* frog = ((CPlayScene*)scence)->GetPlayer();
-	// disable control key when Mario die 
-	if (frog->GetState() == FROG_STATE_DIE) return;
-	if (game->IsKeyDown(DIK_RIGHT))
-		frog->SetState(FROG_STATE_WALKING_RIGHT);
-	else if (game->IsKeyDown(DIK_LEFT))
-		frog->SetState(FROG_STATE_WALKING_LEFT);
-	else if (game->IsKeyDown(DIK_UP))
+	int id = ((CPlayScene*)scence)->GetId();
+	if (id == 1)
 	{
-		if(frog->nx<0)
-			frog->SetState(FROG_STATE_UP_LEFT);
-		else if (frog->nx > 0)
-			frog->SetState(FROG_STATE_UP_RIGHT);
+		if (frog->GetState() == FROG_STATE_DIE) return;
+		if (game->IsKeyDown(DIK_RIGHT))
+			frog->SetState(FROG_STATE_WALKING_RIGHT);
+		else if (game->IsKeyDown(DIK_LEFT))
+			frog->SetState(FROG_STATE_WALKING_LEFT);
+		else if (game->IsKeyDown(DIK_UP))
+		{
+			if (frog->nx < 0)
+				frog->SetState(FROG_STATE_UP_LEFT);
+			else if (frog->nx > 0)
+				frog->SetState(FROG_STATE_UP_RIGHT);
+		}
+		else
+		{
+			if (frog->GetState() != FROG_STATE_FALLING_DOWN && frog->GetState() != FROG_STATE_JUMPING_UP)
+				frog->SetState(FROG_STATE_IDLE);
+		}
 	}
-		
-	else
+	else if (id == 2)
 	{
-		if(frog->GetState() != FROG_STATE_FALLING_DOWN && frog->GetState() != FROG_STATE_JUMPING_UP)
-		//DebugOut(L"KEYSTATE %f \n", mario->vx);
-			frog->SetState(FROG_STATE_IDLE);
+		if (frog->GetState() == FROG_STATE_DIE) return;
+		if (game->IsKeyDown(DIK_RIGHT))
+			frog->SetState(FROG_STATE_WALKING_RIGHT);
+		else if (game->IsKeyDown(DIK_LEFT))
+			frog->SetState(FROG_STATE_WALKING_LEFT);
+		else if (game->IsKeyDown(DIK_UP))
+		{
+			frog->SetState(PRINCE_STATE_WALKING_UP);
+		}
+		else if (game->IsKeyDown(DIK_DOWN))
+		{
+			frog->SetState(PRINCE_STATE_WALKING_DOWN);
+		}
+		else
+		{
+			if (frog->GetState() != FROG_STATE_FALLING_DOWN && frog->GetState() != FROG_STATE_JUMPING_UP)
+				frog->SetState(FROG_STATE_IDLE);
+		}
 	}
+	
 	//Camera* camera = CGame::getCamera();
 	//camera->Update(camera->getCamPosX(), camera->getCamPosY(), ((CPlayScene*)scence) ->GetHeight());
 		

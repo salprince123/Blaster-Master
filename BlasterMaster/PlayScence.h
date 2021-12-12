@@ -31,6 +31,7 @@ protected:
 	vector<LPGAMEOBJECT> staticObjects;
 	Quadtree* quadtree;
 	int height;
+	int width;
 	void _ParseSection_TEXTURES(string line);
 	void _ParseSection_SPRITES(string line);
 	void _ParseSection_ANIMATIONS(string line);
@@ -47,6 +48,8 @@ public:
 	virtual void Unload();
 	int GetHeight() { return height; }
 	void SetHeight(int h) { this->height = h; }
+	int GetWidth() { return width; }
+	void SetWidth(int w) { this->width= w; }
 	Frog* GetPlayer() { return player; }
 	FrogBody* GetBodyUp() { return bodyUp; }
 	FrogBody* GetBodyDown() { return bodyDown; }
