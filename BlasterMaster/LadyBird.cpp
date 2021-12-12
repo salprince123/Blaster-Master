@@ -118,6 +118,8 @@ void LadyBird::Render()
 	}
 	else if (state == LADYBIRD_STATE_WALKING_RIGHT)
 		ani = LADYBIRD_ANI_WALKING_RIGHT;
+	else if (state == LADYBIRD_STATE_COIN)
+		ani = LADYBIRD_ANI_COIN;
 	int alpha = 255;
 
 	animation_set->at(ani)->Render(x, y, alpha);
@@ -138,6 +140,10 @@ void LadyBird::SetState(int state)
 		break;
 	case LADYBIRD_STATE_DIE:
 		y = -1000;
+		break;
+	case LADYBIRD_STATE_COIN:
+		vx = 0;
+		vy = 0;
 		break;
 	}
 }

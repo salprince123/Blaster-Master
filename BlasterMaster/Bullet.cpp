@@ -158,7 +158,7 @@ void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				if (state != BULLET_STATE_DIE && state != BULLET_STATE_NOT_FIRE)
 				{
-					dynamic_cast<LadyBird*>(e->obj)->SetState(LADYBIRD_STATE_DIE);
+					dynamic_cast<LadyBird*>(e->obj)->SetState(LADYBIRD_STATE_COIN);
 					SetState(BULLET_STATE_DIE);
 				}
 			}
