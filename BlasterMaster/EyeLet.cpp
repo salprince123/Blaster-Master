@@ -69,6 +69,8 @@ void EyeLet::Render()
 		ani = EYELET_ANI_WALKING_RIGHT;
 	else if (state == EYELET_STATE_DIE || state == EYELET_STATE_UNACTIVE)
 		ani = EYELET_ANI_DIE;
+	else if (state == EYELET_STATE_COIN)
+		ani = EYELET_ANI_COIN;
 	int alpha = 255;
 
 	animation_set->at(ani)->Render(x, y, alpha);
@@ -85,6 +87,10 @@ void EyeLet::SetState(int state)
 			break;
 		case EYELET_STATE_DIE:
 			y = -1000;
+			break;
+		case EYELET_STATE_COIN:
+			vx = 0;
+			vy = 0;
 			break;
 		case EYELET_STATE_UNACTIVE:
 			break;

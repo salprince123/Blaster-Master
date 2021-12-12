@@ -4,7 +4,11 @@
 Frog::Frog(float x, float y) : CGameObject()
 {
 	//level = FROG_LEVEL;
-	level = PRINCE_LEVEL;
+	int id = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetId();
+	if(id==1)
+		level = FROG_LEVEL;
+	else 
+		level = PRINCE_LEVEL;
 	untouchable = 0;
 	SetState(FROG_STATE_IDLE);
 	start_x = x;
@@ -113,12 +117,18 @@ void Frog::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					x-=3;
 				else if (nx > 0)
 					x += 3;
-				//DebugOut(L"%f %f\n", nx, ny);
 			}
-			/*if (dynamic_cast<Boom*>(e->obj))
-			{				
-					dynamic_cast<Boom*>(e->obj)->SetState(BOOM_STATE_DIE);
-			}*/
+			if (dynamic_cast<EyeLet*>(e->obj))
+			{			
+				EyeLet* temp = dynamic_cast<EyeLet*>(e->obj);
+				if (dynamic_cast<EyeLet*>(e->obj)->GetState() == EYELET_STATE_COIN)
+				{
+					DebugOut(L"COLIIS COIN\n");
+					e->obj->SetState(EYELET_STATE_DIE);
+				}
+					
+
+			}
 		}
 	}
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
@@ -196,9 +206,12 @@ void Frog::SetState(int state)
 		case FROG_STATE_FALLING_DOWN:
 			break;
 		case FROG_STATE_IDLE:
+		{
 			vx = 0;
-			vy = 0;
+			if(level==PRINCE_LEVEL)
+				vy = 0;
 			break;
+		}	
 		case FROG_STATE_FIRE:
 			//SetState(oldState);
 			break;
