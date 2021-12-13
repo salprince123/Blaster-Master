@@ -99,6 +99,12 @@ void Quadtree::_ParseSection_OBJECTS(string line)
             obj = new BallCarry(x, y, x, y, nx);
             break;
         }
+        case OBJECT_TYPE_BALLBOT:
+        {
+            int nx = atof(tokens[4].c_str());
+            obj = new BallBot(x, y, x, y, nx);
+            break;
+        }
         case OBJECT_TYPE_BOOM: obj = new Boom(); break;
         case OBJECT_TYPE_BRICK:
         {

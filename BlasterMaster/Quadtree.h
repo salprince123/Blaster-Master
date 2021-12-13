@@ -11,6 +11,7 @@
 #include "EyeLet.h"
 #include "Portal.h"
 #include "BallCarry.h"
+#include "BallBot.h"
 using namespace std;
 class Rect
 {
