@@ -38,31 +38,97 @@ void Bullet::GetBoundingBox(float& l, float& t, float& r, float& b)
 		r = x + BULLET_BBOX_WIDTH_HORIZONTAL;
 		b = y + BULLET_BBOX_HEIGHT_HORIZONTAL;
 	}
+	else if (enemyHandle != NULL)
+	{
+		r = x + 8;
+		b = y + 16;
+	}
 	else
 	{
 		r = x + BULLET_BBOX_WIDTH_HORIZONTAL;
 		b = y + BULLET_BBOX_HEIGHT_HORIZONTAL;
 	}
+	//DebugOut(L"BBX BULLET : %f %f %f %f %f\n", l, t, r, b, y);
 }
 void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	Frog* frog = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
-	if (frog->GetState() == FROG_STATE_FIRE && frog->GetMaxBullet() == this->id)
-	{		
-		SetState(frog->nx * BULLET_STATE_FIRE_RIGHT);
-		this->vx = frog->nx*BULLET_VX;
-	}
-	switch (state)
+	if (enemyHandle!=NULL)
 	{
+		CGameObject::Update(dt, coObjects);
+		//update bullet for enemy here 
+		if (type == OBJECT_TYPE_BALLCARRY)
+		{
+			BallCarry* ball = dynamic_cast<BallCarry*>(enemyHandle);
+			
+			switch (ball->state)
+			{
+			case BALLCARRY_STATE_UNACTIVE:
+			{
+				vx = vy = 0;
+				x = ball->x + BALLCARRY_BBOX_WIDTH / 4;
+				y = ball->y;
+				break;
+			}
+			case BALLCARRY_STATE_FIRE:
+			{
+				SetState(BULLET_STATE_FIRE_RIGHT);
+				if (y > ball->y - BALLCARRY_BBOX_HEIGHT+5)
+				{
+					//vx = ball->nx * BULLET_VX / 10 * id;
+					//vy = 0.045 - 0.0035 * dt;
+					x += 0.1 * id;
+					y -= 0.1;
+				}				
+				else
+				{
+					ballCarryTime = GetTickCount64();
+					vx = vy = 0;
+				}
+
+				CGameObject::Update(dt, coObjects);
+				DebugOut(L"%d\n", state);
+				break;
+			}
+			}
+			if (ballCarryTime != 0)
+			{
+				if ((GetTickCount64() - ballCarryTime) > 1500)
+				{
+					SetState(BULLET_STATE_DIE);
+					ballCarryTime = 0;
+				}
+			}
+		}
+	}		
+	else
+	{
+		Frog* frog = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+		if (frog->GetState() == FROG_STATE_FIRE && frog->GetMaxBullet() == this->id)
+		{
+			SetState(frog->nx * BULLET_STATE_FIRE_RIGHT);
+			this->vx = frog->nx * BULLET_VX;
+			this->vy = 0;
+		}
+		else if (frog->GetState() == FROG_STATE_FIRE_UP && frog->GetMaxBullet() == this->id)
+		{
+			SetState(BULLET_STATE_FIRE_UP);
+			this->vy = BULLET_VY;
+			this->vx = 0;
+		}
+		switch (state)
+		{
 		case BULLET_STATE_DIE:
-			//DebugOut(L"HERE\n");
 			x += 0.1;
 			if (abs(x - x0) > 20)
 			{
 				SetState(BULLET_STATE_NOT_FIRE);
 			}
+			else if (abs(y - y0) > 20)
+			{
+				SetState(BULLET_STATE_NOT_FIRE);
+			}
 			break;
-		case BULLET_STATE_FIRE_LEFT:case BULLET_STATE_FIRE_RIGHT: case BULLET_STATE_FIRE_UP:
+		case BULLET_STATE_FIRE_LEFT:case BULLET_STATE_FIRE_RIGHT:
 		{
 			if (abs(x - x0) > BULLET_RANGE)
 			{
@@ -71,22 +137,39 @@ void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 			else
 			{
-				CGameObject::Update(dt,coObjects);
+				CGameObject::Update(dt, coObjects);
 				break;
-			}				
-		}			
-		case BULLET_STATE_NOT_FIRE:			
+			}
+		}
+		case BULLET_STATE_FIRE_UP:
+		{
+			if (abs(y - y0) > BULLET_RANGE)
+			{
+				y0 = y;
+				SetState(BULLET_STATE_DIE);
+			}
+			else
+			{
+				CGameObject::Update(dt, coObjects);
+				break;
+			}
+		}
+		case BULLET_STATE_NOT_FIRE:
 			HandleStateUnFire();
 			break;
 		default:
 			break;
+		}
 	}
+	
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 	coEvents.clear();
 	// turn off collision when die 
 	if (state != BULLET_STATE_DIE && state != BULLET_STATE_NOT_FIRE)
 		CalcPotentialCollisions(coObjects, coEvents);
+	//if (type == OBJECT_TYPE_BALLCARRY)
+		//DebugOut(L"%d\n", coEvents.size());
 	// No collision occured, proceed normally
 	if (coEvents.size() == 0)
 	{
@@ -108,9 +191,56 @@ void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			LPCOLLISIONEVENT e = coEventsResult[i];
 			if (dynamic_cast<CBrick*>(e->obj))
 			{
-				///DebugOut(L"COLLISS %d\n",id);
+				float l, t, r, b;
+				e->obj->GetBoundingBox(l, t, r, b);
+				this->GetBoundingBox(l, t, r, b);
 				if (state != BULLET_STATE_DIE && state != BULLET_STATE_NOT_FIRE)
 					SetState(BULLET_STATE_DIE);
+			}
+			else if (dynamic_cast<Boom*>(e->obj))
+			{
+				if (state != BULLET_STATE_DIE && state != BULLET_STATE_NOT_FIRE)
+				{
+					dynamic_cast<Boom*>(e->obj)->SetState(BOOM_STATE_DIE);
+					SetState(BULLET_STATE_DIE);
+				}
+			}
+			else if (dynamic_cast<LadyBird*>(e->obj))
+			{
+				if (state != BULLET_STATE_DIE && state != BULLET_STATE_NOT_FIRE)
+				{
+					dynamic_cast<LadyBird*>(e->obj)->SetState(LADYBIRD_STATE_COIN);
+					SetState(BULLET_STATE_DIE);
+				}
+			}
+			else if (dynamic_cast<EyeLet*>(e->obj))
+			{
+				if (state != BULLET_STATE_DIE && state != BULLET_STATE_NOT_FIRE)
+				{
+					dynamic_cast<EyeLet*>(e->obj)->SetState(EYELET_STATE_COIN);
+					SetState(BULLET_STATE_DIE);
+				}
+			}
+			else if (dynamic_cast<BallCarry*>(e->obj))
+			{
+				if (state != BULLET_STATE_DIE && state != BULLET_STATE_NOT_FIRE && enemyHandle==NULL)
+				{
+					dynamic_cast<BallCarry*>(e->obj)->SetState(BALLCARRY_STATE_COIN);
+					SetState(BULLET_STATE_DIE);
+				}
+			}
+			/*else if (dynamic_cast<Bullet*>(e->obj))
+			{
+				if (state != BULLET_STATE_DIE && state != BULLET_STATE_NOT_FIRE)
+				{
+					if(dynamic_cast<Bullet*>(e->obj)->enemyHandle!=NULL)
+						dynamic_cast<Bullet*>(e->obj)->SetState(BULLET_STATE_DIE);
+					SetState(BULLET_STATE_DIE);
+				}
+			}*/
+			else
+			{
+				SetState(BULLET_STATE_DIE);
 			}
 		}
 	}
@@ -126,17 +256,27 @@ void Bullet::HandleStateUnFire()
 	{
 		case FROG_BODY_UP_STATE_LEFT:
 		{
-			this->x = bodyUp->x - FROG_GUN_BBOX_WIDTH;
-			this->y = bodyUp->y + 0.5 * FROG_BODY_UP_BBOX_HEIGHT;
+			//this->x = bodyUp->x - FROG_GUN_BBOX_WIDTH;
+			//this->y = bodyUp->y + 0.5 * FROG_BODY_UP_BBOX_HEIGHT;
+			this->x = bodyUp->x;
+			this->y = bodyUp->y;
 			break;
 		}
 		case FROG_BODY_UP_STATE_RIGHT:
 		{
-			this->x = bodyUp->x + FROG_BODY_UP_BBOX_WIDTH * 0.6 + FROG_GUN_BBOX_WIDTH;
-			this->y = bodyUp->y + 0.5 * FROG_BODY_UP_BBOX_HEIGHT;
+			//this->x = bodyUp->x + FROG_BODY_UP_BBOX_WIDTH * 0.6 + FROG_GUN_BBOX_WIDTH;
+			//this->y = bodyUp->y + 0.5 * FROG_BODY_UP_BBOX_HEIGHT;
+			this->x = bodyUp->x;
+			this->y = bodyUp->y ;
 			break;
 		}
-		case FROG_BODY_UP_STATE_UP:
+		case FROG_BODY_UP_STATE_UP_RIGHT:
+		{
+			this->x = bodyUp->x + 0.5 * FROG_BODY_UP_BBOX_WIDTH;
+			this->y = bodyUp->y - FROG_GUN_BBOX_HEIGHT;
+			break;
+		}
+		case FROG_BODY_UP_STATE_UP_LEFT:
 		{
 			this->x = bodyUp->x + 0.5 * FROG_BODY_UP_BBOX_WIDTH;
 			this->y = bodyUp->y - FROG_GUN_BBOX_HEIGHT;
@@ -154,5 +294,18 @@ void Bullet::HandleStateUnFire()
 			this->y = bodyUp->y;
 			break;
 		}
+	}
+}
+void Bullet::SetState(int state)
+{
+	CGameObject::SetState(state);
+	switch (state)
+	{
+	case BULLET_STATE_DIE:
+	{
+		if (enemyHandle != 0)
+			x = y = -1000;
+		break;
+	}
 	}
 }

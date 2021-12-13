@@ -1,7 +1,14 @@
 #include "Frog.h"
+#include "Boom.h"
+#include "PlayScence.h"
 Frog::Frog(float x, float y) : CGameObject()
 {
-	level = FROG_LEVEL;
+	//level = FROG_LEVEL;
+	int id = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetId();
+	if(id==1)
+		level = FROG_LEVEL;
+	else 
+		level = PRINCE_LEVEL;
 	untouchable = 0;
 	SetState(FROG_STATE_IDLE);
 	start_x = x;
@@ -15,11 +22,53 @@ void Frog::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {	
 	// Calculate dx, dy 
 	//if(state==FROG_STATE_FIRE)
-		
+	//DebugOut(L"STATE %d %d\n", state, nx);
+	int id = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetId();
 	CGameObject::Update(dt);
+	//DebugOut(L"%d %d \n", nx, ny);
 	if(x <= 0) x = 0;
+	//at small portal
+	if (y > 384 && y < 385)
+	{
+		if (nx > 0)
+		{
+			if (x < 1357 && x > 1208)
+			{
+				x+=2;
+				return;
+			}
+		}
+		else
+		{
+			if (x < 1357 && x > 1208)
+			{
+				x-=2;
+				return;
+			}
+		}
+	}
+	else if (y > 128 && y < 129)
+	{
+		if (nx > 0)
+		{
+			if (x < 1357 && x > 1208)
+			{
+				x += 2;
+				return;
+			}
+		}
+		else
+		{
+			if (x < 1357 && x > 1208)
+			{
+				x -= 2;
+				return;
+			}
+		}
+	}
 	// Simple fall down
-	vy += FROG_GRAVITY*dt ;
+	if(id==1)
+		vy += FROG_GRAVITY*dt ;
 	//if (state == FROG_STATE_FIRE)
 		//SetState(oldState);
 	//Handle update state for Frog
@@ -64,6 +113,42 @@ void Frog::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				if (GetState() == FROG_STATE_FALLING_DOWN)
 					SetState(FROG_STATE_IDLE);
+				if (nx < 0)
+					x-=3;
+				else if (nx > 0)
+					x += 3;
+			}
+			else if (dynamic_cast<EyeLet*>(e->obj))
+			{			
+				//EyeLet* temp = dynamic_cast<EyeLet*>(e->obj);
+				if (dynamic_cast<EyeLet*>(e->obj)->GetState() == EYELET_STATE_COIN)
+				{
+					//DebugOut(L"COLIIS COIN\n");
+					e->obj->SetState(EYELET_STATE_DIE);
+				}
+			}
+			else if (dynamic_cast<LadyBird*>(e->obj))
+			{
+				if (dynamic_cast<LadyBird*>(e->obj)->GetState() == LADYBIRD_STATE_COIN)
+				{
+					e->obj->SetState(LADYBIRD_STATE_DIE);
+				}
+			}
+			else if (dynamic_cast<BallCarry*>(e->obj))
+			{
+				if (dynamic_cast<BallCarry*>(e->obj)->GetState() == BALLCARRY_STATE_COIN)
+				{
+					e->obj->SetState(BALLCARRY_STATE_DIE);
+				}
+			}
+			else if (dynamic_cast<Bullet*>(e->obj))
+			{
+				if (state != BULLET_STATE_DIE && state != BULLET_STATE_NOT_FIRE)
+				{
+					if (dynamic_cast<Bullet*>(e->obj)->enemyHandle != NULL)
+						dynamic_cast<Bullet*>(e->obj)->SetState(BULLET_STATE_DIE);
+					SetState(BULLET_STATE_DIE);
+				}
 			}
 		}
 	}
@@ -74,7 +159,37 @@ void Frog::Render()
 {	
 	//int alpha = 255;
 	//animation_set->at(0)->Render(x, y, alpha);
-	RenderBoundingBox();
+	
+	if (level == PRINCE_LEVEL)
+	{
+		int ani = 1;
+		
+		if (state == FROG_STATE_IDLE)
+		{
+			if (ny == 0)
+			{
+				if (nx < 0)
+					ani = PRINCE_ANI_IDLE_LEFT;
+				else ani = PRINCE_ANI_IDLE_RIGHT;
+			}
+			else
+			{
+				if (ny < 0)
+					ani = PRINCE_ANI_IDLE_DOWN;
+				else ani = PRINCE_ANI_IDLE_UP;
+			}
+		}			
+		else if (state == FROG_STATE_WALKING_RIGHT)
+			ani = PRINCE_ANI_WALKING_RIGHT;
+		else if (state == FROG_STATE_WALKING_LEFT)
+			ani = PRINCE_ANI_WALKING_LEFT;
+		else if (state == PRINCE_STATE_WALKING_DOWN)
+			ani = PRINCE_ANI_WALKING_DOWN;
+		else if (state == PRINCE_STATE_WALKING_UP)
+			ani = PRINCE_ANI_WALKING_UP;
+		animation_set->at(ani)->Render(x, y, 255);
+	}
+	//RenderBoundingBox();
 }
 
 void Frog::SetState(int state)
@@ -86,10 +201,22 @@ void Frog::SetState(int state)
 		case FROG_STATE_WALKING_RIGHT:
 			vx = FROG_WALKING_SPEED;
 			nx = 1;
+			ny = 0;
 			break;
 		case FROG_STATE_WALKING_LEFT:
 			vx = -FROG_WALKING_SPEED;
 			nx = -1;
+			ny = 0;
+			break;
+		case PRINCE_STATE_WALKING_DOWN:
+			vy = -FROG_WALKING_SPEED;
+			ny = -1;
+			nx = 0;
+			break;
+		case PRINCE_STATE_WALKING_UP:
+			vy = FROG_WALKING_SPEED;
+			ny = 1;
+			nx = 0;
 			break;
 		case FROG_STATE_JUMP:
 			vy = FROG_JUMP_SPEED_Y;
@@ -100,8 +227,12 @@ void Frog::SetState(int state)
 		case FROG_STATE_FALLING_DOWN:
 			break;
 		case FROG_STATE_IDLE:
+		{
 			vx = 0;
+			if(level==PRINCE_LEVEL)
+				vy = 0;
 			break;
+		}	
 		case FROG_STATE_FIRE:
 			//SetState(oldState);
 			break;
@@ -119,6 +250,11 @@ void Frog::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 	{
 		right = x + FROG_BBOX_WIDTH;
 		bottom = y + FROG_BBOX_HEIGHT;
+	}
+	else if (level == PRINCE_LEVEL)
+	{
+		right = x + PRINCE_BBOX_WIDTH;
+		bottom = y + PRINCE_BBOX_HEIGHT;
 	}
 }
 

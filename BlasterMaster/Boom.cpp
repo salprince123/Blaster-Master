@@ -7,13 +7,14 @@ Boom::Boom()
 void Boom::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
 	left = x;
-	top = y;
+	top = y-8;
 	right = x + BOOM_BBOX_WIDTH;
 
 	if (state == BOOM_STATE_DIE)
 		bottom = y + BOOM_BBOX_HEIGHT_DIE;
 	else
 		bottom = y + BOOM_BBOX_HEIGHT;
+	//DebugOut(L"BBX BOOM : %f %f %f %f %f\n", left, top, right, bottom, y);
 }
 void Boom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -45,6 +46,7 @@ void Boom::Render()
 	int alpha = 255;
 
 	animation_set->at(ani)->Render(x, y, alpha);
+	RenderBoundingBox();
 
 }
 void Boom::SetState(int state)
@@ -55,6 +57,8 @@ void Boom::SetState(int state)
 	case BOOM_STATE_ALIVE:
 		break;
 	case BOOM_STATE_DIE:
+		x = -100;
+		y = -100;
 		break;
 	}
 }

@@ -13,7 +13,7 @@ void CBrick::GetBoundingBox(float &l, float &t, float &r, float &b)
 	if (type == 1)
 	{
 		r = x + BRICK_BBOX_TYPE1_WIDTH;
-		b = y + BRICK_BBOX_TYPE1_HEIGHT;
+		b = y + BRICK_BBOX_TYPE1_WIDTH;
 	}
 	else
 	{

@@ -21,9 +21,6 @@ void Enemy::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 void Enemy::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CGameObject::Update(dt, coObjects);
-	//DebugOut(L"LADYBIRD HERE\n");
-	x += dx;
-	y += dy;
 }
 
 void Enemy::Render()

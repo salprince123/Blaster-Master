@@ -8,6 +8,7 @@
 #include "GameObject.h"
 #include "Sprites.h"
 #include "Background.h"
+#include "PlayScence.h"
 
 CGameObject::CGameObject()
 {
@@ -20,7 +21,7 @@ void CGameObject::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	this->dt = dt;
 	dx = vx*dt;
-	dy = -vy*dt;
+	dy = vy*dt;
 }
 
 /*
@@ -74,8 +75,13 @@ void CGameObject::CalcPotentialCollisions(
 
 		if (e->t > 0 && e->t <= 1.0f)
 		{
-			if(!dynamic_cast<Background*>(e->obj))
+			if (!dynamic_cast<Background*>(e->obj))
+			{
+				//if (dynamic_cast<EyeLet*>(e->obj) && e->obj->GetState() == EYELET_STATE_COIN)
+					//continue;
 				coEvents.push_back(e);
+			}
+				
 		}
 		else
 			delete e;
@@ -132,8 +138,9 @@ void CGameObject::RenderBoundingBox()
 	rect.top = 0;
 	rect.right = (int)r - (int)l;
 	rect.bottom = (int)b - (int)t;
+	int height = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetHeight();
 
-	CGame::GetInstance()->Draw(x, y, bbox, rect.left, rect.top, rect.right, rect.bottom, 32);
+	CGame::GetInstance()->Draw(x, height-y, bbox, rect.left, rect.top, rect.right, rect.bottom, 32);
 }
 
 

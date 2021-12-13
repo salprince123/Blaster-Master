@@ -170,9 +170,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	//DebugOut(L"STATIC OBJECT TYPE= %d\n", object_type);
 	float x = atof(tokens[1].c_str());
 	float y = atof(tokens[2].c_str());
-	int height = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetHeight();
+	/*int height = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetHeight();
 	int row = (height - y) / 16;
-	y = (row - 1) * 16;
+	y = (row - 1) * 16;*/
 	int ani_set_id = atoi(tokens[3].c_str());
 
 	CAnimationSets * animation_sets = CAnimationSets::GetInstance();
@@ -326,20 +326,18 @@ void CPlayScene::Update(DWORD dt)
 	float camY = camera->getCamPosY();
 	float camWidth = game->GetScreenWidth();
 	float camHeight = game->GetScreenHeight();
-	//DebugOut(L"[CAMPOS] %f %f %f %f\n", camera->getCamPosX(), camera->getCamPosY(), player->x, player->y);
-	//int row = (GetHeight() - camera->getCamPosY()) / 16;
-	//int temp = (row ) * 16;
-	//vector<LPGAMEOBJECT> topLeft = quadtree->search(player->x, player->y);
-	vector<LPGAMEOBJECT> topLeft = quadtree->search(camX, camY);
-	vector<LPGAMEOBJECT> topRight = quadtree->search((camX+camWidth), camY);
-	vector<LPGAMEOBJECT> botLeft = quadtree->search(camX, (camY +camHeight));
-	vector<LPGAMEOBJECT> botRight = quadtree->search((camX+camWidth), (camY +camHeight));
+	
+
+	vector<LPGAMEOBJECT> topLeft = quadtree->search(camX, height-camY);
+	vector<LPGAMEOBJECT> topRight = quadtree->search((camX+camWidth), height - camY);
+	vector<LPGAMEOBJECT> botLeft = quadtree->search(camX, height - (camY +camHeight));
+	vector<LPGAMEOBJECT> botRight = quadtree->search((camX+camWidth), height - (camY +camHeight));
 
 	//clear the same vector object 
-	int topLeftLevel = quadtree->searchLevel(camX, camY);
-	int topRightLevel = quadtree->searchLevel((camX + camWidth), camY);
-	int botLeftLevel = quadtree->searchLevel(camX, (camY + camHeight));
-	int botRightLevel = quadtree->searchLevel((camX + camWidth), (camY + camHeight));	
+	int topLeftLevel = quadtree->searchLevel(camX, height - camY);
+	int topRightLevel = quadtree->searchLevel((camX + camWidth), height - camY);
+	int botLeftLevel = quadtree->searchLevel(camX, height - (camY + camHeight));
+	int botRightLevel = quadtree->searchLevel((camX + camWidth), height - (camY + camHeight));
 	if (topRightLevel == topLeftLevel)
 		topRight.clear();
 	if (botLeftLevel == topLeftLevel)
@@ -365,11 +363,9 @@ void CPlayScene::Update(DWORD dt)
 	{
 		objects[i]->Update(dt, &coObjects);
 	}
-	//DebugOut(L"HAVE %d LADYBIRD \n",temp);
 	for (size_t i = 0; i < staticObjects.size(); i++)
 	{
 		staticObjects[i]->Update(dt, &coObjects);
-		//DebugOut(L"type %f\n", staticObjects[0]->x);
 	}
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
 	if (player == NULL) return; 
@@ -377,9 +373,10 @@ void CPlayScene::Update(DWORD dt)
 	// Update camera to follow mario
 	float cx, cy;
 	player->GetPosition(cx, cy);
+	cy = height - cy;
 	camera->SetSize(game->GetScreenWidth(), game->GetScreenHeight());
 	camera->Update(cx, cy,this->GetHeight());
-	
+
 }
 
 void CPlayScene::Render()
@@ -407,25 +404,33 @@ void CPlayScene::Unload()
 void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 {
 	Frog* frog = ((CPlayScene*)scence)->GetPlayer();
+	int id = ((CPlayScene*)scence)->GetId();
 	switch (KeyCode)
 	{
 	case DIK_S:
-		if(frog->GetState() != FROG_STATE_FALLING_DOWN && frog->GetState() != FROG_STATE_JUMPING_UP)
-			frog->SetState(FROG_STATE_JUMP);
+		if (id == 1)
+		{
+			if (frog->GetState() != FROG_STATE_FALLING_DOWN && frog->GetState() != FROG_STATE_JUMPING_UP)
+				frog->SetState(FROG_STATE_JUMP);
+		}		
 		break;
 	case DIK_A:
 		{
 			int oldState = frog->GetState();
-			frog->SetState(FROG_STATE_FIRE);
+			if(oldState==FROG_STATE_UP_LEFT || oldState == FROG_STATE_UP_RIGHT)
+				frog->SetState(FROG_STATE_FIRE_UP);
+			else frog->SetState(FROG_STATE_FIRE);
 			frog->SetMaxBullet(frog->GetMaxBullet() - 1);
 			if (frog->GetMaxBullet() == 0)
 				frog->SetMaxBullet(MAX_BULLET);
 			frog->SetOldState(oldState);
 			break;
-		}
-		
+		}	
 	case DIK_R: 
 		frog->Reset();
+		break;
+	case DIK_P:
+		frog->SetLevel(PRINCE_LEVEL);
 		break;
 	}
 }
@@ -434,18 +439,49 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 {
 	CGame* game = CGame::GetInstance();
 	Frog* frog = ((CPlayScene*)scence)->GetPlayer();
-	// disable control key when Mario die 
-	if (frog->GetState() == FROG_STATE_DIE) return;
-	if (game->IsKeyDown(DIK_RIGHT))
-		frog->SetState(FROG_STATE_WALKING_RIGHT);
-	else if (game->IsKeyDown(DIK_LEFT))
-		frog->SetState(FROG_STATE_WALKING_LEFT);
-	else
+	int id = ((CPlayScene*)scence)->GetId();
+	if (id == 1)
 	{
-		if(frog->GetState() != FROG_STATE_FALLING_DOWN && frog->GetState() != FROG_STATE_JUMPING_UP)
-		//DebugOut(L"KEYSTATE %f \n", mario->vx);
-			frog->SetState(FROG_STATE_IDLE);
+		if (frog->GetState() == FROG_STATE_DIE) return;
+		if (game->IsKeyDown(DIK_RIGHT))
+			frog->SetState(FROG_STATE_WALKING_RIGHT);
+		else if (game->IsKeyDown(DIK_LEFT))
+			frog->SetState(FROG_STATE_WALKING_LEFT);
+		else if (game->IsKeyDown(DIK_UP))
+		{
+			if (frog->nx < 0)
+				frog->SetState(FROG_STATE_UP_LEFT);
+			else if (frog->nx > 0)
+				frog->SetState(FROG_STATE_UP_RIGHT);
+		}
+		else
+		{
+			if (frog->GetState() != FROG_STATE_FALLING_DOWN && frog->GetState() != FROG_STATE_JUMPING_UP)
+				frog->SetState(FROG_STATE_IDLE);
+		}
 	}
+	else if (id == 2)
+	{
+		if (frog->GetState() == FROG_STATE_DIE) return;
+		if (game->IsKeyDown(DIK_RIGHT))
+			frog->SetState(FROG_STATE_WALKING_RIGHT);
+		else if (game->IsKeyDown(DIK_LEFT))
+			frog->SetState(FROG_STATE_WALKING_LEFT);
+		else if (game->IsKeyDown(DIK_UP))
+		{
+			frog->SetState(PRINCE_STATE_WALKING_UP);
+		}
+		else if (game->IsKeyDown(DIK_DOWN))
+		{
+			frog->SetState(PRINCE_STATE_WALKING_DOWN);
+		}
+		else
+		{
+			if (frog->GetState() != FROG_STATE_FALLING_DOWN && frog->GetState() != FROG_STATE_JUMPING_UP)
+				frog->SetState(FROG_STATE_IDLE);
+		}
+	}
+	
 	//Camera* camera = CGame::getCamera();
 	//camera->Update(camera->getCamPosX(), camera->getCamPosY(), ((CPlayScene*)scence) ->GetHeight());
 		

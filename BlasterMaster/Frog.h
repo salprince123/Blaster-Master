@@ -2,30 +2,7 @@
 #include "GameObject.h"
 #include "Brick.h"
 #include "Utils.h"
-#define FROG_WALKING_SPEED		0.15f 
-#define FROG_JUMP_SPEED_Y		0.5f
-#define FROG_JUMP_DEFLECT_SPEED 0.2f
-#define FROG_GRAVITY			-0.002f
-
-#define FROG_STATE_IDLE			100
-#define FROG_STATE_WALKING_RIGHT	200
-#define FROG_STATE_WALKING_LEFT	300
-#define FROG_STATE_JUMP			400
-#define FROG_STATE_JUMPING_UP	500
-#define FROG_STATE_FALLING_DOWN	600
-#define FROG_STATE_FIRE			700
-
-#define FROG_STATE_DIE				9000
-
-#define	FROG_LEVEL	1
-#define	PRINCE_LEVEL	2
-
-#define FROG_BBOX_WIDTH  26
-#define FROG_BBOX_HEIGHT 16
-
-#define FROG_UNTOUCHABLE_TIME 5000
-
-#define MAX_BULLET 3
+#include "Define.h"
 
 
 class Frog : public CGameObject

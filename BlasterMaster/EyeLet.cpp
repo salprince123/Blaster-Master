@@ -11,14 +11,14 @@ EyeLet::EyeLet(int x0, int y0, int x1, int y1, int nx)
 	this->ny = -1;
 	this->nx = nx;
 	//this->vy = 0;
-	this->SetState(LADYBIRD_STATE_WALKING_RIGHT);
+	this->SetState(EYELET_STATE_WALKING_RIGHT);
 }
 void EyeLet::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
 	left = x;
-	top = y;
+	top = y-8;
 	right = x + EYELET_BBOX_WIDTH;
-	bottom = y + LADYBIRD_BBOX_HEIGHT;
+	bottom = y + EYELET_BBOX_HEIGHT;
 	if (GetState() == EYELET_STATE_DIE)
 	{
 		left = right = top = bottom = 0;
@@ -41,7 +41,7 @@ void EyeLet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 	if (active == 0)
 	{
-		this->SetState(EYELET_STATE_DIE);
+		this->SetState(EYELET_STATE_UNACTIVE);
 		return;
 	}
 	
@@ -67,8 +67,10 @@ void EyeLet::Render()
 	}
 	else if (state == EYELET_STATE_WALKING_RIGHT)
 		ani = EYELET_ANI_WALKING_RIGHT;
-	else if (state == EYELET_STATE_DIE)
-		ani = EYELET_ANI_WALKING_DIE;
+	else if (state == EYELET_STATE_DIE || state == EYELET_STATE_UNACTIVE)
+		ani = EYELET_ANI_DIE;
+	else if (state == EYELET_STATE_COIN)
+		ani = EYELET_ANI_COIN;
 	int alpha = 255;
 
 	animation_set->at(ani)->Render(x, y, alpha);
@@ -82,6 +84,15 @@ void EyeLet::SetState(int state)
 		case EYELET_STATE_WALKING_LEFT:
 			break;
 		case EYELET_STATE_WALKING_RIGHT:
+			break;
+		case EYELET_STATE_DIE:
+			y = -1000;
+			break;
+		case EYELET_STATE_COIN:
+			vx = 0;
+			vy = 0;
+			break;
+		case EYELET_STATE_UNACTIVE:
 			break;
 	}
 }

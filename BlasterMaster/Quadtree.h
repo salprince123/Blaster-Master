@@ -10,6 +10,7 @@
 #include  "Background.h"
 #include "EyeLet.h"
 #include "Portal.h"
+#include "BallCarry.h"
 using namespace std;
 class Rect
 {
