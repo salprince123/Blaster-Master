@@ -5,18 +5,17 @@ BallCarry::BallCarry(int x0, int y0, int x1, int y1, int nx)
 	this->x0 = x0;
 	this->x1 = x1;
 	this->y0 = y0;
-	this->y1 = y1;
-	this->vx = nx * BALLCARRY_WALKING_SPEED;
-	this->vy = BALLCARRY_FLYING_UP_SPEED;
+	this->y1 = y1;	
+	this->vy = 0;
 	this->ny = -1;
 	this->nx = nx;
-	//this->vy = 0;
-	this->SetState(BALLCARRY_STATE_WALKING_RIGHT);
+	this->vy = -1;
+	this->SetState(BALLCARRY_STATE_UNACTIVE);
 }
 void BallCarry::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
 	left = x;
-	top = y - 8;
+	top = y - 2;
 	right = x + BALLCARRY_BBOX_WIDTH;
 	bottom = y + BALLCARRY_BBOX_HEIGHT;
 	if (GetState() == BALLCARRY_STATE_DIE)
@@ -29,34 +28,57 @@ void BallCarry::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	float pX, pY;
 	Frog* player = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	player->GetPosition(pX, pY);
-	if (nx < 0 && (x - pX)>20 && abs(y - pY) < 70)
+	
+	if ((pX - x) < BALLCARRY_RANGE && (pX - x) >0 && state==BALLCARRY_STATE_UNACTIVE)
 	{
-		this->SetState(LADYBIRD_STATE_WALKING_RIGHT);
-		active = 1;
+		//SetState(BALLCARRY_STATE_WALKING_RIGHT);
+		SetState(BALLCARRY_STATE_FIRE);
+		nx = 1;
 	}
-	else if (nx > 0 && (pX - x) > 20 && abs(y - pY) < 70)
+	else if( (x-pX) < BALLCARRY_RANGE && (x - pX)>0 && state == BALLCARRY_STATE_UNACTIVE)
 	{
-		active = 1;
-		this->SetState(LADYBIRD_STATE_WALKING_RIGHT);
+		//SetState(BALLCARRY_STATE_WALKING_LEFT);
+		SetState(BALLCARRY_STATE_FIRE);
+		nx = -1;
 	}
-	if (active == 0)
+	CGameObject::Update(dt, coObjects);
+	vector<LPCOLLISIONEVENT> coEvents;
+	vector<LPCOLLISIONEVENT> coEventsResult;
+	coEvents.clear();
+	// turn off collision when die 
+	if (state != BALLCARRY_STATE_DIE)
+		CalcPotentialCollisions(coObjects, coEvents);
+	
+	if (coEvents.size() == 0)
 	{
-		this->SetState(BALLCARRY_STATE_UNACTIVE);
-		return;
+		x += dx;
+		y += dy;
 	}
-
-	this->dt = dt;
-	dx = vx * dt;
-	if (y0 - y > 20)
-		ny = -1 * nx;
-	if (y - y0 > 20)
-		ny = 1 * nx;
-	if (ny == 1)
-		dy = -vx * sin(45) * dt;
 	else
-		dy = vx * sin(45) * dt;
-	x += dx;
-	y += dy;
+	{
+		float min_tx, min_ty, nx = 0, ny;
+		float rdx = 0;
+		float rdy = 0;
+		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
+		x += min_tx * dx + nx * 0.4f;
+		y += min_ty * dy + ny * 0.4f;
+		if (nx != 0) vx = 0;
+		if (ny != 0) vy = 0;
+		for (UINT i = 0; i < coEventsResult.size(); i++)
+		{
+			LPCOLLISIONEVENT e = coEventsResult[i];
+			if (dynamic_cast<CBrick*>(e->obj))
+			{
+				DebugOut(L"TURN BACK %f %f\n",nx,ny);
+				if (nx != 0)
+				{
+					SetState(-state);
+				}
+					
+			}
+		}
+	}
+	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
 }
 void BallCarry::Render()
 {
@@ -67,10 +89,14 @@ void BallCarry::Render()
 	}
 	else if (state == BALLCARRY_STATE_WALKING_RIGHT)
 		ani = BALLCARRY_ANI_WALKING_RIGHT;
-	else if (state == BALLCARRY_STATE_DIE || state == BALLCARRY_STATE_UNACTIVE)
+	else if (state == BALLCARRY_STATE_DIE )
 		ani = BALLCARRY_ANI_DIE;
+	else if (state == BALLCARRY_STATE_UNACTIVE)
+		ani = BALLCARRY_ANI_SLEEP;
 	else if (state == BALLCARRY_STATE_COIN)
 		ani = BALLCARRY_ANI_COIN;
+	else if (state == BALLCARRY_STATE_FIRE)
+		ani = BALLCARRY_ANI_FIRE;
 	int alpha = 255;
 
 	animation_set->at(ani)->Render(x, y, alpha);
@@ -82,8 +108,10 @@ void BallCarry::SetState(int state)
 	switch (state)
 	{
 	case BALLCARRY_STATE_WALKING_LEFT:
+		vx = -BALLCARRY_WALKING_SPEED;
 		break;
 	case BALLCARRY_STATE_WALKING_RIGHT:
+		vx = BALLCARRY_WALKING_SPEED;
 		break;
 	case BALLCARRY_STATE_DIE:
 		y = -1000;
@@ -91,6 +119,8 @@ void BallCarry::SetState(int state)
 	case BALLCARRY_STATE_COIN:
 		vx = 0;
 		vy = 0;
+		break;
+	case BALLCARRY_STATE_FIRE:
 		break;
 	case BALLCARRY_STATE_UNACTIVE:
 		break;

@@ -93,6 +93,12 @@ void Quadtree::_ParseSection_OBJECTS(string line)
             obj = new EyeLet(x, y, x, y,nx);
             break;
         }
+        case OBJECT_TYPE_BALLCARRY:
+        {
+            int nx = atof(tokens[4].c_str());
+            obj = new BallCarry(x, y, x, y, nx);
+            break;
+        }
         case OBJECT_TYPE_BOOM: obj = new Boom(); break;
         case OBJECT_TYPE_BRICK:
         {
@@ -115,6 +121,23 @@ void Quadtree::_ParseSection_OBJECTS(string line)
             obj = new CPortal(x, y, r, b, scene_id);
         }
         break;
+        case OBJECT_TYPE_BULLET:
+        {
+            int id = atoi(tokens[4].c_str());
+            
+            obj = new Bullet(id);
+            if (tokens.size() == 6)
+            {
+                int type= atoi(tokens[5].c_str());
+                dynamic_cast<Bullet*>(obj)->type = type;
+                CGameObject* preObj = object[object.size() - 1];
+                if(dynamic_cast<BallCarry*>(preObj))
+                    dynamic_cast<Bullet*>(obj)->SetEnemyHandle(preObj);
+                else if (dynamic_cast<Bullet*>(preObj))
+                    dynamic_cast<Bullet*>(obj)->SetEnemyHandle(dynamic_cast<Bullet*>(preObj)->enemyHandle);
+            }
+            break;
+        }
         default:
             DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
             return;

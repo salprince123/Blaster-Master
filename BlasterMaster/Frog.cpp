@@ -129,11 +129,16 @@ void Frog::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 			if (dynamic_cast<LadyBird*>(e->obj))
 			{
-				//EyeLet* temp = dynamic_cast<EyeLet*>(e->obj);
 				if (dynamic_cast<LadyBird*>(e->obj)->GetState() == LADYBIRD_STATE_COIN)
 				{
-					//DebugOut(L"COLIIS COIN\n");
 					e->obj->SetState(LADYBIRD_STATE_DIE);
+				}
+			}
+			if (dynamic_cast<BallCarry*>(e->obj))
+			{
+				if (dynamic_cast<BallCarry*>(e->obj)->GetState() == BALLCARRY_STATE_COIN)
+				{
+					e->obj->SetState(BALLCARRY_STATE_DIE);
 				}
 			}
 		}

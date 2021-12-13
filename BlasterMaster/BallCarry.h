@@ -1,5 +1,4 @@
 #pragma once
-#pragma once
 #include "Enemy.h"
 #include "Utils.h"
 #include "Define.h"

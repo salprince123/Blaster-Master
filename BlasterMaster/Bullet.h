@@ -5,6 +5,7 @@
 class Bullet : public CGameObject
 {
 public:
+	LPGAMEOBJECT enemyHandle = NULL;
 	int type = 0;
 	int id = 0;
 	float x0, y0;
@@ -14,4 +15,5 @@ public:
 	virtual void GetBoundingBox(float& l, float& t, float& r, float& b);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void HandleStateUnFire();
+	void SetEnemyHandle(LPGAMEOBJECT e) { this->enemyHandle = e; }
 };

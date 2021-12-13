@@ -38,6 +38,11 @@ void Bullet::GetBoundingBox(float& l, float& t, float& r, float& b)
 		r = x + BULLET_BBOX_WIDTH_HORIZONTAL;
 		b = y + BULLET_BBOX_HEIGHT_HORIZONTAL;
 	}
+	else if (enemyHandle != NULL)
+	{
+		r = x + 8;
+		b = y + 8;
+	}
 	else
 	{
 		r = x + BULLET_BBOX_WIDTH_HORIZONTAL;
@@ -47,23 +52,61 @@ void Bullet::GetBoundingBox(float& l, float& t, float& r, float& b)
 }
 void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	Frog* frog = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
-	if (frog->GetState() == FROG_STATE_FIRE && frog->GetMaxBullet() == this->id)
-	{		
-		SetState(frog->nx * BULLET_STATE_FIRE_RIGHT);
-		this->vx = frog->nx*BULLET_VX;
-		this->vy = 0;
-	}
-	else if (frog->GetState() == FROG_STATE_FIRE_UP && frog->GetMaxBullet() == this->id)
+	if (enemyHandle!=NULL)
 	{
-		SetState(BULLET_STATE_FIRE_UP);
-		this->vy = BULLET_VY;
-		this->vx = 0;
-	}
-	switch (state)
+		CGameObject::Update(dt, coObjects);
+		//update bullet for enemy here 
+		if (type == OBJECT_TYPE_BALLCARRY)
+		{
+			BallCarry* ball = dynamic_cast<BallCarry*>(enemyHandle);
+			
+			switch (ball->state)
+			{
+			case BALLCARRY_STATE_UNACTIVE:
+			{
+				vx = vy = 0;
+				x = ball->x + BALLCARRY_BBOX_WIDTH / 4;
+				y = ball->y;
+				break;
+			}
+			case BALLCARRY_STATE_FIRE:
+			{
+				SetState(BULLET_STATE_FIRE_RIGHT);
+				if (y > ball->y - BALLCARRY_BBOX_HEIGHT+5)
+				{
+					//vx = ball->nx * BULLET_VX / 10 * id;
+					//vy = 0.045 - 0.0035 * dt;
+					x += 0.1 * id;
+					y -= 0.1;
+				}				
+				else vx=vy = 0;
+				CGameObject::Update(dt, coObjects);
+				DebugOut(L"%d\n", state);
+				break;
+			}
+			}
+			
+			
+		}
+	}		
+	else
 	{
+		Frog* frog = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+		if (frog->GetState() == FROG_STATE_FIRE && frog->GetMaxBullet() == this->id)
+		{
+			SetState(frog->nx * BULLET_STATE_FIRE_RIGHT);
+			this->vx = frog->nx * BULLET_VX;
+			this->vy = 0;
+		}
+		else if (frog->GetState() == FROG_STATE_FIRE_UP && frog->GetMaxBullet() == this->id)
+		{
+			SetState(BULLET_STATE_FIRE_UP);
+			this->vy = BULLET_VY;
+			this->vx = 0;
+		}
+		switch (state)
+		{
 		case BULLET_STATE_DIE:
-			//DebugOut(L"HERE\n");
 			x += 0.1;
 			if (abs(x - x0) > 20)
 			{
@@ -74,7 +117,7 @@ void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				SetState(BULLET_STATE_NOT_FIRE);
 			}
 			break;
-		case BULLET_STATE_FIRE_LEFT:case BULLET_STATE_FIRE_RIGHT: 
+		case BULLET_STATE_FIRE_LEFT:case BULLET_STATE_FIRE_RIGHT:
 		{
 			if (abs(x - x0) > BULLET_RANGE)
 			{
@@ -83,17 +126,16 @@ void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 			else
 			{
-				CGameObject::Update(dt,coObjects);
+				CGameObject::Update(dt, coObjects);
 				break;
-			}				
-		}		
+			}
+		}
 		case BULLET_STATE_FIRE_UP:
 		{
 			if (abs(y - y0) > BULLET_RANGE)
 			{
 				y0 = y;
 				SetState(BULLET_STATE_DIE);
-				DebugOut(L"Out ò range %f\n",dt);
 			}
 			else
 			{
@@ -101,18 +143,22 @@ void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				break;
 			}
 		}
-		case BULLET_STATE_NOT_FIRE:			
+		case BULLET_STATE_NOT_FIRE:
 			HandleStateUnFire();
 			break;
 		default:
 			break;
+		}
 	}
+	
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 	coEvents.clear();
 	// turn off collision when die 
 	if (state != BULLET_STATE_DIE && state != BULLET_STATE_NOT_FIRE)
 		CalcPotentialCollisions(coObjects, coEvents);
+	//if (type == OBJECT_TYPE_BALLCARRY)
+		//DebugOut(L"%d\n", coEvents.size());
 	// No collision occured, proceed normally
 	if (coEvents.size() == 0)
 	{
@@ -134,27 +180,21 @@ void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			LPCOLLISIONEVENT e = coEventsResult[i];
 			if (dynamic_cast<CBrick*>(e->obj))
 			{
-				///DebugOut(L"COLLISS %d\n",id);
-				
 				float l, t, r, b;
 				e->obj->GetBoundingBox(l, t, r, b);
-				DebugOut(L"Colide with brick \n%f %f %f %f\n", l,t,r,b);
 				this->GetBoundingBox(l, t, r, b);
-				DebugOut(L" %f %f %f %f\n", l, t, r, b);
 				if (state != BULLET_STATE_DIE && state != BULLET_STATE_NOT_FIRE)
 					SetState(BULLET_STATE_DIE);
 			}
-			if (dynamic_cast<Boom*>(e->obj))
+			else if (dynamic_cast<Boom*>(e->obj))
 			{
-				//DebugOut(L"COLLISS %d\n",id);
 				if (state != BULLET_STATE_DIE && state != BULLET_STATE_NOT_FIRE)
 				{
 					dynamic_cast<Boom*>(e->obj)->SetState(BOOM_STATE_DIE);
 					SetState(BULLET_STATE_DIE);
 				}
-					
 			}
-			if (dynamic_cast<LadyBird*>(e->obj))
+			else if (dynamic_cast<LadyBird*>(e->obj))
 			{
 				if (state != BULLET_STATE_DIE && state != BULLET_STATE_NOT_FIRE)
 				{
@@ -162,13 +202,34 @@ void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					SetState(BULLET_STATE_DIE);
 				}
 			}
-			if (dynamic_cast<EyeLet*>(e->obj))
+			else if (dynamic_cast<EyeLet*>(e->obj))
 			{
 				if (state != BULLET_STATE_DIE && state != BULLET_STATE_NOT_FIRE)
 				{
 					dynamic_cast<EyeLet*>(e->obj)->SetState(EYELET_STATE_COIN);
 					SetState(BULLET_STATE_DIE);
 				}
+			}
+			else if (dynamic_cast<BallCarry*>(e->obj))
+			{
+				if (state != BULLET_STATE_DIE && state != BULLET_STATE_NOT_FIRE)
+				{
+					dynamic_cast<BallCarry*>(e->obj)->SetState(BALLCARRY_STATE_COIN);
+					SetState(BULLET_STATE_DIE);
+				}
+			}
+			/*else if (dynamic_cast<Bullet*>(e->obj))
+			{
+				if (state != BULLET_STATE_DIE && state != BULLET_STATE_NOT_FIRE)
+				{
+					if(dynamic_cast<Bullet*>(e->obj)->enemyHandle!=NULL)
+						dynamic_cast<Bullet*>(e->obj)->SetState(BULLET_STATE_DIE);
+					SetState(BULLET_STATE_DIE);
+				}
+			}*/
+			else
+			{
+				SetState(BULLET_STATE_DIE);
 			}
 		}
 	}
