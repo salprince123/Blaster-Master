@@ -31,15 +31,25 @@ void BallCarry::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	
 	if ((pX - x) < BALLCARRY_RANGE && (pX - x) >0 && state==BALLCARRY_STATE_UNACTIVE)
 	{
-		//SetState(BALLCARRY_STATE_WALKING_RIGHT);
 		SetState(BALLCARRY_STATE_FIRE);
 		nx = 1;
 	}
 	else if( (x-pX) < BALLCARRY_RANGE && (x - pX)>0 && state == BALLCARRY_STATE_UNACTIVE)
 	{
-		//SetState(BALLCARRY_STATE_WALKING_LEFT);
 		SetState(BALLCARRY_STATE_FIRE);
 		nx = -1;
+	}
+	if (state == BALLCARRY_STATE_FIRE)
+	{
+		if ((GetTickCount64() - t_fire0) > 2000)
+		{
+			DebugOut(L"OUT OF TIME\n");
+			SetState(nx * BALLCARRY_STATE_WALKING_LEFT);
+		}
+	}
+	else
+	{
+		t_fire0 = GetTickCount64();
 	}
 	CGameObject::Update(dt, coObjects);
 	vector<LPCOLLISIONEVENT> coEvents;

@@ -118,7 +118,7 @@ void Frog::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				else if (nx > 0)
 					x += 3;
 			}
-			if (dynamic_cast<EyeLet*>(e->obj))
+			else if (dynamic_cast<EyeLet*>(e->obj))
 			{			
 				//EyeLet* temp = dynamic_cast<EyeLet*>(e->obj);
 				if (dynamic_cast<EyeLet*>(e->obj)->GetState() == EYELET_STATE_COIN)
@@ -127,18 +127,27 @@ void Frog::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					e->obj->SetState(EYELET_STATE_DIE);
 				}
 			}
-			if (dynamic_cast<LadyBird*>(e->obj))
+			else if (dynamic_cast<LadyBird*>(e->obj))
 			{
 				if (dynamic_cast<LadyBird*>(e->obj)->GetState() == LADYBIRD_STATE_COIN)
 				{
 					e->obj->SetState(LADYBIRD_STATE_DIE);
 				}
 			}
-			if (dynamic_cast<BallCarry*>(e->obj))
+			else if (dynamic_cast<BallCarry*>(e->obj))
 			{
 				if (dynamic_cast<BallCarry*>(e->obj)->GetState() == BALLCARRY_STATE_COIN)
 				{
 					e->obj->SetState(BALLCARRY_STATE_DIE);
+				}
+			}
+			else if (dynamic_cast<Bullet*>(e->obj))
+			{
+				if (state != BULLET_STATE_DIE && state != BULLET_STATE_NOT_FIRE)
+				{
+					if (dynamic_cast<Bullet*>(e->obj)->enemyHandle != NULL)
+						dynamic_cast<Bullet*>(e->obj)->SetState(BULLET_STATE_DIE);
+					SetState(BULLET_STATE_DIE);
 				}
 			}
 		}

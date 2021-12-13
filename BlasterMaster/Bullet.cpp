@@ -41,7 +41,7 @@ void Bullet::GetBoundingBox(float& l, float& t, float& r, float& b)
 	else if (enemyHandle != NULL)
 	{
 		r = x + 8;
-		b = y + 8;
+		b = y + 16;
 	}
 	else
 	{
@@ -79,14 +79,25 @@ void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					x += 0.1 * id;
 					y -= 0.1;
 				}				
-				else vx=vy = 0;
+				else
+				{
+					ballCarryTime = GetTickCount64();
+					vx = vy = 0;
+				}
+
 				CGameObject::Update(dt, coObjects);
 				DebugOut(L"%d\n", state);
 				break;
 			}
 			}
-			
-			
+			if (ballCarryTime != 0)
+			{
+				if ((GetTickCount64() - ballCarryTime) > 1500)
+				{
+					SetState(BULLET_STATE_DIE);
+					ballCarryTime = 0;
+				}
+			}
 		}
 	}		
 	else
@@ -212,7 +223,7 @@ void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 			else if (dynamic_cast<BallCarry*>(e->obj))
 			{
-				if (state != BULLET_STATE_DIE && state != BULLET_STATE_NOT_FIRE)
+				if (state != BULLET_STATE_DIE && state != BULLET_STATE_NOT_FIRE && enemyHandle==NULL)
 				{
 					dynamic_cast<BallCarry*>(e->obj)->SetState(BALLCARRY_STATE_COIN);
 					SetState(BULLET_STATE_DIE);
@@ -283,5 +294,18 @@ void Bullet::HandleStateUnFire()
 			this->y = bodyUp->y;
 			break;
 		}
+	}
+}
+void Bullet::SetState(int state)
+{
+	CGameObject::SetState(state);
+	switch (state)
+	{
+	case BULLET_STATE_DIE:
+	{
+		if (enemyHandle != 0)
+			x = y = -1000;
+		break;
+	}
 	}
 }
