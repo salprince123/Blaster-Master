@@ -394,10 +394,8 @@ void CPlayScene::Unload()
 {
 	for (int i = 0; i < objects.size(); i++)
 		delete objects[i];
-
 	objects.clear();
 	player = NULL;
-
 	DebugOut(L"[INFO] Scene %s unloaded! \n", sceneFilePath);
 }
 

@@ -25,7 +25,7 @@ public:
 	void SetState(int state);
 	void SetLevel(int l) { level = l; }
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }
-
+	int GetLevel() { return level; }
 	void Reset();
 
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);

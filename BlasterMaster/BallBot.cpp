@@ -8,6 +8,7 @@ BallBot::BallBot(int x0, int y0, int x1, int y1, int nx)
 	this->y1 = y1;
 	this->vy = 0;
 	this->nx = nx;
+	this->ny = -1;
 	this->SetState(BALLCARRY_STATE_UNACTIVE);
 }
 void BallBot::GetBoundingBox(float& left, float& top, float& right, float& bottom)
@@ -41,14 +42,23 @@ void BallBot::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 	else if (state == BALLBOT_STATE_FLY)
 	{
-		if ((y - pY) < 0 || (y - pY) > BALLBOT_RANGE)
+		if ((y - pY) < 0 /*|| (y - pY) > BALLBOT_RANGE*/)
 		{
 			x = x0;
 			y = y0;
 			return;
 		}
-		CGameObject::Update(dt, coObjects);
-		x += dx;
+		
+		dx = vx * dt;
+		if (ny == -1)
+			dy = -vx * sin(45) * dt;
+		else
+			dy = vx * sin(45) * dt;
+		if (y0 - y > 20)
+			ny = -1 * nx;
+		if (y - y0 > 20)
+			ny = 1 * nx;
+		x += dx;		
 		y += dy;
 	}
 	

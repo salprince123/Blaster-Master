@@ -5,12 +5,19 @@ Frog::Frog(float x, float y) : CGameObject()
 {
 	//level = FROG_LEVEL;
 	int id = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetId();
-	if(id==1)
+	if (id == 1)
+	{
 		level = FROG_LEVEL;
-	else 
+		SetState(FROG_STATE_IDLE);
+	}		
+	else
+	{
 		level = PRINCE_LEVEL;
+		SetState(PRINCE_STATE_WALKING_DOWN);
+	}
+		
 	untouchable = 0;
-	SetState(FROG_STATE_IDLE);
+	
 	start_x = x;
 	start_y = y;
 	this->x = x;
@@ -149,6 +156,11 @@ void Frog::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						dynamic_cast<Bullet*>(e->obj)->SetState(BULLET_STATE_DIE);
 					SetState(BULLET_STATE_DIE);
 				}
+			}
+			else if (dynamic_cast<CPortal*>(e->obj))
+			{
+				CPortal* p = dynamic_cast<CPortal*>(e->obj);
+				CGame::GetInstance()->SwitchScene(p->GetSceneId());
 			}
 		}
 	}

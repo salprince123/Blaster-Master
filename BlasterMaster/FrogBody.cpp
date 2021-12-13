@@ -77,43 +77,12 @@ void FrogBody::SetState(int state)
 }
 void FrogBody::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	
-	/*switch (state)
-	{
-		case FROG_BODY_UP_STATE_TOP_RIGHT:
-		{
-			break;
-		}
-
-		case FROG_BODY_UP_STATE_BOT_LEFT:
-		{
-			break;
-		}
-		case FROG_BODY_UP_STATE_STACTIC_LEFT:
-		{
-			break;
-		}
-		case FROG_BODY_DOWN_STATE_LEFT_RIGHT:
-		{
-			break;
-		}
-		case FROG_BODY_DOWN_STATE_TOP_BOT:
-		{
-			break;
-		}
-		case FROG_BODY_DOWN_STATE_TOP_LEFT:
-		{
-			break;
-		}
-		case FROG_BODY_DOWN_STATE_BOT_RIGHT:
-		{
-			break;
-		}
-	}*/
-	
+	Frog* mario = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+	if (mario->GetLevel() == PRINCE_LEVEL)
+		return;
 	if (type == FROG_BODY_TYPE_UP)
 	{
-		Frog* mario = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+		
 		//DebugOut(L"Frog state: %d %f\n", mario->GetState(), mario->vx);
 		switch (mario->GetState())
 		{
