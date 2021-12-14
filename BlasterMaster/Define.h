@@ -135,6 +135,23 @@
 
 #define BALLBOT_RANGE 100
 
+//GX680
+#define GX680_WALKING_SPEED 0.05;
+#define GX680_FLYING_UP_SPEED 0.05*0.4*2;
+
+#define GX680_BBOX_WIDTH 16
+#define GX680_BBOX_HEIGHT 16
+#define GX680_BBOX_HEIGHT_DIE 9
+
+#define GX680_STATE_UNACTIVE 102
+#define GX680_STATE_ACTIVE 103
+#define GX680_STATE_DIE 200
+
+#define GX680_ANI_WALK 0
+#define GX680_ANI_DIE 1
+
+#define GX680_RANGE 100
+
 //background
 #pragma region backround
 #define BACKGROUND_BBOX_WIDTH  16

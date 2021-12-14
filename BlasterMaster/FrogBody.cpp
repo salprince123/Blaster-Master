@@ -82,8 +82,6 @@ void FrogBody::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		return;
 	if (type == FROG_BODY_TYPE_UP)
 	{
-		
-		//DebugOut(L"Frog state: %d %f\n", mario->GetState(), mario->vx);
 		switch (mario->GetState())
 		{
 			case FROG_STATE_WALKING_LEFT:
@@ -92,7 +90,6 @@ void FrogBody::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (this->type == FROG_BODY_TYPE_DOWN)
 					this->SetState(FROG_BODY_DOWN_STATE_LEFT_RIGHT);
 				this->x = mario->x+FROG_GUN_BBOX_WIDTH - 0.5 * FROG_WHEEL_BBOX_WIDTH;
-				
 				break;
 			}
 			case FROG_STATE_WALKING_RIGHT:

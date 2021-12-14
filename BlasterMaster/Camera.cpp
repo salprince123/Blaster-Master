@@ -44,8 +44,23 @@ void Camera::Update(float player_x, float player_y, float h)
 	}
 	else
 	{
-		player_x -= width / 2;
-		player_y -= height / 2;
+		DebugOut(L"%f\n", player_y);
+		if (player_x < width/2 || player_x < 204)
+		{
+			player_x = 10;			
+		}	
+		else
+		{
+			player_x -= width / 2;			
+		}
+		if (player_y  < 95)
+		{
+			player_y =0;
+		}
+		else
+		{
+			player_y -= height / 2;
+		}
 	}
 
 	SetCamPos(round(player_x), round(player_y));
