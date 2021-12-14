@@ -105,6 +105,12 @@ void Quadtree::_ParseSection_OBJECTS(string line)
             obj = new BallBot(x, y, x, y, nx);
             break;
         }
+        case OBJECT_TYPE_GX680:
+        {
+            int nx = atof(tokens[4].c_str());
+            obj = new GX680(x, y, x, y, nx);
+            break;
+        }
         case OBJECT_TYPE_BOOM: obj = new Boom(); break;
         case OBJECT_TYPE_BRICK:
         {
@@ -117,8 +123,16 @@ void Quadtree::_ParseSection_OBJECTS(string line)
             //DebugOut(L"%d\n", dynamic_cast<CBrick*>(obj)->type);
             break;
         }
-        case OBJECT_TYPE_BACKROUND: obj = new Background(); break;
-            //case OBJECT_TYPE_KOOPAS: obj = new CKoopas(); break;
+        case OBJECT_TYPE_BACKROUND: 
+        {
+            obj = new Background();
+            if (tokens.size() == 4)
+            {
+                int isUpper = atof(tokens[3].c_str());
+                dynamic_cast<Background*>(obj)->isUpper = isUpper;
+            }
+            break;
+        }
        
         case OBJECT_TYPE_BULLET:
         {
@@ -156,8 +170,10 @@ void Quadtree::_ParseSection_OBJECTS(string line)
     LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
 
     obj->SetAnimationSet(ani_set);
-    
-    this->object.push_back(obj);    
+    if(dynamic_cast<Background*>(obj) && dynamic_cast<Background*>(obj)->isUpper==1)
+        this->upperBackground.push_back(obj);
+    else
+        this->object.push_back(obj);    
 }
 void Quadtree::_ParseSection_SIZE(string line)
 {
@@ -286,6 +302,67 @@ vector<LPGAMEOBJECT> Quadtree::search(double x, double y)
             if (botRightTree == NULL)
                 return {};
             return botRightTree->search(x,y);
+        }
+    }
+};
+vector<LPGAMEOBJECT> Quadtree::searchUpperBackground(double x, double y)
+{
+    //DebugOut(L"YOU ARE IN SEARCH      %d\n", this->level);
+    Rect botRight(size.x + size.width, size.y + size.width);
+    // Current quad cannot contain it
+    if (!inBoundary(x, y))
+        return {};
+
+    // We are at a quad of unit length
+    // We cannot subdivide this quad further
+    if (upperBackground.size() > 0)
+    {
+        // DebugOut(L"THIS IS LEVEL %d SIZE %d %f %f\n", this->level, this->object.size(), this->size.x, this->size.y);
+         //LPGAMEOBJECT temp = object[0];
+         //temp->SetPosition(this->level, this->level);
+         //object.push_back(temp);
+        return upperBackground;
+    }
+
+
+    if ((size.x + botRight.x) / 2 >= x)
+    {
+        // Indicates topLeftTree
+        if ((size.y + botRight.y) / 2 >= y)
+        {
+            //DebugOut(L"YOU ARE IN TOP LEFT      %d\n", this->level);
+            if (topLeftTree == NULL)
+                return {};
+            return topLeftTree->search(x, y);
+        }
+
+        // Indicates botLeftTree
+        else
+        {
+            //DebugOut(L"YOU ARE IN BOT LEFT      %d\n", this->level);
+            if (botLeftTree == NULL)
+                return {};
+            return botLeftTree->search(x, y);
+        }
+    }
+    else
+    {
+        // Indicates topRightTree
+        if ((size.y + botRight.y) / 2 >= y)
+        {
+            // DebugOut(L"YOU ARE IN TOP RIGHT      %d\n", this->level);
+            if (topRightTree == NULL)
+                return {};
+            return topRightTree->search(x, y);
+        }
+
+        // Indicates botRightTree
+        else
+        {
+            // DebugOut(L"YOU ARE IN BOT RIGHT      %d\n", this->level);
+            if (botRightTree == NULL)
+                return {};
+            return botRightTree->search(x, y);
         }
     }
 };

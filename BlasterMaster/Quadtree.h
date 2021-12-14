@@ -12,6 +12,7 @@
 #include "Portal.h"
 #include "BallCarry.h"
 #include "BallBot.h"
+#include "GX680.h"
 using namespace std;
 class Rect
 {
@@ -27,7 +28,7 @@ public:
 class Quadtree
 {	
 	vector<LPGAMEOBJECT> object;
-	
+	vector<LPGAMEOBJECT> upperBackground;
 	int level;
 	Rect size;
 public:
@@ -43,6 +44,7 @@ public:
 	void Split();
 	void Clear();
 	vector<LPGAMEOBJECT> search(double x, double y);
+	vector<LPGAMEOBJECT> searchUpperBackground(double x, double y);
 	int searchLevel(double x, double y);
 	bool inBoundary(double x, double y);
 	void _ParseSection_OBJECTS(string line);

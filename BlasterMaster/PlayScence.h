@@ -27,6 +27,7 @@ protected:
 	FrogWheel* wheelLeft;
 	FrogWheel* wheelRight;
 	vector<LPGAMEOBJECT> objects;
+	vector<LPGAMEOBJECT> upperBackground;
 	map<string, LPGAMEOBJECT> mapObject;
 	vector<LPGAMEOBJECT> staticObjects;
 	Quadtree* quadtree;

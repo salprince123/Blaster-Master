@@ -359,6 +359,18 @@ void CPlayScene::Update(DWORD dt)
 	objects.insert(objects.end(), botLeft.begin(), botLeft.end());
 	objects.insert(objects.end(), botRight.begin(), botRight.end());
 
+	topLeft = quadtree->search(camX, height - camY);
+	topRight = quadtree->search((camX + camWidth), height - camY);
+	botLeft = quadtree->search(camX, height - (camY + camHeight));
+	botRight = quadtree->search((camX + camWidth), height - (camY + camHeight));
+
+	upperBackground.clear();
+	upperBackground.insert(upperBackground.end(), topLeft.begin(), topLeft.end());
+	upperBackground.insert(upperBackground.end(), topRight.begin(), topRight.end());
+	upperBackground.insert(upperBackground.end(), botLeft.begin(), botLeft.end());
+	upperBackground.insert(upperBackground.end(), botRight.begin(), botRight.end());
+
+
 	for (size_t i = 0; i < objects.size(); i++)
 	{
 		objects[i]->Update(dt, &coObjects);
@@ -383,6 +395,8 @@ void CPlayScene::Render()
 {
 	for (size_t i = 0; i < staticObjects.size(); i++)
 		staticObjects[i]->Render();
+	for (int i = 0; i < upperBackground.size(); i++)
+		upperBackground[i]->Render();
 	for (int i = 0; i < objects.size(); i++)
 		objects[i]->Render();
 }
