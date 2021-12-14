@@ -27,7 +27,6 @@ void BallBot::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	float pX, pY;
 	Frog* player = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	player->GetPosition(pX, pY);
-
 	if ((y - pY) > 0 && (y - pY) < BALLBOT_RANGE && state == BALLBOT_STATE_UNACTIVE)
 	{
 		if (nx > 0 && pX >= x)

@@ -9,15 +9,15 @@ GX680::GX680(int x0, int y0, int x1, int y1, int nx)
 	this->vy = 0;
 	this->nx = nx;
 	this->ny = -1;
-	this->SetState(BALLCARRY_STATE_UNACTIVE);
+	this->SetState(GX680_STATE_ACTIVE);
 }
 void GX680::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
 	left = x;
 	top = y - 2;
-	right = x + BALLBOT_BBOX_WIDTH;
-	bottom = y + BALLBOT_BBOX_HEIGHT;
-	if (GetState() == BALLBOT_STATE_DIE)
+	right = x + GX680_BBOX_WIDTH;
+	bottom = y + GX680_BBOX_HEIGHT;
+	if (GetState() == GX680_STATE_DIE)
 	{
 		left = right = top = bottom = 0;
 	}
@@ -27,60 +27,35 @@ void GX680::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	float pX, pY;
 	Frog* player = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	player->GetPosition(pX, pY);
-
-	if ((y - pY) > 0 && (y - pY) < BALLBOT_RANGE && state == BALLBOT_STATE_UNACTIVE)
+	//if (state == GX680_STATE_ACTIVE)
+		//DebugOut(L"ACTIVE %f\n",dt);
+	DebugOut(L"%f %f\n", abs(pX - x), abs(pY - y));
+	if ( (abs(x - pX) < GX680_RANGE || abs(y - pY) < GX680_RANGE)&& state == GX680_STATE_UNACTIVE)
 	{
-		if (nx > 0 && pX >= x)
-		{
-			SetState(BALLBOT_STATE_FLY);
-		}
-		else if (nx < 0 && pX <= x)
-		{
-			SetState(BALLBOT_STATE_FLY);
-		}
-		//else DebugOut(L"SOMETHING Wrong!\n");
+		SetState(GX680_STATE_ACTIVE);
 	}
-	else if (state == BALLBOT_STATE_FLY)
-	{
-		if ((y - pY) < 0 /*|| (y - pY) > BALLBOT_RANGE*/)
+	
+	if (state == GX680_STATE_ACTIVE)
+	{		
+		if (abs(x - pX) > GX680_RANGE || abs(y - pY) > GX680_RANGE)
 		{
+			SetState(GX680_STATE_UNACTIVE);
 			x = x0;
 			y = y0;
-			return;
+			//DebugOut(L"UNACTIVE\n");
 		}
+		if ((pX - x) > 0) x+=0.2;
+		else if ((pX - x) < 0) x-=0.2;
+		if ((pY - y) > 0) y+=0.2;
+		else if ((pY - y) < 0) y-=0.2;
 
-		dx = vx * dt;
-		if (ny == -1)
-			dy = -vx * sin(45) * dt;
-		else
-			dy = vx * sin(45) * dt;
-		if (y0 - y > 20)
-			ny = -1 * nx;
-		if (y - y0 > 20)
-			ny = 1 * nx;
-		x += dx;
-		y += dy;
 	}
-
 }
 void GX680::Render()
 {
 	int ani = 0;
-	switch (state)
-	{
-	case BALLBOT_STATE_FLY:case BALLBOT_STATE_ACTIVE:case BALLBOT_STATE_UNACTIVE:
-		if (nx < 0)
-			ani = BALLBOT_ANI_LEFT;
-		else if (nx > 0)
-			ani = BALLBOT_ANI_RIGHT;
-		break;
-	case BALLBOT_STATE_DIE:
-		ani = BALLBOT_ANI_DIE;
-	default:
-		break;
-	}
 	int alpha = 255;
-	animation_set->at(ani)->Render(x, y, alpha);
+	animation_set->at(0)->Render(x, y, alpha);
 	//RenderBoundingBox();
 }
 void GX680::SetState(int state)
@@ -88,8 +63,8 @@ void GX680::SetState(int state)
 	Enemy::SetState(state);
 	switch (state)
 	{
-	case BALLBOT_STATE_FLY:
-		vx = nx * BALLBOT_WALKING_SPEED;
-
+	case GX680_STATE_DIE:
+		x = -1000;
+		y = -1000;
 	}
 }

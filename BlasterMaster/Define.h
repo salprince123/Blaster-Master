@@ -20,6 +20,7 @@
 #define OBJECT_TYPE_EYELET	32
 #define OBJECT_TYPE_BALLCARRY	33
 #define OBJECT_TYPE_BALLBOT	34
+#define OBJECT_TYPE_GX680	35
 
 #define OBJECT_TYPE_PORTAL	50
 
@@ -150,7 +151,7 @@
 #define GX680_ANI_WALK 0
 #define GX680_ANI_DIE 1
 
-#define GX680_RANGE 100
+#define GX680_RANGE 70
 
 //background
 #pragma region backround
