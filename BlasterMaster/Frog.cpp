@@ -191,13 +191,13 @@ void Frog::Render()
 				else ani = PRINCE_ANI_IDLE_UP;
 			}
 		}			
-		else if (state == FROG_STATE_WALKING_RIGHT)
+		else if (state == FROG_STATE_WALKING_RIGHT || state == PRINCE_STATE_FIRE_RIGHT)
 			ani = PRINCE_ANI_WALKING_RIGHT;
-		else if (state == FROG_STATE_WALKING_LEFT)
+		else if (state == FROG_STATE_WALKING_LEFT || state == PRINCE_STATE_FIRE_LEFT)
 			ani = PRINCE_ANI_WALKING_LEFT;
-		else if (state == PRINCE_STATE_WALKING_DOWN)
+		else if (state == PRINCE_STATE_WALKING_DOWN || state == PRINCE_STATE_FIRE_DOWN)
 			ani = PRINCE_ANI_WALKING_DOWN;
-		else if (state == PRINCE_STATE_WALKING_UP)
+		else if (state == PRINCE_STATE_WALKING_UP || state == PRINCE_STATE_FIRE_UP)
 			ani = PRINCE_ANI_WALKING_UP;
 		animation_set->at(ani)->Render(x, y, 255);
 	}

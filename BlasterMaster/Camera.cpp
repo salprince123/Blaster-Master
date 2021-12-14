@@ -44,7 +44,7 @@ void Camera::Update(float player_x, float player_y, float h)
 	}
 	else
 	{
-		DebugOut(L"%f\n", player_y);
+		//DebugOut(L"%f\n", player_y);
 		if (player_x < width/2 || player_x < 204)
 		{
 			player_x = 10;			

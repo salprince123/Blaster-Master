@@ -415,9 +415,23 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_A:
 		{
 			int oldState = frog->GetState();
-			if(oldState==FROG_STATE_UP_LEFT || oldState == FROG_STATE_UP_RIGHT)
-				frog->SetState(FROG_STATE_FIRE_UP);
-			else frog->SetState(FROG_STATE_FIRE);
+			if (id == 1)
+			{
+				if (oldState == FROG_STATE_UP_LEFT || oldState == FROG_STATE_UP_RIGHT)
+					frog->SetState(FROG_STATE_FIRE_UP);
+				else frog->SetState(FROG_STATE_FIRE);
+			}
+			else if (id == 2)
+			{
+				if (oldState == FROG_STATE_WALKING_LEFT || (oldState == FROG_STATE_IDLE && frog->nx<0 && frog->ny==0))
+					frog->SetState(PRINCE_STATE_FIRE_LEFT);
+				else if(oldState == FROG_STATE_WALKING_RIGHT || (oldState == FROG_STATE_IDLE && frog->nx > 0 && frog->ny == 0))
+					frog->SetState(PRINCE_STATE_FIRE_RIGHT);
+				else if (oldState == PRINCE_STATE_WALKING_UP || (oldState == FROG_STATE_IDLE && frog->ny > 0 && frog->nx == 0))
+					frog->SetState(PRINCE_STATE_FIRE_UP);
+				else frog->SetState(PRINCE_STATE_FIRE_DOWN);
+			}
+
 			frog->SetMaxBullet(frog->GetMaxBullet() - 1);
 			if (frog->GetMaxBullet() == 0)
 				frog->SetMaxBullet(MAX_BULLET);

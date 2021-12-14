@@ -8,6 +8,13 @@ FrogBody::FrogBody()
 }
 void FrogBody::Render()
 {
+	Frog* frog = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+	if (frog->GetLevel() == PRINCE_LEVEL)
+	{
+		animation_set->at(FROG_BODY_DOWN_ANI_HIDE)->Render(x, y);
+		return;
+	}
+		
 	int ani = 0;
 	switch (state)
 	{
@@ -78,8 +85,8 @@ void FrogBody::SetState(int state)
 void FrogBody::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	Frog* mario = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
-	if (mario->GetLevel() == PRINCE_LEVEL)
-		return;
+	//if (mario->GetLevel() == PRINCE_LEVEL)
+		//return;
 	if (type == FROG_BODY_TYPE_UP)
 	{
 		switch (mario->GetState())

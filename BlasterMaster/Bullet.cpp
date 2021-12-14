@@ -52,6 +52,7 @@ void Bullet::GetBoundingBox(float& l, float& t, float& r, float& b)
 }
 void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	DebugOut(L"%d\n", state);
 	if (enemyHandle!=NULL)
 	{
 		CGameObject::Update(dt, coObjects);
@@ -86,7 +87,7 @@ void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				}
 
 				CGameObject::Update(dt, coObjects);
-				DebugOut(L"%d\n", state);
+				//DebugOut(L"%d\n", state);
 				break;
 			}
 			}
@@ -102,7 +103,8 @@ void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}		
 	else
 	{
-		Frog* frog = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+		
+		Frog* frog = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();		
 		if (frog->GetState() == FROG_STATE_FIRE && frog->GetMaxBullet() == this->id)
 		{
 			SetState(frog->nx * BULLET_STATE_FIRE_RIGHT);
@@ -114,6 +116,34 @@ void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			SetState(BULLET_STATE_FIRE_UP);
 			this->vy = BULLET_VY;
 			this->vx = 0;
+		}
+		else if (frog->GetState() == PRINCE_STATE_FIRE_UP && frog->GetMaxBullet() == this->id)
+		{
+			DebugOut(L"UP\n");
+			SetState(BULLET_STATE_FIRE_UP);
+			this->vy = BULLET_VY;
+			this->vx = 0;
+		}
+		else if (frog->GetState() == PRINCE_STATE_FIRE_DOWN && frog->GetMaxBullet() == this->id)
+		{
+			DebugOut(L"DOWN\n");
+			SetState(BULLET_STATE_FIRE_UP);
+			this->vy = -BULLET_VY;
+			this->vx = 0;
+		}
+		else if (frog->GetState() == PRINCE_STATE_FIRE_LEFT && frog->GetMaxBullet() == this->id)
+		{
+			DebugOut(L"LEFT\n");
+			SetState( BULLET_STATE_FIRE_LEFT);
+			this->vx =  -BULLET_VX;
+			this->vy = 0;
+		}
+		else if (frog->GetState() == PRINCE_STATE_FIRE_RIGHT && frog->GetMaxBullet() == this->id)
+		{
+			DebugOut(L"RIGHT\n");
+			SetState(BULLET_STATE_FIRE_RIGHT);
+			this->vx = BULLET_VX;
+			this->vy = 0;
 		}
 		switch (state)
 		{

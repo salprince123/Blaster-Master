@@ -11,6 +11,12 @@ FrogWheel::FrogWheel(int type)
 }
 void FrogWheel::Render()
 {
+	Frog* frog = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+	if (frog->GetLevel() == PRINCE_LEVEL)
+	{
+		animation_set->at(FROG_WHEEL_ANI_HIDE)->Render(x, y);
+		return;
+	}
 	int ani = FROG_WHEEL_ANI_UP_RIGHT;
 	switch (state)
 	{
