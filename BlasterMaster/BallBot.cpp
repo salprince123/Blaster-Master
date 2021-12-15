@@ -25,6 +25,7 @@ void BallBot::GetBoundingBox(float& left, float& top, float& right, float& botto
 void BallBot::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	float pX, pY;
+	//DebugOut(L"%d %d\n",x0,y0);
 	Frog* player = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	player->GetPosition(pX, pY);
 	if ((y - pY) > 0 && (y - pY) < BALLBOT_RANGE && state == BALLBOT_STATE_UNACTIVE)
@@ -37,28 +38,26 @@ void BallBot::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		{
 			SetState(BALLBOT_STATE_FLY);
 		}
-		//else DebugOut(L"SOMETHING Wrong!\n");
 	}
 	else if (state == BALLBOT_STATE_FLY)
 	{
-		if ((y - pY) < 0 /*|| (y - pY) > BALLBOT_RANGE*/)
+		if ((y - y0) > 10 )
 		{
 			x = x0;
 			y = y0;
+			ny = -1;
 			return;
 		}
-		
 		dx = vx * dt;
 		if (ny == -1)
 			dy = -vx * sin(45) * dt;
 		else
 			dy = vx * sin(45) * dt;
 		if (y0 - y > 20)
-			ny = -1 * nx;
-		if (y - y0 > 20)
-			ny = 1 * nx;
+			ny = -1 * nx*dt;		
 		x += dx;		
 		y += dy;
+		
 	}
 	
 }
