@@ -143,6 +143,7 @@
     <ClCompile Include="LadyBird.cpp" />
     <ClCompile Include="Portal.cpp" />
     <ClCompile Include="Quadtree.cpp" />
+    <ClCompile Include="Sensor.cpp" />
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
@@ -172,6 +173,7 @@
     <ClInclude Include="LadyBird.h" />
     <ClInclude Include="Portal.h" />
     <ClInclude Include="Quadtree.h" />
+    <ClInclude Include="Sensor.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />

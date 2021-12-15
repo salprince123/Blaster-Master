@@ -13,6 +13,7 @@
 #include "BallCarry.h"
 #include "BallBot.h"
 #include "GX680.h"
+#include "Sensor.h"
 using namespace std;
 class Rect
 {

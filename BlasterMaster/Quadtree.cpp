@@ -111,6 +111,12 @@ void Quadtree::_ParseSection_OBJECTS(string line)
             obj = new GX680(x, y, x, y, nx);
             break;
         }
+        case OBJECT_TYPE_SENSOR:
+        {
+            int nx = atof(tokens[4].c_str());
+            obj = new Sensor(x, y, x, y, nx);
+            break;
+        }
         case OBJECT_TYPE_BOOM: obj = new Boom(); break;
         case OBJECT_TYPE_BRICK:
         {
