@@ -213,9 +213,14 @@
 #define BULLET_ANI_BIG_RIGHT		5
 #define BULLET_ANI_NOT_FIRE			6
 #define BULLET_ANI_DIE				7
+#define BULLET_ANI_TYPE_2_LEFT			8
+#define BULLET_ANI_TYPE_2_RIGHT			9
+#define BULLET_ANI_TYPE_2_UP			10
+#define BULLET_ANI_TYPE_2_DOWN			11
 
-#define BULLET_VX 0.15
-#define BULLET_VY 0.15
+
+#define BULLET_VX 0.17
+#define BULLET_VY 0.17
 
 #define BULLET_RANGE				120
 

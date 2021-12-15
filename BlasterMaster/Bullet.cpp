@@ -9,8 +9,33 @@ Bullet::Bullet(int id)
 void Bullet::Render()
 {
 	int ani = 0;
-	switch (state)
+	Frog* player = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+	if (player->GetLevel() == PRINCE_LEVEL)
 	{
+		switch (state)
+		{
+		case BULLET_STATE_NOT_FIRE:
+			ani = BULLET_ANI_NOT_FIRE;
+			break;
+		case BULLET_STATE_FIRE_LEFT:
+			ani = BULLET_ANI_TYPE_2_LEFT;
+			break;
+		case BULLET_STATE_FIRE_RIGHT:
+			ani = BULLET_ANI_TYPE_2_RIGHT;
+			break;
+		case BULLET_STATE_DIE:
+			ani = BULLET_ANI_NOT_FIRE;
+			break;
+		default:
+			if (vy < 0) ani = BULLET_ANI_TYPE_2_DOWN;
+			else if (vy > 0) ani = BULLET_ANI_TYPE_2_UP;
+			break;
+		}
+	}
+	else
+	{
+		switch (state)
+		{
 		case BULLET_STATE_NOT_FIRE:
 			ani = BULLET_ANI_NOT_FIRE;
 			break;
@@ -25,7 +50,9 @@ void Bullet::Render()
 			break;
 		default:
 			break;
+		}
 	}
+	
 	animation_set->at(ani)->Render(x, y);
 }
 
@@ -284,22 +311,21 @@ void Bullet::HandleStateUnFire()
 	x0 = x;
 	y0 = y;
 	FrogBody* bodyUp = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetBodyUp();
-	switch (bodyUp->GetState())
+	Frog* player = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+	if (player->GetLevel() == FROG_LEVEL)
 	{
+		switch (bodyUp->GetState())
+		{
 		case FROG_BODY_UP_STATE_LEFT:
 		{
-			//this->x = bodyUp->x - FROG_GUN_BBOX_WIDTH;
-			//this->y = bodyUp->y + 0.5 * FROG_BODY_UP_BBOX_HEIGHT;
 			this->x = bodyUp->x;
 			this->y = bodyUp->y;
 			break;
 		}
 		case FROG_BODY_UP_STATE_RIGHT:
 		{
-			//this->x = bodyUp->x + FROG_BODY_UP_BBOX_WIDTH * 0.6 + FROG_GUN_BBOX_WIDTH;
-			//this->y = bodyUp->y + 0.5 * FROG_BODY_UP_BBOX_HEIGHT;
 			this->x = bodyUp->x;
-			this->y = bodyUp->y ;
+			this->y = bodyUp->y;
 			break;
 		}
 		case FROG_BODY_UP_STATE_UP_RIGHT:
@@ -326,7 +352,51 @@ void Bullet::HandleStateUnFire()
 			this->y = bodyUp->y;
 			break;
 		}
+		}
 	}
+	else
+	{
+		switch (bodyUp->GetState())
+		{
+		case FROG_BODY_UP_STATE_LEFT:
+		{
+			this->x = bodyUp->x;
+			this->y = bodyUp->y-8;
+			break;
+		}
+		case FROG_BODY_UP_STATE_RIGHT:
+		{
+			this->x = bodyUp->x;
+			this->y = bodyUp->y-8;
+			break;
+		}
+		case FROG_BODY_UP_STATE_UP_RIGHT:
+		{
+			this->x = bodyUp->x + 0.5 * FROG_BODY_UP_BBOX_WIDTH;
+			this->y = bodyUp->y - FROG_GUN_BBOX_HEIGHT;
+			break;
+		}
+		case FROG_BODY_UP_STATE_UP_LEFT:
+		{
+			this->x = bodyUp->x + 0.5 * FROG_BODY_UP_BBOX_WIDTH;
+			this->y = bodyUp->y - FROG_GUN_BBOX_HEIGHT;
+			break;
+		}
+		case FROG_BODY_UP_STATE_LEFT_UP:
+		{
+			this->x = bodyUp->x - FROG_GUN_BBOX_WIDTH;
+			this->y = bodyUp->y - FROG_GUN_BBOX_HEIGHT;
+			break;
+		}
+		case FROG_BODY_UP_STATE_RIGHT_UP:
+		{
+			this->x = bodyUp->x + FROG_GUN_BBOX_WIDTH + FROG_BODY_UP_BBOX_WIDTH;
+			this->y = bodyUp->y;
+			break;
+		}
+		}
+	}
+	
 }
 void Bullet::SetState(int state)
 {
