@@ -29,12 +29,12 @@ void EyeLet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	float pX, pY;
 	Frog* player = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	player->GetPosition(pX, pY);
-	if (nx < 0 && (x - pX)>20 && abs(y-pY)<70)
+	if (nx < 0 && (x - pX)>30 && abs(y-pY)<70)
 	{
 		this->SetState(LADYBIRD_STATE_WALKING_RIGHT);
 		active = 1; 
 	}
-	else if (nx >0 && (pX - x) > 20 && abs(y - pY) < 70)
+	else if (nx >0 && (pX - x) > 30 && abs(y - pY) < 70)
 	{
 		active = 1;	
 		this->SetState(LADYBIRD_STATE_WALKING_RIGHT);
@@ -47,9 +47,9 @@ void EyeLet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	
 	this->dt = dt;
 	dx = vx*dt;
-	if (y0 - y > 20)
+	if (y0 - y > 30)
 		ny = -1*nx;
-	if (y - y0 > 20)
+	if (y - y0 > 30)
 		ny = 1* nx;
 	if(ny==1)
 		dy = -vx * sin(45) * dt;
