@@ -27,9 +27,7 @@ void GX680::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	float pX, pY;
 	Frog* player = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	player->GetPosition(pX, pY);
-	//if (state == GX680_STATE_ACTIVE)
-		//DebugOut(L"ACTIVE %f\n",dt);
-	DebugOut(L"%f %f\n", abs(pX - x), abs(pY - y));
+	
 	if ( (abs(x - pX) < GX680_RANGE || abs(y - pY) < GX680_RANGE)&& state == GX680_STATE_UNACTIVE)
 	{
 		SetState(GX680_STATE_ACTIVE);
@@ -53,9 +51,17 @@ void GX680::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 }
 void GX680::Render()
 {
-	int ani = 0;
+	int ani = GX680_ANI_DIE;
 	int alpha = 255;
-	animation_set->at(0)->Render(x, y, alpha);
+	if (state == GX680_STATE_ACTIVE)
+	{
+		if (vx < 0)
+			ani = GX680_ANI_WALK_lEFT;
+		else if (vx > 0)
+			ani = GX680_ANI_WALK_RIGHT;
+		else ani = GX680_ANI_WALK_RIGHT;
+	}
+	animation_set->at(ani)->Render(x, y, alpha);
 	//RenderBoundingBox();
 }
 void GX680::SetState(int state)

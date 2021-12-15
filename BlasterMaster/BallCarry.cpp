@@ -79,7 +79,7 @@ void BallCarry::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			LPCOLLISIONEVENT e = coEventsResult[i];
 			if (dynamic_cast<CBrick*>(e->obj))
 			{
-				DebugOut(L"TURN BACK %f %f\n",nx,ny);
+				//DebugOut(L"TURN BACK %f %f\n",nx,ny);
 				if (nx != 0)
 				{
 					SetState(-state);
