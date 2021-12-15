@@ -177,7 +177,7 @@
 #define GX680_ANI_WALK_RIGHT	2
 #define GX680_ANI_DIE			3
 
-#define GX680_RANGE				100
+#define GX680_RANGE				150
 
 //background
 #pragma region backround

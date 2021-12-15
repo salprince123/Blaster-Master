@@ -27,8 +27,7 @@ Frog::Frog(float x, float y) : CGameObject()
 }
 
 void Frog::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
-{	
-	// Calculate dx, dy 
+{
 	int id = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetId();
 	CGameObject::Update(dt);
 	if(x <= 0) x = 0;

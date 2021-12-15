@@ -24,10 +24,18 @@ void GX680::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 }
 void GX680::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	
 	float pX, pY;
 	Frog* player = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	player->GetPosition(pX, pY);
+	CGameObject::Update(dt, coObjects);
+	vector<LPCOLLISIONEVENT> coEvents;
+	vector<LPCOLLISIONEVENT> coEventsResult;
+	coEvents.clear();
 	
+	// turn off collision when die 
+	//if (state != SENSOR_STATE_DIE)
+	CalcPotentialCollisions(coObjects, coEvents);
 	if ( (abs(x - pX) < GX680_RANGE || abs(y - pY) < GX680_RANGE)&& state == GX680_STATE_UNACTIVE)
 	{
 		SetState(GX680_STATE_ACTIVE);
@@ -42,12 +50,33 @@ void GX680::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			y = y0;
 			//DebugOut(L"UNACTIVE\n");
 		}
-		if ((pX - x) > 0) x+=0.2;
+		/*if ((pX - x) > 0) x+=0.2;
 		else if ((pX - x) < 0) x-=0.2;
 		if ((pY - y) > 0) y+=0.2;
-		else if ((pY - y) < 0) y-=0.2;
+		else if ((pY - y) < 0) y-=0.2;*/
+		if ((pX - x) > 0) vx= 0.015;
+		else if ((pX - x) < 0) vx = -0.015;
+		if ((pY - y) > 0) vy = 0.015;
+		else if ((pY - y) < 0) vy = -0.015;
 
 	}
+	if (coEvents.size() == 0)
+	{
+		x += dx;
+		y += dy;
+	}
+	else
+	{
+		float min_tx, min_ty, nx = 0, ny;
+		float rdx = 0;
+		float rdy = 0;
+		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
+		x += min_tx * dx + nx * 0.4f;
+		y += min_ty * dy + ny * 0.4f;
+		if (nx != 0) vx = 0;
+		if (ny != 0) vy = 0;
+	}
+	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
 }
 void GX680::Render()
 {
