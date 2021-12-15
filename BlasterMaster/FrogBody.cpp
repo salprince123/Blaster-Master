@@ -14,7 +14,8 @@ void FrogBody::Render()
 		animation_set->at(FROG_BODY_DOWN_ANI_HIDE)->Render(x, y);
 		return;
 	}
-		
+	int alpha = 255;
+	if (frog->untouchable) alpha = 128;
 	int ani = 0;
 	switch (state)
 	{
@@ -45,7 +46,7 @@ void FrogBody::Render()
 			ani = FROG_BODY_DOWN_ANI_BOT_RIGHT;
 			break;
 	}
-	animation_set->at(ani)->Render(x, y);
+	animation_set->at(ani)->Render(x, y, alpha);
 	//RenderBoundingBox();
 }
 

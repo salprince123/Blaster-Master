@@ -29,11 +29,8 @@ Frog::Frog(float x, float y) : CGameObject()
 void Frog::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {	
 	// Calculate dx, dy 
-	//if(state==FROG_STATE_FIRE)
-	DebugOut(L" %f %f\n", x, y);
 	int id = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetId();
 	CGameObject::Update(dt);
-	//DebugOut(L"%d %d \n", nx, ny);
 	if(x <= 0) x = 0;
 	if (id == 1)
 	{
@@ -174,14 +171,19 @@ void Frog::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				else if (nx > 0)
 					x += 3;
 			}
+			else if (dynamic_cast<Boom*>(e->obj))
+			{
+				if (dynamic_cast<Boom*>(e->obj)->GetState() == BOOM_STATE_ALIVE)
+					 StartUntouchable();
+			}
 			else if (dynamic_cast<EyeLet*>(e->obj))
-			{			
-				//EyeLet* temp = dynamic_cast<EyeLet*>(e->obj);
+			{	
 				if (dynamic_cast<EyeLet*>(e->obj)->GetState() == EYELET_STATE_COIN)
 				{
-					//DebugOut(L"COLIIS COIN\n");
 					e->obj->SetState(EYELET_STATE_DIE);
 				}
+				else if(dynamic_cast<EyeLet*>(e->obj)->GetState() != EYELET_STATE_UNACTIVE) 
+					StartUntouchable();
 			}
 			else if (dynamic_cast<LadyBird*>(e->obj))
 			{
@@ -189,6 +191,8 @@ void Frog::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				{
 					e->obj->SetState(LADYBIRD_STATE_DIE);
 				}
+				else
+					StartUntouchable();
 			}
 			else if (dynamic_cast<BallCarry*>(e->obj))
 			{
@@ -196,6 +200,13 @@ void Frog::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				{
 					e->obj->SetState(BALLCARRY_STATE_DIE);
 				}
+				else if (dynamic_cast<BallCarry*>(e->obj)->GetState() != BALLCARRY_STATE_UNACTIVE)
+					StartUntouchable();
+			}
+			else if (dynamic_cast<BallBot*>(e->obj))
+			{
+				if (dynamic_cast<BallCarry*>(e->obj)->GetState() != BALLBOT_STATE_UNACTIVE)
+					StartUntouchable();
 			}
 			else if (dynamic_cast<Bullet*>(e->obj))
 			{
@@ -205,6 +216,7 @@ void Frog::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						dynamic_cast<Bullet*>(e->obj)->SetState(BULLET_STATE_DIE);
 					SetState(BULLET_STATE_DIE);
 				}
+				else StartUntouchable();
 			}
 			else if (dynamic_cast<CPortal*>(e->obj))
 			{
@@ -221,7 +233,8 @@ void Frog::Render()
 {	
 	//int alpha = 255;
 	//animation_set->at(0)->Render(x, y, alpha);
-	
+	int alpha = 255;
+	if (untouchable) alpha = 128;
 	if (level == PRINCE_LEVEL)
 	{
 		int ani = 1;		
@@ -248,7 +261,7 @@ void Frog::Render()
 			ani = PRINCE_ANI_WALKING_DOWN;
 		else if (state == PRINCE_STATE_WALKING_UP || state == PRINCE_STATE_FIRE_UP)
 			ani = PRINCE_ANI_WALKING_UP;
-		animation_set->at(ani)->Render(x, y, 255);
+		animation_set->at(ani)->Render(x, y, alpha);
 	}
 	else if (level == LITTLE_PRINCE_LEVEL)
 	{
@@ -266,7 +279,7 @@ void Frog::Render()
 			ani = LITTLE_PRINCE_ANI_WALKING_RIGHT;
 		else if (state == FROG_STATE_WALKING_LEFT )
 			ani = LITTLE_PRINCE_ANI_WALKING_LEFT;
-		animation_set->at(ani)->Render(x, y, 255);
+		animation_set->at(ani)->Render(x, y, alpha);
 	}
 	//RenderBoundingBox();
 }

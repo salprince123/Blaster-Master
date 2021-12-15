@@ -12,6 +12,8 @@ void FrogGun::Render()
 		animation_set->at(FROG_GUN_ANI_HIDE)->Render(x, y);
 		return;
 	}
+	int alpha = 255;
+	if (frog->untouchable) alpha = 128;
 	int ani = 0;
 	switch (state)
 	{
@@ -31,7 +33,7 @@ void FrogGun::Render()
 		ani = FROG_GUN_ANI_RIGHT_UP;
 		break;
 	}
-	animation_set->at(ani)->Render(x, y);
+	animation_set->at(ani)->Render(x, y, alpha);
 	//RenderBoundingBox();
 }
 

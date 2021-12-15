@@ -17,6 +17,8 @@ void FrogWheel::Render()
 		animation_set->at(FROG_WHEEL_ANI_HIDE)->Render(x, y);
 		return;
 	}
+	int alpha = 255;
+	if (frog->untouchable) alpha = 128;
 	int ani = FROG_WHEEL_ANI_UP_RIGHT;
 	switch (state)
 	{
@@ -34,7 +36,7 @@ void FrogWheel::Render()
 			break;
 	}
 	//ani = FROG_WHEEL_ANI_UP_LEFT;
-	animation_set->at(ani)->Render(x, y);
+	animation_set->at(ani)->Render(x, y, alpha);
 }
 void FrogWheel::AutoChangeStateWithTime(DWORD time)
 {

@@ -8,7 +8,7 @@
 class Frog : public CGameObject
 {
 	int level;
-	int untouchable;
+	
 	DWORD untouchable_start;
 
 	float start_x;			// initial position of Mario at scene
@@ -16,6 +16,7 @@ class Frog : public CGameObject
 	int maxBullet;
 	int oldState;
 public:
+	int untouchable;
 	Frog(float x = 0.0f, float y = 0.0f);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);
 	virtual void Render();
