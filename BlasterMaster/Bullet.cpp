@@ -76,7 +76,7 @@ void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				{
 					//vx = ball->nx * BULLET_VX / 10 * id;
 					//vy = 0.045 - 0.0035 * dt;
-					x += 0.1 * id;
+					x += ball->nx*0.051 * id;
 					y -= 0.1;
 				}				
 				else

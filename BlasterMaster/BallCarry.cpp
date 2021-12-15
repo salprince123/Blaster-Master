@@ -29,12 +29,12 @@ void BallCarry::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	Frog* player = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	player->GetPosition(pX, pY);
 	
-	if ((pX - x) < BALLCARRY_RANGE && (pX - x) >0 && state==BALLCARRY_STATE_UNACTIVE)
+	if ((pX - x) < BALLCARRY_RANGE && (pX - x) >0 && state==BALLCARRY_STATE_UNACTIVE && abs(y-pY)<10)
 	{
 		SetState(BALLCARRY_STATE_FIRE);
 		nx = 1;
 	}
-	else if( (x-pX) < BALLCARRY_RANGE && (x - pX)>0 && state == BALLCARRY_STATE_UNACTIVE)
+	else if( (x-pX) < BALLCARRY_RANGE && (x - pX)>0 && state == BALLCARRY_STATE_UNACTIVE && abs(y - pY) < 10)
 	{
 		SetState(BALLCARRY_STATE_FIRE);
 		nx = -1;
