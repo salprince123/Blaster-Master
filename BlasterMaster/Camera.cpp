@@ -21,25 +21,17 @@ void Camera::Update(float player_x, float player_y, float h)
 {
 	
 	int id = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetId();
-
+	//DebugOut(L"%f %f %f %f\n", player_x, player_y, player_x+width, player_y + height);
 	if (id == 1)
 	{
-		if (player_x >= 1307)
-		{
-			player_x = 1421 - width / 2;
-			player_y -= height / 2;
-		}
-		else
-		{
-			player_x -= width / 2;
-			player_y -= height / 2;
-		}
-		if (player_x < 0)
-			player_x = 0;
-		else if (player_x > 1576)
-			player_x = 1576;
-		if (player_y + height > 784)
-			player_y = 784 - height;
+		
+		if (player_x > SMALL_SCENE_1_1_X ) player_x = SMALL_SCENE_1_1_X+ width / 2;
+		player_x -= width / 2;
+		player_y -= height / 2;
+		if (player_x < 0) player_x = 0;
+		if (player_x +width > SCENE1_MAX_X) player_x = SCENE1_MAX_X - width;
+		if (player_y  < 0) player_y = 0;
+		if (player_y  +height > SCENE1_MAX_Y) player_y = SCENE1_MAX_Y-height;
 		float _dy = abs(player_y - CGame::getCamera()->getCamPosY());
 	}
 	else
@@ -61,7 +53,8 @@ void Camera::Update(float player_x, float player_y, float h)
 		{
 			player_y -= height / 2;
 		}
+		if (player_x < 0) player_x = 0;
+		if (player_x + width > SCENE2_MAX_X) player_x = SCENE2_MAX_X - width;
 	}
-
 	SetCamPos(round(player_x), round(player_y));
 }

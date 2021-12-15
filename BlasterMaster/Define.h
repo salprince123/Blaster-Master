@@ -25,6 +25,15 @@
 #define OBJECT_TYPE_PORTAL	50
 
 #define MAX_SCENE_LINE 1024
+//CAMERA:
+//Scene1 
+#define SCENE1_MAX_X 1568
+#define SCENE1_MAX_Y 784
+#define SMALL_SCENE_1_1_X 1296 
+#define SMALL_SCENE_1_1_Y 384
+//Scene2 
+#define SCENE2_MAX_X 528
+#define SCENE2_MAX_Y 2048
 
 // QUAD TREE
 #define MIN_WIDTH_OF_QUADTREE 256 
