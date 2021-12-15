@@ -458,6 +458,11 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_P:
 		frog->SetLevel(PRINCE_LEVEL);
 		break;
+	case DIK_O:
+		if(frog->GetLevel() == FROG_LEVEL)
+			frog->SetLevel(LITTLE_PRINCE_LEVEL);
+		else if(frog->GetLevel() == LITTLE_PRINCE_LEVEL)
+			frog->SetLevel(FROG_LEVEL);
 	}
 }
 

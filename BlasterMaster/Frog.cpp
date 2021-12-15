@@ -8,6 +8,7 @@ Frog::Frog(float x, float y) : CGameObject()
 	if (id == 1)
 	{
 		level = FROG_LEVEL;
+		//level=LITTLE_PRINCE_LEVEL;
 		SetState(FROG_STATE_IDLE);
 	}		
 	else
@@ -174,12 +175,12 @@ void Frog::Render()
 	
 	if (level == PRINCE_LEVEL)
 	{
-		int ani = 1;
-		
+		int ani = 1;		
 		if (state == FROG_STATE_IDLE)
 		{
 			if (ny == 0)
 			{
+				DebugOut(L"%d  \n", nx);
 				if (nx < 0)
 					ani = PRINCE_ANI_IDLE_LEFT;
 				else ani = PRINCE_ANI_IDLE_RIGHT;
@@ -199,6 +200,24 @@ void Frog::Render()
 			ani = PRINCE_ANI_WALKING_DOWN;
 		else if (state == PRINCE_STATE_WALKING_UP || state == PRINCE_STATE_FIRE_UP)
 			ani = PRINCE_ANI_WALKING_UP;
+		animation_set->at(ani)->Render(x, y, 255);
+	}
+	else if (level == LITTLE_PRINCE_LEVEL)
+	{
+		int ani = LITTLE_PRINCE_ANI_IDLE_LEFT;
+		if (state == FROG_STATE_IDLE)
+		{
+			if (ny == 0)
+			{
+				if (nx < 0)
+					ani = LITTLE_PRINCE_ANI_IDLE_LEFT;
+				else ani = LITTLE_PRINCE_ANI_IDLE_RIGHT;
+			}
+		}
+		else if (state == FROG_STATE_WALKING_RIGHT )
+			ani = LITTLE_PRINCE_ANI_WALKING_RIGHT;
+		else if (state == FROG_STATE_WALKING_LEFT )
+			ani = LITTLE_PRINCE_ANI_WALKING_LEFT;
 		animation_set->at(ani)->Render(x, y, 255);
 	}
 	//RenderBoundingBox();
@@ -267,6 +286,11 @@ void Frog::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 	{
 		right = x + PRINCE_BBOX_WIDTH;
 		bottom = y + PRINCE_BBOX_HEIGHT;
+	}
+	else if (level == LITTLE_PRINCE_LEVEL)
+	{
+		right = x + 8;
+		bottom = y + 15;
 	}
 }
 

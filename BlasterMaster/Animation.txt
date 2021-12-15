@@ -1,6 +1,6 @@
 #NOTHING
 9999 99999 100
-# ==== MARIO =========
+# ==== PRINCE =========
 #idle BIG right
 400 10001 100
 #idle BIG left
@@ -21,6 +21,15 @@
 #die
 599 10001 100
 
+#LITTLE PRINCE
+#idle left right
+601 10020 100
+602 10021 100
+#walk
+#left
+603 10022 100 10023 100
+#right
+604 10024 100 10025 100
 #FROG
 #======GUN
 771001 7710001 100

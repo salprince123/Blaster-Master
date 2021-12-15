@@ -85,8 +85,8 @@ void FrogBody::SetState(int state)
 void FrogBody::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	Frog* mario = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
-	//if (mario->GetLevel() == PRINCE_LEVEL)
-		//return;
+	if (mario->GetLevel() == LITTLE_PRINCE_LEVEL)
+		return;
 	if (type == FROG_BODY_TYPE_UP)
 	{
 		switch (mario->GetState())
