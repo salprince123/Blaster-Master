@@ -30,7 +30,7 @@ void Frog::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {	
 	// Calculate dx, dy 
 	//if(state==FROG_STATE_FIRE)
-	//DebugOut(L"STATE %d %d\n", state, nx);
+	//DebugOut(L"STATE %f %f\n", x, y);
 	int id = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetId();
 	CGameObject::Update(dt);
 	//DebugOut(L"%d %d \n", nx, ny);
@@ -161,7 +161,8 @@ void Frog::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			else if (dynamic_cast<CPortal*>(e->obj))
 			{
 				CPortal* p = dynamic_cast<CPortal*>(e->obj);
-				CGame::GetInstance()->SwitchScene(p->GetSceneId());
+				if(level==LITTLE_PRINCE_LEVEL && p->GetSceneId()==2)
+					CGame::GetInstance()->SwitchScene(p->GetSceneId());
 			}
 		}
 	}
@@ -180,7 +181,6 @@ void Frog::Render()
 		{
 			if (ny == 0)
 			{
-				DebugOut(L"%d  \n", nx);
 				if (nx < 0)
 					ani = PRINCE_ANI_IDLE_LEFT;
 				else ani = PRINCE_ANI_IDLE_RIGHT;
