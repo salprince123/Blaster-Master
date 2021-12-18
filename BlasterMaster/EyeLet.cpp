@@ -31,20 +31,25 @@ void EyeLet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	player->GetPosition(pX, pY);
 	if (nx < 0 && (x - pX)>30 && abs(y-pY)<70)
 	{
-		this->SetState(LADYBIRD_STATE_WALKING_RIGHT);
+		this->SetState(EYELET_STATE_WALKING_RIGHT);
 		active = 1; 
 	}
 	else if (nx >0 && (pX - x) > 30 && abs(y - pY) < 70)
 	{
 		active = 1;	
-		this->SetState(LADYBIRD_STATE_WALKING_RIGHT);
+		this->SetState(EYELET_STATE_WALKING_RIGHT);
 	}
 	if (active == 0)
 	{
 		this->SetState(EYELET_STATE_UNACTIVE);
 		return;
+	}	
+	if (vx == 0)
+	{
+		SetState(EYELET_STATE_COIN);
+		return;
 	}
-	
+		
 	this->dt = dt;
 	dx = vx*dt;
 	if (y0 - y > 30)
