@@ -41,6 +41,30 @@ void BallBot::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 	else if (state == BALLBOT_STATE_FLY)
 	{
+		if ((y0 - pY) < 0 || (y0 - pY) > BALLBOT_RANGE)
+		{
+			SetState(BALLBOT_STATE_UNACTIVE);
+			x = x0;
+			y = y0;
+			ny = -1;
+			return;
+		}
+		else if (nx > 0 && pX -x0 > BALLBOT_RANGE)
+		{
+			SetState(BALLBOT_STATE_UNACTIVE);
+			x = x0;
+			y = y0;
+			ny = -1;
+			return;
+		}
+		else if (nx < 0 && x0- pX > BALLBOT_RANGE)
+		{
+			SetState(BALLBOT_STATE_UNACTIVE);
+			x = x0;
+			y = y0;
+			ny = -1;
+			return;
+		}
 		if ((y - y0) > 10 )
 		{
 			x = x0;
@@ -48,6 +72,7 @@ void BallBot::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			ny = -1;
 			return;
 		}
+		
 		dx = vx * dt;
 		if (ny == -1)
 			dy = -vx * sin(45) * dt;

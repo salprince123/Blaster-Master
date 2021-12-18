@@ -40,3 +40,5 @@
 *.recipe
 *.suo
 *.ipch
+BlasterMaster/Debug/*
+.vs/samples/v16/ipch/*
