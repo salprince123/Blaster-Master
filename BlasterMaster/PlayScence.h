@@ -42,7 +42,7 @@ protected:
 	
 public: 
 	CPlayScene(int id, LPCWSTR filePath);
-
+	vector<LPGAMEOBJECT> createObject;
 	virtual void Load();
 	virtual void Update(DWORD dt);
 	virtual void Render();

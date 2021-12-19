@@ -6,11 +6,15 @@ class Bullet : public CGameObject
 {
 public:
 	LPGAMEOBJECT enemyHandle = NULL;
-	int type = 0;
+	int type = 1;
+	int isCreate = 0;
+	int left = 0;
+	int right = 0;
 	int id = 0;
 	float x0, y0;
 	DWORD lastTime;	
 	float ballCarryTime=0;
+	int count = 0;
 	Bullet(int id);
 	virtual void Render();
 	virtual void GetBoundingBox(float& l, float& t, float& r, float& b);

@@ -379,6 +379,10 @@ void CPlayScene::Update(DWORD dt)
 	{
 		staticObjects[i]->Update(dt, &coObjects);
 	}
+	for (size_t i = 0; i < createObject.size(); i++)
+	{
+		createObject[i]->Update(dt, &coObjects);
+	}
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
 	if (player == NULL) return; 
 
@@ -399,6 +403,10 @@ void CPlayScene::Render()
 		upperBackground[i]->Render();
 	for (int i = 0; i < objects.size(); i++)
 		objects[i]->Render();
+	for (size_t i = 0; i < createObject.size(); i++)
+	{
+		createObject[i]->Render();
+	}
 }
 
 /*
@@ -409,6 +417,15 @@ void CPlayScene::Unload()
 	for (int i = 0; i < objects.size(); i++)
 		delete objects[i];
 	objects.clear();
+	for (int i = 0; i < staticObjects.size(); i++)
+		delete staticObjects[i];
+	staticObjects.clear();
+	for (int i = 0; i < upperBackground.size(); i++)
+		delete upperBackground[i];
+	upperBackground.clear();
+	for (int i = 0; i < createObject.size(); i++)
+		delete createObject[i];
+	createObject.clear();
 	player = NULL;
 	DebugOut(L"[INFO] Scene %s unloaded! \n", sceneFilePath);
 }

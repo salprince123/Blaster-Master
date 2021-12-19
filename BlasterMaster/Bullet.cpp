@@ -4,6 +4,7 @@ Bullet::Bullet(int id)
 {
 	this->id = id;
 	this->SetState(BULLET_STATE_NOT_FIRE);
+	this->type = BULLET_TYPE_2;
 }
 
 void Bullet::Render()
@@ -136,6 +137,7 @@ void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			SetState(frog->nx * BULLET_STATE_FIRE_RIGHT);
 			this->vx = frog->nx * BULLET_VX;
 			this->vy = 0;
+			
 		}
 		else if (frog->GetState() == FROG_STATE_FIRE_UP && frog->GetMaxBullet() == this->id)
 		{
@@ -160,6 +162,29 @@ void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			SetState( BULLET_STATE_FIRE_LEFT);
 			this->vx =  -BULLET_VX;
 			this->vy = 0;
+			if (left == 0 && isCreate==0)
+			{
+				Bullet* up = new Bullet(id);
+				up->SetPosition(x, y);
+				up->SetAnimationSet(animation_set);
+				up->isCreate = 1;
+				up->SetState(state);
+				DebugOut(L"%d\n", ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->createObject.size());
+				((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->createObject.push_back(up);
+				left = 1;
+			}
+			if (right == 0 && isCreate == 0)
+			{
+				Bullet* up = new Bullet(id);
+				up->SetPosition(x, y);
+				up->SetAnimationSet(animation_set);
+				up->isCreate = -1;
+				up->SetState(state);
+				DebugOut(L"%d\n", ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->createObject.size());
+				((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->createObject.push_back(up);
+				right = 1;
+			}
+
 		}
 		else if (frog->GetState() == PRINCE_STATE_FIRE_RIGHT && frog->GetMaxBullet() == this->id)
 		{
@@ -189,7 +214,22 @@ void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 			else
 			{
-				CGameObject::Update(dt, coObjects);
+				
+				if (isCreate == 1)
+				{
+					dy = -20 * sin(dt);
+					dx = state/ BULLET_STATE_FIRE_RIGHT;
+					
+				}
+				else if (isCreate == -1)
+				{
+					dy = 20 * sin(dt);
+					dx = state / BULLET_STATE_FIRE_RIGHT;
+				}
+				else 
+					CGameObject::Update(dt, coObjects);
+				count += 60;
+				
 				break;
 			}
 		}
@@ -310,6 +350,11 @@ void Bullet::HandleStateUnFire()
 {
 	x0 = x;
 	y0 = y;
+	if (isCreate != 0)
+	{
+		vector <LPGAMEOBJECT> t = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->createObject;
+		t.erase(t.begin());
+	}
 	FrogBody* bodyUp = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetBodyUp();
 	Frog* player = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	if (player->GetLevel() == FROG_LEVEL)

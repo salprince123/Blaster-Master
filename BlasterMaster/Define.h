@@ -218,6 +218,8 @@
 #define BULLET_ANI_TYPE_2_UP			10
 #define BULLET_ANI_TYPE_2_DOWN			11
 
+#define BULLET_TYPE_1	1
+#define BULLET_TYPE_2	2
 
 #define BULLET_VX 0.17
 #define BULLET_VY 0.17
