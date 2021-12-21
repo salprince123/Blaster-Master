@@ -61,21 +61,24 @@ void Bullet::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
 	l = x;
 	t = y;
-	if (type == 0)
+
+	/*if (type == 0)
 	{
 		r = x + BULLET_BBOX_WIDTH_HORIZONTAL;
 		b = y + BULLET_BBOX_HEIGHT_HORIZONTAL;
 	}
 	else if (enemyHandle != NULL)
 	{
-		r = x + 8;
-		b = y + 16;
+		r = x + BULLET_BBOX_WIDTH_HORIZONTAL;
+		b = y + BULLET_BBOX_WIDTH_HORIZONTAL;
 	}
 	else
 	{
 		r = x + BULLET_BBOX_WIDTH_HORIZONTAL;
 		b = y + BULLET_BBOX_HEIGHT_HORIZONTAL;
-	}
+	}*/
+	r = x + BULLET_BBOX_WIDTH_HORIZONTAL*2;
+	b = y + BULLET_BBOX_WIDTH_HORIZONTAL*2;
 	//DebugOut(L"BBX BULLET : %f %f %f %f %f\n", l, t, r, b, y);
 }
 void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -365,12 +368,16 @@ void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			lastTime = GetTickCount64();
 			LPCOLLISIONEVENT e = coEventsResult[i];
 			if (dynamic_cast<CBrick*>(e->obj))
-			{
-				float l, t, r, b;
-				e->obj->GetBoundingBox(l, t, r, b);
-				this->GetBoundingBox(l, t, r, b);
+			{				
 				if (state != BULLET_STATE_DIE && state != BULLET_STATE_NOT_FIRE)
+				{
+					DebugOut(L"%f %f\n",e->nx, e->ny);
+					if (e->ny != 0) 
+					y -= 16;
 					SetState(BULLET_STATE_DIE);
+				}
+					
+				
 			}
 			else if (dynamic_cast<Boom*>(e->obj))
 			{

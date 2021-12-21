@@ -14,17 +14,16 @@ GX680::GX680(int x0, int y0, int x1, int y1, int nx)
 void GX680::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
 	left = x;
-	top = y - 2;
+	top = y;
 	right = x + GX680_BBOX_WIDTH;
-	bottom = y + GX680_BBOX_HEIGHT;
+	bottom = y + GX680_BBOX_HEIGHT*2;
 	if (GetState() == GX680_STATE_DIE)
 	{
 		left = right = top = bottom = 0;
 	}
 }
 void GX680::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
-{
-	
+{	
 	float pX, pY;
 	Frog* player = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	player->GetPosition(pX, pY);
