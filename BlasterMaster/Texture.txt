@@ -6,5 +6,6 @@
 5	textures\test.png	0	0	0
 6	textures\map2.png	0	0	0
 7	textures\Item.png	0	15	150
+8	textures\brick.png	0	0	0
 20	textures\misc.png	176	224	248
 10	textures\enemies.png	3	26	110
