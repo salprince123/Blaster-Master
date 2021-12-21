@@ -22,6 +22,8 @@
 #define OBJECT_TYPE_BALLBOT	34
 #define OBJECT_TYPE_GX680	35
 #define OBJECT_TYPE_SENSOR	36
+#define OBJECT_TYPE_WORM	37
+#define OBJECT_TYPE_BREAKABLE_BRICK	38
 
 #define OBJECT_TYPE_PORTAL	50
 
@@ -178,6 +180,24 @@
 #define GX680_ANI_DIE			3
 
 #define GX680_RANGE				150
+
+//WORM
+#define WORM_WALKING_SPEED		0.05;
+#define WORM_FLYING_UP_SPEED	0.05*0.4*2;
+
+#define WORM_BBOX_WIDTH		16
+#define WORM_BBOX_HEIGHT		16
+#define WORM_BBOX_HEIGHT_DIE	9
+
+#define WORM_STATE_UNACTIVE	102
+#define WORM_STATE_ACTIVE		103
+#define WORM_STATE_DIE			200
+
+#define WORM_ANI_WALK_lEFT		0
+#define WORM_ANI_WALK_RIGHT	1
+#define WORM_ANI_DIE	2
+
+#define WORM_RANGE				150
 
 //background
 #pragma region backround

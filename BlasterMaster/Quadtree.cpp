@@ -142,8 +142,7 @@ void Quadtree::_ParseSection_OBJECTS(string line)
        
         case OBJECT_TYPE_BULLET:
         {
-            int id = atoi(tokens[4].c_str());
-            
+            int id = atoi(tokens[4].c_str());            
             obj = new Bullet(id);
             if (tokens.size() == 6)
             {
@@ -155,6 +154,14 @@ void Quadtree::_ParseSection_OBJECTS(string line)
                 else if (dynamic_cast<Bullet*>(preObj))
                     dynamic_cast<Bullet*>(obj)->SetEnemyHandle(dynamic_cast<Bullet*>(preObj)->enemyHandle);
             }
+            break;
+        }
+        case OBJECT_TYPE_WORM:
+        {
+            obj = new Worm(x, y, x, y, 1);
+            CGameObject* preObj = object[object.size() - 1];
+            if (dynamic_cast<Boom*>(preObj))
+                dynamic_cast<Worm*>(obj)->SetEnemyHandle(preObj);
             break;
         }
         case OBJECT_TYPE_PORTAL:

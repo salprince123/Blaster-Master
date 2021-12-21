@@ -14,6 +14,7 @@
 #include "BallBot.h"
 #include "GX680.h"
 #include "Sensor.h"
+#include "Worm.h"
 using namespace std;
 class Rect
 {
