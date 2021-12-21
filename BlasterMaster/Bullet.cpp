@@ -208,7 +208,7 @@ void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			if (left == 0 && isCreate==0)
 			{
 				Bullet* up = new Bullet(id);
-				up->SetPosition(x, y);
+				up->SetPosition(x-5, y);
 				up->SetAnimationSet(animation_set);
 				up->isCreate = 1;
 				up->SetState(state);
@@ -219,7 +219,7 @@ void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			if (right == 0 && isCreate == 0)
 			{
 				Bullet* up = new Bullet(id);
-				up->SetPosition(x, y);
+				up->SetPosition(x-5, y);
 				up->SetAnimationSet(animation_set);
 				up->isCreate = -1;
 				up->SetState(state);
@@ -237,7 +237,7 @@ void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			if (left == 0 && isCreate == 0)
 			{
 				Bullet* up = new Bullet(id);
-				up->SetPosition(x, y);
+				up->SetPosition(x+5, y);
 				up->SetAnimationSet(animation_set);
 				up->isCreate = 1;
 				up->SetState(state);
@@ -248,7 +248,7 @@ void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			if (right == 0 && isCreate == 0)
 			{
 				Bullet* up = new Bullet(id);
-				up->SetPosition(x, y);
+				up->SetPosition(x+5, y);
 				up->SetAnimationSet(animation_set);
 				up->isCreate = -1;
 				up->SetState(state);
@@ -415,9 +415,20 @@ void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					SetState(BULLET_STATE_DIE);
 				}
 			}
+			else if (dynamic_cast<Bullet*>(e->obj))
+			{
+				if (state != BULLET_STATE_DIE && state != BULLET_STATE_NOT_FIRE && enemyHandle == NULL)
+				{
+					if (dynamic_cast<Bullet*>(e->obj)->enemyHandle != NULL)
+					{
+						dynamic_cast<Bullet*>(e->obj)->SetState(BULLET_STATE_DIE);
+						SetState(BULLET_STATE_DIE);
+					}						
+				}
+			}
 			else
 			{
-
+				
 				SetState(BULLET_STATE_DIE);
 			}
 		}
@@ -429,13 +440,9 @@ void Bullet::HandleStateUnFire()
 {
 	x0 = x;
 	y0 = y;
-	/*if (isCreate != 0)
-	{
-		vector <LPGAMEOBJECT> t = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->createObject;
-		t.erase(t.begin());
-	}*/
 	FrogBody* bodyUp = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetBodyUp();
 	Frog* player = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+	
 	if (player->GetLevel() == FROG_LEVEL)
 	{
 		switch (bodyUp->GetState())
@@ -480,47 +487,41 @@ void Bullet::HandleStateUnFire()
 	}
 	else
 	{
-		switch (bodyUp->GetState())
-		{
-		case FROG_BODY_UP_STATE_LEFT:
-		{
-			this->x = bodyUp->x;
-			this->y = bodyUp->y-8;
-			break;
+		//DebugOut(L"PRINCE LEVEL %d %d %d\n", player->GetState(), player->nx, player->ny);
+		switch (player->GetState())
+		{			
+			case FROG_STATE_IDLE:
+			{
+				if (player->ny == 0)
+				{					
+					if (player->nx < 0)
+					{						
+						this->x = player->x -10;
+						this->y = player->y - 8;
+					}
+					else
+					{
+						this->x = player->x + PRINCE_BBOX_WIDTH +8 ;
+						this->y = player->y - 8;
+					}
+				}
+				else
+				{
+					if (player->ny < 0)
+					{
+						this->x = player->x -5;
+						this->y = player->y - PRINCE_BBOX_HEIGHT+3;
+					}
+					else
+					{
+						this->x = player->x+PRINCE_BBOX_WIDTH/2;
+						this->y = player->y +5;
+					}
+				}
+				break;
+			}
 		}
-		case FROG_BODY_UP_STATE_RIGHT:
-		{
-			this->x = bodyUp->x;
-			this->y = bodyUp->y-8;
-			break;
-		}
-		case FROG_BODY_UP_STATE_UP_RIGHT:
-		{
-			this->x = bodyUp->x + 0.5 * FROG_BODY_UP_BBOX_WIDTH;
-			this->y = bodyUp->y - FROG_GUN_BBOX_HEIGHT;
-			break;
-		}
-		case FROG_BODY_UP_STATE_UP_LEFT:
-		{
-			this->x = bodyUp->x + 0.5 * FROG_BODY_UP_BBOX_WIDTH;
-			this->y = bodyUp->y - FROG_GUN_BBOX_HEIGHT;
-			break;
-		}
-		case FROG_BODY_UP_STATE_LEFT_UP:
-		{
-			this->x = bodyUp->x - FROG_GUN_BBOX_WIDTH;
-			this->y = bodyUp->y - FROG_GUN_BBOX_HEIGHT;
-			break;
-		}
-		case FROG_BODY_UP_STATE_RIGHT_UP:
-		{
-			this->x = bodyUp->x + FROG_GUN_BBOX_WIDTH + FROG_BODY_UP_BBOX_WIDTH;
-			this->y = bodyUp->y;
-			break;
-		}
-		}
-	}
-	
+	}	
 }
 void Bullet::SetState(int state)
 {
