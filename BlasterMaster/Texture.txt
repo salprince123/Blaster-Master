@@ -3,8 +3,10 @@
 2	textures\Enemies0.png	0	15	100
 3	textures\tileScene1.png	0	0	0
 4	textures\map1.png	0	0	0
+44	textures\map11.png	0	0	0
 5	textures\test.png	0	0	0
 6	textures\map2.png	0	0	0
+66	textures\map21.png	0	15	150
 7	textures\Item.png	0	15	150
 8	textures\brick.png	0	0	0
 20	textures\misc.png	176	224	248

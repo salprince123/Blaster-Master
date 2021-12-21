@@ -225,7 +225,18 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			obj = new Bullet(id);
 			break;
 		}
-		case OBJECT_TYPE_BACKROUND: obj = new Background(); break;
+		case OBJECT_TYPE_BACKROUND: 
+		{DebugOut(L"UPPER BAKCGROUND %d\n", tokens.size());
+			obj = new Background(); 
+			if (tokens.size() == 5)
+			{
+				
+				int isUpper = atof(tokens[4].c_str());
+				dynamic_cast<Background*>(obj)->isUpper = isUpper;
+			}
+			break;
+			
+		}
 		case OBJECT_TYPE_PORTAL:
 			{	
 				float r = atof(tokens[4].c_str());
@@ -246,7 +257,13 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
 		obj->SetAnimationSet(ani_set);
 		if (object_type == OBJECT_TYPE_BACKROUND)
-			staticObjects.insert(staticObjects.begin(), obj);
+		{
+			if (dynamic_cast<Background*>(obj) && dynamic_cast<Background*>(obj)->isUpper == 1)
+				this->upperBackground.push_back(obj);
+			else
+				staticObjects.insert(staticObjects.begin(), obj);
+				//this->upperBackground.push_back(obj);
+		}			
 		else
 			staticObjects.push_back(obj);
 	}	
@@ -364,11 +381,11 @@ void CPlayScene::Update(DWORD dt)
 	botLeft = quadtree->search(camX, height - (camY + camHeight));
 	botRight = quadtree->search((camX + camWidth), height - (camY + camHeight));
 
-	upperBackground.clear();
+	/*upperBackground.clear();
 	upperBackground.insert(upperBackground.end(), topLeft.begin(), topLeft.end());
 	upperBackground.insert(upperBackground.end(), topRight.begin(), topRight.end());
 	upperBackground.insert(upperBackground.end(), botLeft.begin(), botLeft.end());
-	upperBackground.insert(upperBackground.end(), botRight.begin(), botRight.end());
+	upperBackground.insert(upperBackground.end(), botRight.begin(), botRight.end());*/
 
 
 	for (size_t i = 0; i < objects.size(); i++)
