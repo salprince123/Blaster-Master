@@ -66,3 +66,15 @@ void Sensor::Render()
 		ani = SENSOR_ANI_WALK;
 	animation_set->at(ani)->Render(x, y, alpha);
 }
+void Sensor::SetState(int state)
+{
+	this->state = state;
+	switch (state)
+	{
+	case SENSOR_STATE_DIE:
+		x = -1000;
+		y = -1000;
+	default:
+		break;
+	}
+}

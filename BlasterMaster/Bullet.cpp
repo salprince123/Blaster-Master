@@ -464,6 +464,14 @@ void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					SetState(BULLET_STATE_DIE);
 				}
 			}
+			else if (dynamic_cast<Sensor*>(e->obj))
+			{
+				if (state != BULLET_STATE_DIE && state != BULLET_STATE_NOT_FIRE && enemyHandle == NULL)
+				{
+					dynamic_cast<Sensor*>(e->obj)->SetState(SENSOR_STATE_DIE);
+					SetState(BULLET_STATE_DIE);
+				}
+			}
 			else if (dynamic_cast<Bullet*>(e->obj))
 			{
 				if (state != BULLET_STATE_DIE && state != BULLET_STATE_NOT_FIRE && enemyHandle == NULL)

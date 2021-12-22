@@ -25,7 +25,6 @@ void BallBot::GetBoundingBox(float& left, float& top, float& right, float& botto
 void BallBot::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	float pX, pY;
-	//DebugOut(L"%d %d\n",x0,y0);
 	Frog* player = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	player->GetPosition(pX, pY);
 	if ((y - pY) > 0 && (y - pY) < BALLBOT_RANGE && state == BALLBOT_STATE_UNACTIVE)
@@ -33,40 +32,48 @@ void BallBot::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		if (nx > 0 && pX >= x)
 		{
 			SetState(BALLBOT_STATE_FLY);
+			
 		}			
 		else if (nx < 0 && pX <= x)
 		{
 			SetState(BALLBOT_STATE_FLY);
+
 		}
 	}
 	else if (state == BALLBOT_STATE_FLY)
 	{
-		if ((y0 - pY) < 0 || (y0 - pY) > BALLBOT_RANGE)
+		if (active == 0)
 		{
-			SetState(BALLBOT_STATE_UNACTIVE);
-			x = x0;
-			y = y0;
-			ny = -1;
-			return;
-		}
-		else if (nx > 0 && pX -x0 > BALLBOT_RANGE)
-		{
-			SetState(BALLBOT_STATE_UNACTIVE);
-			x = x0;
-			y = y0;
-			ny = -1;
-			return;
-		}
-		else if (nx < 0 && x0- pX > BALLBOT_RANGE)
-		{
-			SetState(BALLBOT_STATE_UNACTIVE);
-			x = x0;
-			y = y0;
-			ny = -1;
-			return;
-		}
+			if ((y0 - pY) < 0 || (y0 - pY) > BALLBOT_RANGE)
+			{
+				SetState(BALLBOT_STATE_UNACTIVE);
+				x = x0;
+				y = y0;
+				ny = -1;
+				return;
+			}
+			else if (nx > 0 && (pX<x || (pX - x)>BALLBOT_RANGE))
+			{
+
+				SetState(BALLBOT_STATE_UNACTIVE);
+				x = x0;
+				y = y0;
+				ny = -1;
+				return;
+			}
+			else if (nx < 0 && (pX > x || (x - pX) > BALLBOT_RANGE))
+			{
+				SetState(BALLBOT_STATE_UNACTIVE);
+				x = x0;
+				y = y0;
+				ny = -1;
+				return;
+			}
+		}		
 		if ((y - y0) > 10 )
 		{
+			if (active == 1)
+				active = 0;
 			x = x0;
 			y = y0;
 			ny = -1;
@@ -113,6 +120,6 @@ void BallBot::SetState(int state)
 	{
 	case BALLBOT_STATE_FLY:
 		vx = nx * BALLBOT_WALKING_SPEED;
-
+		active = 1;
 	}
 }
