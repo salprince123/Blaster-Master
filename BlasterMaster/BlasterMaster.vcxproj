@@ -130,6 +130,7 @@
     <ClCompile Include="BallBot.cpp" />
     <ClCompile Include="BallCarry.cpp" />
     <ClCompile Include="Boom.cpp" />
+    <ClCompile Include="BreakableBrick.cpp" />
     <ClCompile Include="Brick.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Camera.cpp" />
@@ -160,6 +161,7 @@
     <ClInclude Include="BallBot.h" />
     <ClInclude Include="BallCarry.h" />
     <ClInclude Include="Boom.h" />
+    <ClInclude Include="BreakableBrick.h" />
     <ClInclude Include="Brick.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Camera.h" />

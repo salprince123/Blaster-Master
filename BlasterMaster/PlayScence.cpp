@@ -262,7 +262,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 				this->upperBackground.push_back(obj);
 			else
 				staticObjects.insert(staticObjects.begin(), obj);
-				//this->upperBackground.push_back(obj);
 		}			
 		else
 			staticObjects.push_back(obj);

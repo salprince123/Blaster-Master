@@ -15,6 +15,7 @@
 #include "GX680.h"
 #include "Sensor.h"
 #include "Worm.h"
+#include "BreakableBrick.h"
 using namespace std;
 class Rect
 {

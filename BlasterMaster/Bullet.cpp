@@ -376,6 +376,14 @@ void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					SetState(BULLET_STATE_DIE);
 				}
 			}
+			else if (dynamic_cast<BreakableBrick*>(e->obj))
+			{
+				if (state != BULLET_STATE_DIE && state != BULLET_STATE_NOT_FIRE)
+				{
+					dynamic_cast<BreakableBrick*>(e->obj)->SetState(BREAKABLE_BRICK_STATE_DIE);
+					SetState(BULLET_STATE_DIE);
+				}
+			}
 			else if (dynamic_cast<LadyBird*>(e->obj))
 			{
 				if (state != BULLET_STATE_DIE && state != BULLET_STATE_NOT_FIRE)
