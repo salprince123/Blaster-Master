@@ -69,6 +69,7 @@ void CGameObject::CalcPotentialCollisions(
 	vector<LPGAMEOBJECT> *coObjects, 
 	vector<LPCOLLISIONEVENT> &coEvents)
 {
+	Frog* player = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	for (UINT i = 0; i < coObjects->size(); i++)
 	{
 		LPCOLLISIONEVENT e = SweptAABBEx(coObjects->at(i));
@@ -77,8 +78,8 @@ void CGameObject::CalcPotentialCollisions(
 		{
 			if (!dynamic_cast<Background*>(e->obj))
 			{
-				//if (dynamic_cast<EyeLet*>(e->obj) && e->obj->GetState() == EYELET_STATE_COIN)
-					//continue;
+				if (dynamic_cast<Frog*>(this)&&  player->untouchable != 0 && dynamic_cast<Enemy*>(e->obj));
+				else 
 				coEvents.push_back(e);
 			}
 				

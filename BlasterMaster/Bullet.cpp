@@ -6,8 +6,12 @@ Bullet::Bullet(int id)
 	this->id = id;
 	this->SetState(BULLET_STATE_NOT_FIRE);
 	this->type = BULLET_TYPE_2;
-	y0 = player->y;
-	x0 = player->x;
+	if (player != NULL)
+	{
+		y0 = player->y;
+		x0 = player->x;
+	}
+	
 	//DebugOut(L"y0= %f\n", y0);
 }
 
@@ -149,6 +153,8 @@ void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	else
 	{		
 		Frog* frog = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+		if(frog->GetLevel()==1)
+			this->type = BULLET_TYPE_1;
 		if (state == BULLET_STATE_NOT_FIRE)
 		{
 			if (frog->GetState() == FROG_STATE_FIRE && frog->GetMaxBullet() == this->id)
@@ -156,17 +162,20 @@ void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				SetState(frog->nx * BULLET_STATE_FIRE_RIGHT);
 				this->vx = frog->nx * BULLET_VX;
 				this->vy = 0; 
-
-				if (left == 0 && isCreate == 0)
+				if (type == BULLET_TYPE_2)
 				{
-					CreateBullet(x, y, 1,vx,vy);
-					left = 1;
+					if (left == 0 && isCreate == 0)
+					{
+						CreateBullet(x, y, 1, vx, vy);
+						left = 1;
+					}
+					if (right == 0 && isCreate == 0)
+					{
+						CreateBullet(x, y, -1, vx, vy);
+						right = 1;
+					}
 				}
-				if (right == 0 && isCreate == 0)
-				{
-					CreateBullet(x, y, -1, vx, vy);
-					right = 1;
-				}
+				
 
 			}
 			else if (frog->GetState() == FROG_STATE_FIRE_UP && frog->GetMaxBullet() == this->id)
@@ -175,15 +184,18 @@ void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				SetState(BULLET_STATE_FIRE_UP);
 				this->vy = BULLET_VY;
 				this->vx = 0;
-				if (left == 0 && isCreate == 0)
+				if (type == BULLET_TYPE_2)
 				{
-					CreateBullet(x, y, 1, vx, vy);
-					left = 1;
-				}
-				if (right == 0 && isCreate == 0)
-				{
-					CreateBullet(x, y, -1, vx, vy);
-					right = 1;
+					if (left == 0 && isCreate == 0)
+					{
+						CreateBullet(x, y, 1, vx, vy);
+						left = 1;
+					}
+					if (right == 0 && isCreate == 0)
+					{
+						CreateBullet(x, y, -1, vx, vy);
+						right = 1;
+					}
 				}
 			}
 			else if (frog->GetState() == PRINCE_STATE_FIRE_UP && frog->GetMaxBullet() == this->id)
@@ -192,15 +204,18 @@ void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				SetState(BULLET_STATE_FIRE_UP);
 				this->vy = BULLET_VY;
 				this->vx = 0;
-				if (left == 0 && isCreate == 0)
+				if (type == BULLET_TYPE_2)
 				{
-					CreateBullet(x, y, 1, vx, vy);
-					left = 1;
-				}
-				if (right == 0 && isCreate == 0)
-				{
-					CreateBullet(x, y, -1, vx, vy);
-					right = 1;
+					if (left == 0 && isCreate == 0)
+					{
+						CreateBullet(x, y, 1, vx, vy);
+						left = 1;
+					}
+					if (right == 0 && isCreate == 0)
+					{
+						CreateBullet(x, y, -1, vx, vy);
+						right = 1;
+					}
 				}
 			}
 			else if (frog->GetState() == PRINCE_STATE_FIRE_DOWN && frog->GetMaxBullet() == this->id)
@@ -208,15 +223,18 @@ void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				SetState(BULLET_STATE_FIRE_UP);
 				this->vy = -BULLET_VY;
 				this->vx = 0;
-				if (left == 0 && isCreate == 0)
+				if (type == BULLET_TYPE_2)
 				{
-					CreateBullet(x, y, 1, vx, vy);
-					left = 1;
-				}
-				if (right == 0 && isCreate == 0)
-				{
-					CreateBullet(x, y, -1, vx, vy);
-					right = 1;
+					if (left == 0 && isCreate == 0)
+					{
+						CreateBullet(x, y, 1, vx, vy);
+						left = 1;
+					}
+					if (right == 0 && isCreate == 0)
+					{
+						CreateBullet(x, y, -1, vx, vy);
+						right = 1;
+					}
 				}
 			}
 			else if (frog->GetState() == PRINCE_STATE_FIRE_LEFT && frog->GetMaxBullet() == this->id)
@@ -224,15 +242,18 @@ void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				SetState(BULLET_STATE_FIRE_LEFT);
 				this->vx = -BULLET_VX;
 				this->vy = 0;
-				if (left == 0 && isCreate == 0)
+				if (type == BULLET_TYPE_2)
 				{
-					CreateBullet(x, y, 1, vx, vy);
-					left = 1;
-				}
-				if (right == 0 && isCreate == 0)
-				{
-					CreateBullet(x, y, -1, vx, vy);
-					right = 1;
+					if (left == 0 && isCreate == 0)
+					{
+						CreateBullet(x, y, 1, vx, vy);
+						left = 1;
+					}
+					if (right == 0 && isCreate == 0)
+					{
+						CreateBullet(x, y, -1, vx, vy);
+						right = 1;
+					}
 				}
 
 			}
@@ -241,15 +262,18 @@ void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				SetState(BULLET_STATE_FIRE_RIGHT);
 				this->vx = BULLET_VX;
 				this->vy = 0;
-				if (left == 0 && isCreate == 0)
+				if (type == BULLET_TYPE_2)
 				{
-					CreateBullet(x, y, 1, vx, vy);
-					left = 1;
-				}
-				if (right == 0 && isCreate == 0)
-				{
-					CreateBullet(x, y, -1, vx, vy);
-					right = 1;
+					if (left == 0 && isCreate == 0)
+					{
+						CreateBullet(x, y, 1, vx, vy);
+						left = 1;
+					}
+					if (right == 0 && isCreate == 0)
+					{
+						CreateBullet(x, y, -1, vx, vy);
+						right = 1;
+					}
 				}
 			}
 
@@ -381,6 +405,14 @@ void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (state != BULLET_STATE_DIE && state != BULLET_STATE_NOT_FIRE)
 				{
 					dynamic_cast<Boom*>(e->obj)->SetState(BOOM_STATE_DIE);
+					SetState(BULLET_STATE_DIE);
+				}
+			}
+			else if (dynamic_cast<Worm*>(e->obj))
+			{
+				if (state != BULLET_STATE_DIE && state != BULLET_STATE_NOT_FIRE)
+				{
+					dynamic_cast<Worm*>(e->obj)->SetState(WORM_STATE_DIE);
 					SetState(BULLET_STATE_DIE);
 				}
 			}

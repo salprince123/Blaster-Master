@@ -1,12 +1,13 @@
 #include "Boom.h"
 #include "Utils.h"
+#include "PlayScence.h"
 Boom::Boom()
 {
 	SetState(BOOM_STATE_ALIVE);
 }
 void Boom::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	left = x;
+	left = x+5;
 	top = y-8;
 	right = x + BOOM_BBOX_WIDTH;
 
@@ -14,32 +15,19 @@ void Boom::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 		bottom = y + BOOM_BBOX_HEIGHT_DIE;
 	else
 		bottom = y + BOOM_BBOX_HEIGHT;
-	//DebugOut(L"BBX BOOM : %f %f %f %f %f\n", left, top, right, bottom, y);
 }
 void Boom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	// Calculate dx, dy 
+	Frog* player = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+	float pX = player->x; float pY = player->y;
+	if (abs(x - pX) < 20 && (y - pY) > 10)
+		SetState(BOOM_STATE_FIRE);
 	Enemy::Update(dt, coObjects);
-	//DebugOut(L"[LADYBIRD] %d %d %d %d \n", x0, y0, x1, y1);
-	/*x += dx;
-	y += dy;
-	if (vx < 0 && x < x0) {
-		x = x0; vx = -vx;
-	}
-	if (vx > 0 && x > x1) {
-		x = x1; vx = -vx;
-	}
-	if (vy < 0 && y < y0) {
-		y = y0; vy = -vy;
-	}
-	if (vy > 0 && y > y1) {
-		y = y1; vy = -vy;
-	}*/
 }
 void Boom::Render()
 {
 	int ani = BOOM_ANI_DIE;
-	if (state == BOOM_STATE_ALIVE)
+	if (state == BOOM_STATE_ALIVE || state == BOOM_STATE_FIRE)
 	{
 		ani = BOOM_ANI_ALIVE;
 	}

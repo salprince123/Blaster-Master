@@ -134,7 +134,7 @@ void Frog::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vector<LPCOLLISIONEVENT> coEventsResult;
 	coEvents.clear();
 	// turn off collision when die 
-	if (state != FROG_STATE_DIE)
+	if (state != FROG_STATE_DIE )
 		CalcPotentialCollisions(coObjects, coEvents);
 	// reset untouchable timer if untouchable time has passed
 	if (GetTickCount64() - untouchable_start > FROG_UNTOUCHABLE_TIME)
@@ -175,6 +175,11 @@ void Frog::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (dynamic_cast<Boom*>(e->obj)->GetState() == BOOM_STATE_ALIVE)
 					 StartUntouchable();
 			}
+			else if (dynamic_cast<Worm*>(e->obj))
+			{
+				if (dynamic_cast<Worm*>(e->obj)->GetState() == WORM_STATE_ACTIVE)
+					StartUntouchable();
+			}
 			else if (dynamic_cast<EyeLet*>(e->obj))
 			{	
 				if (dynamic_cast<EyeLet*>(e->obj)->GetState() == EYELET_STATE_COIN)
@@ -205,6 +210,11 @@ void Frog::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			else if (dynamic_cast<BallBot*>(e->obj))
 			{
 				if (dynamic_cast<BallCarry*>(e->obj)->GetState() != BALLBOT_STATE_UNACTIVE)
+					StartUntouchable();
+			}
+			else if (dynamic_cast<GX680*>(e->obj))
+			{
+				if (dynamic_cast<GX680*>(e->obj)->GetState() != GX680_STATE_ACTIVE)
 					StartUntouchable();
 			}
 			else if (dynamic_cast<Bullet*>(e->obj))

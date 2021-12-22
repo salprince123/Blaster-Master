@@ -9,12 +9,12 @@ Worm::Worm(int x0, int y0, int x1, int y1, int nx)
 	this->vy = 0;
 	this->nx = nx;
 	this->ny = -1;
-	this->SetState(WORM_STATE_ACTIVE);
+	this->SetState(WORM_STATE_UNACTIVE);
 }
 void Worm::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	left = x;
-	top = y - 2;
+	left = x+5;
+	top = y;
 	right = x + WORM_BBOX_WIDTH;
 	bottom = y + WORM_BBOX_HEIGHT;
 	if (GetState() == WORM_STATE_DIE)
@@ -28,6 +28,15 @@ void Worm::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	float pX, pY;
 	Frog* player = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	player->GetPosition(pX, pY);
+	if (enemyHandle != NULL && enemyHandle->state == BOOM_STATE_FIRE)
+	{
+		SetState(WORM_STATE_ACTIVE);
+	}
+	if (enemyHandle != NULL && enemyHandle->state == BOOM_STATE_DIE)
+	{
+		SetState(WORM_STATE_DIE);
+	}
+		
 	CGameObject::Update(dt, coObjects);
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
@@ -77,5 +86,7 @@ void Worm::SetState(int state)
 	case WORM_STATE_DIE:
 		x = -1000;
 		y = -1000;
+	case WORM_STATE_ACTIVE:
+		vy = WORM_FLYING_UP_SPEED;
 	}
 }
