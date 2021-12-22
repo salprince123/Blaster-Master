@@ -11,8 +11,6 @@ Bullet::Bullet(int id)
 		y0 = player->y;
 		x0 = player->x;
 	}
-	
-	//DebugOut(L"y0= %f\n", y0);
 }
 
 void Bullet::Render()
@@ -63,6 +61,7 @@ void Bullet::Render()
 	}
 	
 	animation_set->at(ani)->Render(x, y);
+	//RenderBoundingBox();
 }
 
 void Bullet::GetBoundingBox(float& l, float& t, float& r, float& b)
@@ -75,22 +74,19 @@ void Bullet::GetBoundingBox(float& l, float& t, float& r, float& b)
 		r = x + BULLET_BBOX_WIDTH_HORIZONTAL;
 		b = y + BULLET_BBOX_HEIGHT_HORIZONTAL;
 	}
-	else if (enemyHandle != NULL)
-	{
-		r = x + BULLET_BBOX_WIDTH_HORIZONTAL;
-		b = y + BULLET_BBOX_WIDTH_HORIZONTAL;
-	}
+	else i
 	else
 	{
 		r = x + BULLET_BBOX_WIDTH_HORIZONTAL;
 		b = y + BULLET_BBOX_HEIGHT_HORIZONTAL;
 	}*/
-	r = x + BULLET_BBOX_WIDTH_HORIZONTAL*2;
-	b = y + BULLET_BBOX_WIDTH_HORIZONTAL*2;
+	r = x + BULLET_BBOX_WIDTH_HORIZONTAL;
+	b = y + BULLET_BBOX_WIDTH_HORIZONTAL;
+	
 }
 LPGAMEOBJECT Bullet::CreateBullet(float x, float y, int direction, float vx, float vy)
 {
-	DebugOut(L"state %d\n", state);
+	//DebugOut(L"state %d\n", state);
 	Bullet* up = new Bullet(id);
 	up->SetPosition(x, y);
 	up->SetAnimationSet(animation_set);
@@ -122,21 +118,23 @@ void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 			case BALLCARRY_STATE_FIRE:
 			{
-				SetState(BULLET_STATE_FIRE_RIGHT);
-				if (y > ball->y - BALLCARRY_BBOX_HEIGHT+5)
+				if(state!= BULLET_STATE_FIRE_RIGHT)
+					SetState(BULLET_STATE_FIRE_RIGHT);
+				
+				if ((y - ball->y) >10)
 				{
-					//vx = ball->nx * BULLET_VX / 10 * id;
-					//vy = 0.045 - 0.0035 * dt;
-					x += ball->nx*0.051 * id;
-					y -= 0.1;
 				}				
 				else
 				{
 					ballCarryTime = GetTickCount64();
-					vx = vy = 0;
+					vy += -0.001;
 				}
-
-				CGameObject::Update(dt, coObjects);
+				if (y < ball->y- BALLCARRY_BBOX_HEIGHT+8)
+				{
+					y = ball->y - BALLCARRY_BBOX_HEIGHT+8;
+					 vy = 0;
+				}
+				dx = ball->nx *0.1 * id;							
 				break;
 			}
 			}
@@ -367,8 +365,6 @@ void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	// turn off collision when die 
 	if (state != BULLET_STATE_DIE && state != BULLET_STATE_NOT_FIRE)
 		CalcPotentialCollisions(coObjects, coEvents);
-	//if (type == OBJECT_TYPE_BALLCARRY)
-		//DebugOut(L"%d\n", coEvents.size());
 	// No collision occured, proceed normally
 	if (coEvents.size() == 0)
 	{
@@ -395,7 +391,8 @@ void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				{
 					if (e->ny != 0) 
 					y -= 16;
-					SetState(BULLET_STATE_DIE);
+					if(!dynamic_cast<BallCarry*>(enemyHandle))
+						SetState(BULLET_STATE_DIE);
 				}
 					
 				
@@ -599,5 +596,13 @@ void Bullet::SetState(int state)
 		}
 		break;
 	}
+	case BULLET_STATE_FIRE_RIGHT:
+		if (dynamic_cast<BallCarry*>(enemyHandle))
+		{
+			vy = 0.01;
+			vx = -0.025;
+		}
+			
+		break;
 	}
 }

@@ -43,7 +43,7 @@ void BallCarry::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		if ((GetTickCount64() - t_fire0) > 2000)
 		{
-			DebugOut(L"OUT OF TIME\n");
+			//DebugOut(L"OUT OF TIME\n");
 			SetState(nx * BALLCARRY_STATE_WALKING_LEFT);
 		}
 	}
