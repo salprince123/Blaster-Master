@@ -14,7 +14,7 @@ public:
 	float x0, y0;
 	DWORD lastTime;	
 	float ballCarryTime=0;
-	int count = 0;
+	int count = 60;
 	Bullet(int id);
 
 	virtual void Render();
@@ -23,4 +23,5 @@ public:
 	void HandleStateUnFire();
 	void SetEnemyHandle(LPGAMEOBJECT e) { this->enemyHandle = e; }
 	void SetState(int state);
+	LPGAMEOBJECT CreateBullet(float x, float y, int direction, float vx, float vy);
 };

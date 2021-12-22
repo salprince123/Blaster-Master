@@ -221,7 +221,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		}
 		case OBJECT_TYPE_BULLET:
 		{
-			int id = atoi(tokens[4].c_str());
+			int id = atoi(tokens[4].c_str());			
 			obj = new Bullet(id);
 			break;
 		}
