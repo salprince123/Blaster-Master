@@ -37,7 +37,7 @@ void GX680::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		SetState(GX680_STATE_ACTIVE);
 	}
 	
-	if (state == GX680_STATE_ACTIVE)
+	if (state == GX680_STATE_ACTIVE || state == GX680_STATE_FIRE)
 	{		
 		if (abs(x - pX) > GX680_RANGE || abs(y - pY) > GX680_RANGE)
 		{
@@ -45,12 +45,38 @@ void GX680::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			x = x0;
 			y = y0;
 		}
+		if (abs(pX - x) < GX680_BBOX_WIDTH / 2)
+		{
+			SetState(GX680_STATE_FIRE);
+			fireX = 0;
+			fireY = 1;
+		}
+		else if (abs(pY - y) < GX680_BBOX_HEIGHT / 2)
+		{
+			SetState(GX680_STATE_FIRE);
+			fireX = 1;
+			fireY = 0;
+		}
+		if (state == GX680_STATE_FIRE)
+		{
+			if (GetTickCount64() - tFire > 3000)
+			{
+				tFire = 0;
+				SetState(GX680_STATE_ACTIVE);
+			}
+		}
+		else
+		{
+			fireX = 0;
+			fireY = 0;
+		}
+		
 		if ((pX - x) > 0) vx = 0.015;
 		else if ((pX - x) < 0) vx = -GX680_WALIKNG_SPEED;
 		if ((pY - y) > 0) vy = 0.015;
 		else if ((pY - y) < 0) vy = -GX680_WALIKNG_SPEED;
-
 	}
+	
 	if (coEvents.size() == 0)
 	{
 		x += dx;
@@ -73,7 +99,7 @@ void GX680::Render()
 {
 	int ani = GX680_ANI_DIE;
 	int alpha = 255;
-	if (state == GX680_STATE_ACTIVE)
+	if (state == GX680_STATE_ACTIVE || state == GX680_STATE_FIRE)
 	{
 		if (vx < 0)
 			ani = GX680_ANI_WALK_lEFT;
@@ -89,8 +115,13 @@ void GX680::SetState(int state)
 	Enemy::SetState(state);
 	switch (state)
 	{
+	case GX680_STATE_FIRE:
+		if (tFire == 0)
+			tFire = GetTickCount64();
+		break;
 	case GX680_STATE_DIE:
 		x = -1000;
 		y = -1000;
+		break;
 	}
 }

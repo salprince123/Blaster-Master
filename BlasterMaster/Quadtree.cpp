@@ -152,6 +152,8 @@ void Quadtree::_ParseSection_OBJECTS(string line)
                 CGameObject* preObj = object[object.size() - 1];
                 if(dynamic_cast<BallCarry*>(preObj))
                     dynamic_cast<Bullet*>(obj)->SetEnemyHandle(preObj);
+                else  if (dynamic_cast<GX680*>(preObj))
+                    dynamic_cast<Bullet*>(obj)->SetEnemyHandle(preObj);
                 else if (dynamic_cast<Bullet*>(preObj))
                     dynamic_cast<Bullet*>(obj)->SetEnemyHandle(dynamic_cast<Bullet*>(preObj)->enemyHandle);
             }
