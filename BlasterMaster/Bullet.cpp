@@ -151,9 +151,7 @@ void Bullet::EnemyHandleStateFire(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		switch (gx->state)
 		{
 		case GX680_STATE_FIRE:
-			if(state!= BULLET_STATE_FIRE_RIGHT)
-				SetState(BULLET_STATE_FIRE_RIGHT);
-			
+			SetState(BULLET_STATE_FIRE_RIGHT);
 			break;
 		default: 
 			x = gx->x;
@@ -618,23 +616,8 @@ void Bullet::SetState(int state)
 		}	
 		else if (dynamic_cast<GX680*>(enemyHandle))
 		{
-			Frog* player = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
-			float pX = player->x;
-			float pY = player->y;			
-			if (dynamic_cast<GX680*>(enemyHandle)->fireX != 0)
-			{
-				vx = 0;
-				if(pY>y)
-					vy = 0.1;
-				else vy = -0.1;
-			}
-			else if (dynamic_cast<GX680*>(enemyHandle)->fireY != 0)
-			{
-				if (pX > x)
-					vx = -0.1;
-				else vx = 0.1;
-				vy = 0;
-			}
+			vx = dynamic_cast<GX680*>(enemyHandle)->fireX * GX680_BULLET_SPEED;
+			vy = dynamic_cast<GX680*>(enemyHandle)->fireY * GX680_BULLET_SPEED;
 		}
 		
 		break;

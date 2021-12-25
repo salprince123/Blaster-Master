@@ -49,12 +49,15 @@ void GX680::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		{
 			SetState(GX680_STATE_FIRE);
 			fireX = 0;
-			fireY = 1;
+			if(pY>y)
+				fireY = 1;
+			else fireY = -1;
 		}
 		else if (abs(pY - y) < GX680_BBOX_HEIGHT / 2)
 		{
 			SetState(GX680_STATE_FIRE);
-			fireX = 1;
+			if (pX > x) fireX = 1;
+			else fireX = -1;
 			fireY = 0;
 		}
 		if (state == GX680_STATE_FIRE)
