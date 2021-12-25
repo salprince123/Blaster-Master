@@ -31,9 +31,6 @@ void GX680::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 	coEvents.clear();
-	
-	// turn off collision when die 
-	//if (state != SENSOR_STATE_DIE)
 	CalcPotentialCollisions(coObjects, coEvents);
 	if ( (abs(x - pX) < GX680_RANGE || abs(y - pY) < GX680_RANGE)&& state == GX680_STATE_UNACTIVE)
 	{
@@ -47,16 +44,11 @@ void GX680::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			SetState(GX680_STATE_UNACTIVE);
 			x = x0;
 			y = y0;
-			//DebugOut(L"UNACTIVE\n");
 		}
-		/*if ((pX - x) > 0) x+=0.2;
-		else if ((pX - x) < 0) x-=0.2;
-		if ((pY - y) > 0) y+=0.2;
-		else if ((pY - y) < 0) y-=0.2;*/
-		if ((pX - x) > 0) vx= 0.015;
-		else if ((pX - x) < 0) vx = -0.015;
+		if ((pX - x) > 0) vx = 0.015;
+		else if ((pX - x) < 0) vx = -GX680_WALIKNG_SPEED;
 		if ((pY - y) > 0) vy = 0.015;
-		else if ((pY - y) < 0) vy = -0.015;
+		else if ((pY - y) < 0) vy = -GX680_WALIKNG_SPEED;
 
 	}
 	if (coEvents.size() == 0)

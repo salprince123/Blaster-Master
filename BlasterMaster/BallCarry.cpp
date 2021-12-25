@@ -43,7 +43,6 @@ void BallCarry::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		if ((GetTickCount64() - t_fire0) > 2000)
 		{
-			//DebugOut(L"OUT OF TIME\n");
 			SetState(nx * BALLCARRY_STATE_WALKING_LEFT);
 		}
 	}
@@ -79,12 +78,10 @@ void BallCarry::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			LPCOLLISIONEVENT e = coEventsResult[i];
 			if (dynamic_cast<CBrick*>(e->obj))
 			{
-				//DebugOut(L"TURN BACK %f %f\n",nx,ny);
 				if (nx != 0)
 				{
 					SetState(-state);
-				}
-					
+				}					
 			}
 		}
 	}

@@ -23,5 +23,7 @@ public:
 	void HandleStateUnFire();
 	void SetEnemyHandle(LPGAMEOBJECT e) { this->enemyHandle = e; }
 	void SetState(int state);
+	void EnemyHandleStateFire(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
+	void PlayerHandleStateFire(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	LPGAMEOBJECT CreateBullet(float x, float y, int direction, float vx, float vy);
 };

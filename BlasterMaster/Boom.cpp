@@ -32,10 +32,7 @@ void Boom::Render()
 		ani = BOOM_ANI_ALIVE;
 	}
 	int alpha = 255;
-
 	animation_set->at(ani)->Render(x, y, alpha);
-	RenderBoundingBox();
-
 }
 void Boom::SetState(int state)
 {

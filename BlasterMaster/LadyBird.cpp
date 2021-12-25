@@ -42,11 +42,9 @@ void LadyBird::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (vx >= 0 && x >= x1)
 				{
 					this->SetState(LADYBIRD_STATE_WALKING_LEFT);
-					x = x1; vx = -LADYBIRD_WALKING_SPEED;
-					
+					x = x1; vx = -LADYBIRD_WALKING_SPEED;					
 				}
-			}
-			
+			}			
 		}
 		case LADYBIRD_STATE_WALKING_LEFT:
 		{
@@ -60,8 +58,7 @@ void LadyBird::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (vx <= 0 && x <= x0 && y0 == y1)
 				{
 					this->SetState(LADYBIRD_STATE_WALKING_RIGHT);
-					x = x0; vx = LADYBIRD_WALKING_SPEED; vy = 0;
-					
+					x = x0; vx = LADYBIRD_WALKING_SPEED; vy = 0;					
 				}
 			}
 		}
@@ -78,7 +75,6 @@ void LadyBird::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			y-=0.5;
 		else y+=0.5;
 		return;
-		//dy = (vy/(8*vx*vx))*dx*dx;
 	}
 	x += 2*dx;
 	y += dy;
@@ -95,9 +91,7 @@ void LadyBird::Render()
 	else if (state == LADYBIRD_STATE_COIN)
 		ani = LADYBIRD_ANI_COIN;
 	int alpha = 255;
-
 	animation_set->at(ani)->Render(x, y, alpha);
-	//RenderBoundingBox();
 }
 void LadyBird::SetState(int state)
 {

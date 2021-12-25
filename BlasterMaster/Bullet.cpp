@@ -61,7 +61,6 @@ void Bullet::Render()
 	}
 	
 	animation_set->at(ani)->Render(x, y);
-	//RenderBoundingBox();
 }
 
 void Bullet::GetBoundingBox(float& l, float& t, float& r, float& b)
@@ -97,268 +96,267 @@ LPGAMEOBJECT Bullet::CreateBullet(float x, float y, int direction, float vx, flo
 	((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->createObject.push_back(up);
 	return up;
 }
-void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+void Bullet::EnemyHandleStateFire(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	if (enemyHandle!=NULL)
+	CGameObject::Update(dt, coObjects);
+	//update bullet for enemy here 
+	if (type == OBJECT_TYPE_BALLCARRY)
 	{
-		CGameObject::Update(dt, coObjects);
-		//update bullet for enemy here 
-		if (type == OBJECT_TYPE_BALLCARRY)
+		BallCarry* ball = dynamic_cast<BallCarry*>(enemyHandle);
+
+		switch (ball->state)
 		{
-			BallCarry* ball = dynamic_cast<BallCarry*>(enemyHandle);
-			
-			switch (ball->state)
-			{
-			case BALLCARRY_STATE_UNACTIVE:
-			{
-				vx = vy = 0;
-				x = ball->x + BALLCARRY_BBOX_WIDTH / 4;
-				y = ball->y;
-				break;
-			}
-			case BALLCARRY_STATE_FIRE:
-			{
-				if(state!= BULLET_STATE_FIRE_RIGHT)
-					SetState(BULLET_STATE_FIRE_RIGHT);
-				
-				if ((y - ball->y) >10)
-				{
-				}				
-				else
-				{
-					ballCarryTime = GetTickCount64();
-					vy += -0.001;
-				}
-				if (y < ball->y- BALLCARRY_BBOX_HEIGHT+8)
-				{
-					y = ball->y - BALLCARRY_BBOX_HEIGHT+8;
-					 vy = 0;
-				}
-				dx = ball->nx *0.1 * id;							
-				break;
-			}
-			}
-			if (ballCarryTime != 0)
-			{
-				if ((GetTickCount64() - ballCarryTime) > 1500)
-				{
-					SetState(BULLET_STATE_DIE);
-					ballCarryTime = 0;
-				}
-			}
+		case BALLCARRY_STATE_UNACTIVE:
+		{
+			vx = vy = 0;
+			x = ball->x + BALLCARRY_BBOX_WIDTH / 4;
+			y = ball->y;
+			break;
 		}
-	}		
-	else
-	{		
-		Frog* frog = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
-		if(frog->GetLevel()==1)
-			this->type = BULLET_TYPE_1;
-		if (state == BULLET_STATE_NOT_FIRE)
+		case BALLCARRY_STATE_FIRE:
 		{
-			if (frog->GetState() == FROG_STATE_FIRE && frog->GetMaxBullet() == this->id)
-			{
-				SetState(frog->nx * BULLET_STATE_FIRE_RIGHT);
-				this->vx = frog->nx * BULLET_VX;
-				this->vy = 0; 
-				if (type == BULLET_TYPE_2)
-				{
-					if (left == 0 && isCreate == 0)
-					{
-						CreateBullet(x, y, 1, vx, vy);
-						left = 1;
-					}
-					if (right == 0 && isCreate == 0)
-					{
-						CreateBullet(x, y, -1, vx, vy);
-						right = 1;
-					}
-				}
-				
-
-			}
-			else if (frog->GetState() == FROG_STATE_FIRE_UP && frog->GetMaxBullet() == this->id)
-			{
-				
-				SetState(BULLET_STATE_FIRE_UP);
-				this->vy = BULLET_VY;
-				this->vx = 0;
-				if (type == BULLET_TYPE_2)
-				{
-					if (left == 0 && isCreate == 0)
-					{
-						CreateBullet(x, y, 1, vx, vy);
-						left = 1;
-					}
-					if (right == 0 && isCreate == 0)
-					{
-						CreateBullet(x, y, -1, vx, vy);
-						right = 1;
-					}
-				}
-			}
-			else if (frog->GetState() == PRINCE_STATE_FIRE_UP && frog->GetMaxBullet() == this->id)
-			{
-				
-				SetState(BULLET_STATE_FIRE_UP);
-				this->vy = BULLET_VY;
-				this->vx = 0;
-				if (type == BULLET_TYPE_2)
-				{
-					if (left == 0 && isCreate == 0)
-					{
-						CreateBullet(x, y, 1, vx, vy);
-						left = 1;
-					}
-					if (right == 0 && isCreate == 0)
-					{
-						CreateBullet(x, y, -1, vx, vy);
-						right = 1;
-					}
-				}
-			}
-			else if (frog->GetState() == PRINCE_STATE_FIRE_DOWN && frog->GetMaxBullet() == this->id)
-			{
-				SetState(BULLET_STATE_FIRE_UP);
-				this->vy = -BULLET_VY;
-				this->vx = 0;
-				if (type == BULLET_TYPE_2)
-				{
-					if (left == 0 && isCreate == 0)
-					{
-						CreateBullet(x, y, 1, vx, vy);
-						left = 1;
-					}
-					if (right == 0 && isCreate == 0)
-					{
-						CreateBullet(x, y, -1, vx, vy);
-						right = 1;
-					}
-				}
-			}
-			else if (frog->GetState() == PRINCE_STATE_FIRE_LEFT && frog->GetMaxBullet() == this->id)
-			{
-				SetState(BULLET_STATE_FIRE_LEFT);
-				this->vx = -BULLET_VX;
-				this->vy = 0;
-				if (type == BULLET_TYPE_2)
-				{
-					if (left == 0 && isCreate == 0)
-					{
-						CreateBullet(x, y, 1, vx, vy);
-						left = 1;
-					}
-					if (right == 0 && isCreate == 0)
-					{
-						CreateBullet(x, y, -1, vx, vy);
-						right = 1;
-					}
-				}
-
-			}
-			else if (frog->GetState() == PRINCE_STATE_FIRE_RIGHT && frog->GetMaxBullet() == this->id)
-			{
+			if (state != BULLET_STATE_FIRE_RIGHT)
 				SetState(BULLET_STATE_FIRE_RIGHT);
-				this->vx = BULLET_VX;
-				this->vy = 0;
-				if (type == BULLET_TYPE_2)
+
+			if ((y - ball->y) > 10)
+			{
+			}
+			else
+			{
+				ballCarryTime = GetTickCount64();
+				vy += -0.001;
+			}
+			if (y < ball->y - BALLCARRY_BBOX_HEIGHT + 8)
+			{
+				y = ball->y - BALLCARRY_BBOX_HEIGHT + 8;
+				vy = 0;
+			}
+			dx = ball->nx * 0.1 * id;
+			break;
+		}
+		}
+		if (ballCarryTime != 0)
+		{
+			if ((GetTickCount64() - ballCarryTime) > 1500)
+			{
+				SetState(BULLET_STATE_DIE);
+				ballCarryTime = 0;
+			}
+		}
+	}
+}
+void Bullet::PlayerHandleStateFire(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+{
+	Frog* frog = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+	if (frog->GetLevel() == 1)
+		this->type = BULLET_TYPE_1;
+	if (state == BULLET_STATE_NOT_FIRE)
+	{
+		if (frog->GetState() == FROG_STATE_FIRE && frog->GetMaxBullet() == this->id)
+		{
+			SetState(frog->nx * BULLET_STATE_FIRE_RIGHT);
+			this->vx = frog->nx * BULLET_VX;
+			this->vy = 0;
+			if (type == BULLET_TYPE_2)
+			{
+				if (left == 0 && isCreate == 0)
 				{
-					if (left == 0 && isCreate == 0)
-					{
-						CreateBullet(x, y, 1, vx, vy);
-						left = 1;
-					}
-					if (right == 0 && isCreate == 0)
-					{
-						CreateBullet(x, y, -1, vx, vy);
-						right = 1;
-					}
+					CreateBullet(x, y, 1, vx, vy);
+					left = 1;
+				}
+				if (right == 0 && isCreate == 0)
+				{
+					CreateBullet(x, y, -1, vx, vy);
+					right = 1;
+				}
+			}
+		}
+		else if (frog->GetState() == FROG_STATE_FIRE_UP && frog->GetMaxBullet() == this->id)
+		{
+
+			SetState(BULLET_STATE_FIRE_UP);
+			this->vy = BULLET_VY;
+			this->vx = 0;
+			if (type == BULLET_TYPE_2)
+			{
+				if (left == 0 && isCreate == 0)
+				{
+					CreateBullet(x, y, 1, vx, vy);
+					left = 1;
+				}
+				if (right == 0 && isCreate == 0)
+				{
+					CreateBullet(x, y, -1, vx, vy);
+					right = 1;
+				}
+			}
+		}
+		else if (frog->GetState() == PRINCE_STATE_FIRE_UP && frog->GetMaxBullet() == this->id)
+		{
+
+			SetState(BULLET_STATE_FIRE_UP);
+			this->vy = BULLET_VY;
+			this->vx = 0;
+			if (type == BULLET_TYPE_2)
+			{
+				if (left == 0 && isCreate == 0)
+				{
+					CreateBullet(x, y, 1, vx, vy);
+					left = 1;
+				}
+				if (right == 0 && isCreate == 0)
+				{
+					CreateBullet(x, y, -1, vx, vy);
+					right = 1;
+				}
+			}
+		}
+		else if (frog->GetState() == PRINCE_STATE_FIRE_DOWN && frog->GetMaxBullet() == this->id)
+		{
+			SetState(BULLET_STATE_FIRE_UP);
+			this->vy = -BULLET_VY;
+			this->vx = 0;
+			if (type == BULLET_TYPE_2)
+			{
+				if (left == 0 && isCreate == 0)
+				{
+					CreateBullet(x, y, 1, vx, vy);
+					left = 1;
+				}
+				if (right == 0 && isCreate == 0)
+				{
+					CreateBullet(x, y, -1, vx, vy);
+					right = 1;
+				}
+			}
+		}
+		else if (frog->GetState() == PRINCE_STATE_FIRE_LEFT && frog->GetMaxBullet() == this->id)
+		{
+			SetState(BULLET_STATE_FIRE_LEFT);
+			this->vx = -BULLET_VX;
+			this->vy = 0;
+			if (type == BULLET_TYPE_2)
+			{
+				if (left == 0 && isCreate == 0)
+				{
+					CreateBullet(x, y, 1, vx, vy);
+					left = 1;
+				}
+				if (right == 0 && isCreate == 0)
+				{
+					CreateBullet(x, y, -1, vx, vy);
+					right = 1;
 				}
 			}
 
 		}
-		
-		
-		switch (state)
+		else if (frog->GetState() == PRINCE_STATE_FIRE_RIGHT && frog->GetMaxBullet() == this->id)
 		{
-		case BULLET_STATE_DIE:
-			if (GetTickCount64() - lastTime > 100)
+			SetState(BULLET_STATE_FIRE_RIGHT);
+			this->vx = BULLET_VX;
+			this->vy = 0;
+			if (type == BULLET_TYPE_2)
 			{
-				SetState(BULLET_STATE_NOT_FIRE);
-				lastTime = 0;
-			}
-			else return;
-			break;
-		case BULLET_STATE_FIRE_LEFT:case BULLET_STATE_FIRE_RIGHT:
-		{
-			lastTime = 0;
-			if (abs(x - x0) > BULLET_RANGE )
-			{
-				x0 = x;
-				SetState(BULLET_STATE_DIE);
-			}
-			else
-			{
-				
-				if (isCreate == 1)
+				if (left == 0 && isCreate == 0)
 				{
-					dy = -50 * sin(count);
-					dx = state/ BULLET_STATE_FIRE_RIGHT;
-					
+					CreateBullet(x, y, 1, vx, vy);
+					left = 1;
 				}
-				else if (isCreate == -1)
+				if (right == 0 && isCreate == 0)
 				{
-					dy = 50 * sin(count);
-					dx = state / BULLET_STATE_FIRE_RIGHT;
+					CreateBullet(x, y, -1, vx, vy);
+					right = 1;
 				}
-				else 
-					CGameObject::Update(dt, coObjects);
-				count += 60;
-				
-				break;
 			}
 		}
-		case BULLET_STATE_FIRE_UP:
+
+	}
+
+
+	switch (state)
+	{
+	case BULLET_STATE_DIE:
+		if (GetTickCount64() - lastTime > 100)
 		{
+			SetState(BULLET_STATE_NOT_FIRE);
 			lastTime = 0;
-			if (abs(y - y0) > BULLET_RANGE )
-			{				
-				y0 = y;
-				SetState(BULLET_STATE_DIE);
+		}
+		else return;
+		break;
+	case BULLET_STATE_FIRE_LEFT:case BULLET_STATE_FIRE_RIGHT:
+	{
+		lastTime = 0;
+		if (abs(x - x0) > BULLET_RANGE)
+		{
+			x0 = x;
+			SetState(BULLET_STATE_DIE);
+		}
+		else
+		{
+
+			if (isCreate == 1)
+			{
+				dy = -50 * sin(count);
+				dx = state / BULLET_STATE_FIRE_RIGHT;
+
+			}
+			else if (isCreate == -1)
+			{
+				dy = 50 * sin(count);
+				dx = state / BULLET_STATE_FIRE_RIGHT;
 			}
 			else
-			{
-				if (isCreate == 1)
-				{
-					//DebugOut(L"GO HERE %d\n", ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->createObject.size());
-					dx = -50 * sin(count);					
-					if (vy < 0)
-						dy = -1;
-					else if (vy > 0) dy = 1;
-					else dy = 0;
-				}
-				else if (isCreate == -1)
-				{
-					dx = 50 * sin(count);
-					if (vy < 0)
-						dy = -1;
-					else if (vy > 0) dy = 1;
-					else dy = 0;
-				}
-				else
-					CGameObject::Update(dt, coObjects);
-				count += 60;
-				break;
-			}
-		}
-		case BULLET_STATE_NOT_FIRE:
-			lastTime = 0;
-			HandleStateUnFire();
-			break;
-		default:
+				CGameObject::Update(dt, coObjects);
+			count += 60;
 			break;
 		}
 	}
-	
+	case BULLET_STATE_FIRE_UP:
+	{
+		lastTime = 0;
+		if (abs(y - y0) > BULLET_RANGE)
+		{
+			y0 = y;
+			SetState(BULLET_STATE_DIE);
+		}
+		else
+		{
+			if (isCreate == 1)
+			{
+				dx = -50 * sin(count);
+				if (vy < 0)
+					dy = -1;
+				else if (vy > 0) dy = 1;
+				else dy = 0;
+			}
+			else if (isCreate == -1)
+			{
+				dx = 50 * sin(count);
+				if (vy < 0)
+					dy = -1;
+				else if (vy > 0) dy = 1;
+				else dy = 0;
+			}
+			else
+				CGameObject::Update(dt, coObjects);
+			count += 60;
+			break;
+		}
+	}
+	case BULLET_STATE_NOT_FIRE:
+		lastTime = 0;
+		HandleStateUnFire();
+		break;
+	default:
+		break;
+	}
+}
+void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+{
+	if (enemyHandle != NULL)
+		EnemyHandleStateFire(dt, coObjects);
+	else
+		PlayerHandleStateFire(dt, coObjects);	
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 	coEvents.clear();
@@ -393,9 +391,7 @@ void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					y -= 16;
 					if(!dynamic_cast<BallCarry*>(enemyHandle))
 						SetState(BULLET_STATE_DIE);
-				}
-					
-				
+				}		
 			}
 			else if (dynamic_cast<Boom*>(e->obj))
 			{
@@ -481,8 +477,7 @@ void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				}
 			}
 			else
-			{
-				
+			{				
 				SetState(BULLET_STATE_DIE);
 			}
 		}
@@ -541,7 +536,6 @@ void Bullet::HandleStateUnFire()
 	}
 	else
 	{
-		//DebugOut(L"PRINCE LEVEL %d %d %d\n", player->GetState(), player->nx, player->ny);
 		switch (player->GetState())
 		{			
 			case FROG_STATE_IDLE:
@@ -601,8 +595,7 @@ void Bullet::SetState(int state)
 		{
 			vy = 0.01;
 			vx = -0.025;
-		}
-			
+		}			
 		break;
 	}
 }

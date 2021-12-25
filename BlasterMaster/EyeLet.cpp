@@ -10,7 +10,6 @@ EyeLet::EyeLet(int x0, int y0, int x1, int y1, int nx)
 	this->vy = EYELET_FLYING_UP_SPEED;
 	this->ny = -1;
 	this->nx = nx;
-	//this->vy = 0;
 	this->SetState(EYELET_STATE_WALKING_RIGHT);
 }
 void EyeLet::GetBoundingBox(float& left, float& top, float& right, float& bottom)
@@ -31,8 +30,8 @@ void EyeLet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	player->GetPosition(pX, pY);
 	if (nx < 0 && (x - pX)>30 && abs(y-pY)<70)
 	{
-		this->SetState(EYELET_STATE_WALKING_RIGHT);
-		active = 1; 
+		active = 1;
+		this->SetState(EYELET_STATE_WALKING_RIGHT);		
 	}
 	else if (nx >0 && (pX - x) > 30 && abs(y - pY) < 70)
 	{
@@ -48,14 +47,13 @@ void EyeLet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		SetState(EYELET_STATE_COIN);
 		return;
-	}
-		
+	}		
 	this->dt = dt;
 	dx = vx*dt;
 	if (y0 - y > 30)
-		ny = -1*nx;
+		ny = -nx;
 	if (y - y0 > 30)
-		ny = 1* nx;
+		ny = nx;
 	if(ny==1)
 		dy = -vx * sin(45) * dt;
 	else 
@@ -77,9 +75,7 @@ void EyeLet::Render()
 	else if (state == EYELET_STATE_COIN)
 		ani = EYELET_ANI_COIN;
 	int alpha = 255;
-
 	animation_set->at(ani)->Render(x, y, alpha);
-	//RenderBoundingBox();
 }
 void EyeLet::SetState(int state)
 {

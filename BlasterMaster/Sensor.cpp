@@ -29,8 +29,6 @@ void Sensor::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 	coEvents.clear();
-	// turn off collision when die 
-	//if (state != SENSOR_STATE_DIE)
 		CalcPotentialCollisions(coObjects, coEvents);
 	if ((pY-y)*(pY0 - y) <0)
 	{
