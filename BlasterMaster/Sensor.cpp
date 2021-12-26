@@ -15,7 +15,7 @@ Sensor::Sensor(int x0, int y0, int x1, int y1, int nx)
 void Sensor::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
 	left = x;
-	top = y - 2;
+	top = y;
 	right = x + SENSOR_BBOX_WIDTH;
 	bottom = y + SENSOR_BBOX_HEIGHT;
 }
@@ -63,6 +63,7 @@ void Sensor::Render()
 	if (vx != 0)
 		ani = SENSOR_ANI_WALK;
 	animation_set->at(ani)->Render(x, y, alpha);
+	//RenderBoundingBox();
 }
 void Sensor::SetState(int state)
 {

@@ -79,6 +79,7 @@ void CGameObject::CalcPotentialCollisions(
 			if (!dynamic_cast<Background*>(e->obj))
 			{
 				if (dynamic_cast<Frog*>(this)&&  player->untouchable != 0 && dynamic_cast<Enemy*>(e->obj));
+				else if (dynamic_cast<Sensor*>(this) && dynamic_cast<BreakableBrick*>(e->obj));
 				else 
 				coEvents.push_back(e);
 			}
