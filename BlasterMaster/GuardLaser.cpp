@@ -7,7 +7,7 @@ GuardLaser::GuardLaser(int x0, int y0, int x1, int y1, int nx)
 	this->y0 = y0;
 	this->y1 = y1;
 	this->vy = 0;
-	this->nx = -1;
+	this->nx = 1;
 	this->ny = 0;
 	this->SetState(GUARDLASER_STATE_ACTIVE);
 }
@@ -16,7 +16,7 @@ void GuardLaser::GetBoundingBox(float& left, float& top, float& right, float& bo
 	left = x;
 	top = y;
 	right = x + GUARDLASER_BBOX_WIDTH;
-	bottom = y + GUARDLASER_BBOX_HEIGHT * 2;
+	bottom = y + GUARDLASER_BBOX_HEIGHT ;
 	if (GetState() == GUARDLASER_STATE_DIE)
 	{
 		left = right = top = bottom = 0;
@@ -31,20 +31,9 @@ void GuardLaser::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 	coEvents.clear();
-	CalcPotentialCollisions(coObjects, coEvents);
-	if ((abs(x - pX) < GUARDLASER_RANGE || abs(y - pY) < GUARDLASER_RANGE) && state == GUARDLASER_STATE_UNACTIVE)
-	{
-		SetState(GUARDLASER_STATE_ACTIVE);
-	}
-
+	CalcPotentialCollisions(coObjects, coEvents);	
 	if (state == GUARDLASER_STATE_ACTIVE || state == GUARDLASER_STATE_FIRE)
-	{
-		if (abs(x - pX) > GUARDLASER_RANGE || abs(y - pY) > GUARDLASER_RANGE)
-		{
-			SetState(GUARDLASER_STATE_UNACTIVE);
-			x = x0;
-			y = y0;
-		}
+	{		
 		if (abs(pX - x) < GUARDLASER_BBOX_WIDTH / 2)
 		{
 			SetState(GUARDLASER_STATE_FIRE);
@@ -73,13 +62,9 @@ void GuardLaser::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			fireX = 0;
 			fireY = 0;
 		}
-
-		/*if ((pX - x) > 0) vx = 0.015;
-		else if ((pX - x) < 0) vx = -GUARDLASER_WALIKNG_SPEED;
-		if ((pY - y) > 0) vy = 0.015;
-		else if ((pY - y) < 0) vy = -GUARDLASER_WALIKNG_SPEED;*/
 	}
-
+	vx = nx * GUARDLASER_WALIKNG_SPEED;
+	vy = 0;
 	if (coEvents.size() == 0)
 	{
 		x += dx;
@@ -87,7 +72,7 @@ void GuardLaser::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 	else
 	{
-		float min_tx, min_ty, nx = 0, ny;
+		float min_tx, min_ty, nx=0, ny;
 		float rdx = 0;
 		float rdy = 0;
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
@@ -95,6 +80,14 @@ void GuardLaser::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		y += min_ty * dy + ny * 0.4f;
 		if (nx != 0) vx = 0;
 		if (ny != 0) vy = 0;
+		for (UINT i = 0; i < coEventsResult.size(); i++)
+		{
+			LPCOLLISIONEVENT e = coEventsResult[i];
+			if (dynamic_cast<CBrick*>(e->obj))
+			{
+				this->nx = -this->nx;
+			}
+		}
 	}
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
 }
