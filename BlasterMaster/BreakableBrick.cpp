@@ -7,9 +7,9 @@ BreakableBrick::BreakableBrick()
 void BreakableBrick::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
 	left = x;
-	top = y - 8;
+	top = y+16;
 	right = x + BREAKABLE_BRICK_BBOX_WIDTH;
-	bottom = y + BREAKABLE_BRICK_BBOX_HEIGHT;		
+	bottom = top + BREAKABLE_BRICK_BBOX_HEIGHT;		
 }
 void BreakableBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -25,6 +25,7 @@ void BreakableBrick::Render()
 	int alpha = 255;
 
 	animation_set->at(ani)->Render(x, y, alpha);
+	//RenderBoundingBox();
 }
 void BreakableBrick::SetState(int state)
 {
