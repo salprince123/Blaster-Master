@@ -59,7 +59,8 @@ void Bullet::Render()
 			break;
 		}
 	}
-	
+	if (enemyHandle != NULL && state == BULLET_STATE_NOT_FIRE)
+		ani = BULLET_ANI_DIE;
 	animation_set->at(ani)->Render(x, y);
 }
 
@@ -154,12 +155,28 @@ void Bullet::EnemyHandleStateFire(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			SetState(BULLET_STATE_FIRE_RIGHT);
 			break;
 		default: 
+			state = BULLET_STATE_NOT_FIRE;
 			x = gx->x;
 			y = gx->y;
 			break;
 
+		}		
+	}
+	else if (type == OBJECT_TYPE_GUARD_LASER)
+	{
+		GuardLaser* guard = dynamic_cast<GuardLaser*>(enemyHandle);
+		switch (guard->state)
+		{
+		case GUARDLASER_STATE_FIRE:
+			SetState(BULLET_STATE_FIRE_RIGHT);
+			break;
+		default:
+			state = BULLET_STATE_NOT_FIRE;
+			x = guard->x+4;
+			y = guard->y - GUARDLASER_BBOX_HEIGHT / 4;
+			break;
+
 		}
-		
 	}
 }
 void Bullet::PlayerHandleStateFire(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -627,7 +644,11 @@ void Bullet::SetState(int state)
 			vx = dynamic_cast<GX680*>(enemyHandle)->fireX * GX680_BULLET_SPEED;
 			vy = dynamic_cast<GX680*>(enemyHandle)->fireY * GX680_BULLET_SPEED;
 		}
-		
+		else if (dynamic_cast<GuardLaser*>(enemyHandle))
+		{
+			vx = 0;
+			vy = -GUARDLASER_BULLET_SPEED;
+		}
 		break;
 	}
 }

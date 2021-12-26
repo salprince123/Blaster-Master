@@ -34,20 +34,10 @@ void GuardLaser::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CalcPotentialCollisions(coObjects, coEvents);	
 	if (state == GUARDLASER_STATE_ACTIVE || state == GUARDLASER_STATE_FIRE)
 	{		
-		if (abs(pX - x) < GUARDLASER_BBOX_WIDTH / 2)
+		if ((y - pY) > 0 && (y - pY) < GUARDLASER_RANGE)
 		{
+			if(abs(x-pX)< GUARDLASER_BBOX_WIDTH/2)
 			SetState(GUARDLASER_STATE_FIRE);
-			fireX = 0;
-			if (pY > y)
-				fireY = 1;
-			else fireY = -1;
-		}
-		else if (abs(pY - y) < GUARDLASER_BBOX_HEIGHT / 2)
-		{
-			SetState(GUARDLASER_STATE_FIRE);
-			if (pX > x) fireX = 1;
-			else fireX = -1;
-			fireY = 0;
 		}
 		if (state == GUARDLASER_STATE_FIRE)
 		{
@@ -56,11 +46,6 @@ void GuardLaser::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				tFire = 0;
 				SetState(GUARDLASER_STATE_ACTIVE);
 			}
-		}
-		else
-		{
-			fireX = 0;
-			fireY = 0;
 		}
 	}
 	vx = nx * GUARDLASER_WALIKNG_SPEED;
@@ -117,6 +102,10 @@ void GuardLaser::SetState(int state)
 	Enemy::SetState(state);
 	switch (state)
 	{
+	case GUARDLASER_STATE_FIRE:
+		if (tFire == 0)
+			tFire = GetTickCount64();
+		break;
 	case GUARDLASER_STATE_DIE:
 		x = -1000;
 		y = -1000;
