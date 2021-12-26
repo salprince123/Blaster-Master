@@ -111,6 +111,12 @@ void Quadtree::_ParseSection_OBJECTS(string line)
             obj = new GX680(x, y, x, y, nx);
             break;
         }
+        case OBJECT_TYPE_GUARD_LASER:
+        {
+            int nx = atof(tokens[4].c_str());
+            obj = new GuardLaser(x, y, x, y, nx);
+            break;
+        }
         case OBJECT_TYPE_SENSOR:
         {
             int nx = atof(tokens[4].c_str());
@@ -153,6 +159,8 @@ void Quadtree::_ParseSection_OBJECTS(string line)
                 if(dynamic_cast<BallCarry*>(preObj))
                     dynamic_cast<Bullet*>(obj)->SetEnemyHandle(preObj);
                 else  if (dynamic_cast<GX680*>(preObj))
+                    dynamic_cast<Bullet*>(obj)->SetEnemyHandle(preObj);
+                else  if (dynamic_cast<GuardLaser*>(preObj))
                     dynamic_cast<Bullet*>(obj)->SetEnemyHandle(preObj);
                 else if (dynamic_cast<Bullet*>(preObj))
                     dynamic_cast<Bullet*>(obj)->SetEnemyHandle(dynamic_cast<Bullet*>(preObj)->enemyHandle);

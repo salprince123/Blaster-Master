@@ -140,6 +140,7 @@
     <ClCompile Include="FrogBody.cpp" />
     <ClCompile Include="FrogGun.cpp" />
     <ClCompile Include="FrogWheel.cpp" />
+    <ClCompile Include="GuardLaser.cpp" />
     <ClCompile Include="GX680.cpp" />
     <ClCompile Include="LadyBird.cpp" />
     <ClCompile Include="Portal.cpp" />
@@ -172,6 +173,7 @@
     <ClInclude Include="FrogBody.h" />
     <ClInclude Include="FrogGun.h" />
     <ClInclude Include="FrogWheel.h" />
+    <ClInclude Include="GuardLaser.h" />
     <ClInclude Include="GX680.h" />
     <ClInclude Include="LadyBird.h" />
     <ClInclude Include="Portal.h" />

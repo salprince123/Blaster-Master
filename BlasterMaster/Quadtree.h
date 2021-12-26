@@ -16,6 +16,7 @@
 #include "Sensor.h"
 #include "Worm.h"
 #include "BreakableBrick.h"
+#include "GuardLaser.h"
 using namespace std;
 class Rect
 {

@@ -7,8 +7,8 @@ GuardLaser::GuardLaser(int x0, int y0, int x1, int y1, int nx)
 	this->y0 = y0;
 	this->y1 = y1;
 	this->vy = 0;
-	this->nx = nx;
-	this->ny = -1;
+	this->nx = -1;
+	this->ny = 0;
 	this->SetState(GUARDLASER_STATE_ACTIVE);
 }
 void GuardLaser::GetBoundingBox(float& left, float& top, float& right, float& bottom)
@@ -74,10 +74,10 @@ void GuardLaser::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			fireY = 0;
 		}
 
-		if ((pX - x) > 0) vx = 0.015;
+		/*if ((pX - x) > 0) vx = 0.015;
 		else if ((pX - x) < 0) vx = -GUARDLASER_WALIKNG_SPEED;
 		if ((pY - y) > 0) vy = 0.015;
-		else if ((pY - y) < 0) vy = -GUARDLASER_WALIKNG_SPEED;
+		else if ((pY - y) < 0) vy = -GUARDLASER_WALIKNG_SPEED;*/
 	}
 
 	if (coEvents.size() == 0)
@@ -102,13 +102,19 @@ void GuardLaser::Render()
 {
 	int ani = GUARDLASER_ANI_DIE;
 	int alpha = 255;
-	if (state == GUARDLASER_STATE_ACTIVE || state == GUARDLASER_STATE_FIRE)
+	if (state == GUARDLASER_STATE_ACTIVE )
 	{
-		if (vx < 0)
-			ani = GUARDLASER_ANI_WALK_lEFT;
-		else if (vx > 0)
-			ani = GUARDLASER_ANI_WALK_RIGHT;
-		else ani = GUARDLASER_ANI_WALK_RIGHT;
+		if (nx < 0)
+			ani = GUARDLASER_ANI_IDLE_LEFT;
+		else if (nx > 0)
+			ani = GUARDLASER_ANI_IDLE_RIGHT;
+	}
+	else if (state == GUARDLASER_STATE_FIRE)
+	{
+		if (nx < 0)
+			ani = GUARDLASER_ANI_FIRE_LEFT;
+		else if (nx > 0)
+			ani = GUARDLASER_ANI_FIRE_RIGHT;
 	}
 	animation_set->at(ani)->Render(x, y, alpha);
 	//RenderBoundingBox();
@@ -118,10 +124,6 @@ void GuardLaser::SetState(int state)
 	Enemy::SetState(state);
 	switch (state)
 	{
-	case GUARDLASER_STATE_FIRE:
-		if (tFire == 0)
-			tFire = GetTickCount64();
-		break;
 	case GUARDLASER_STATE_DIE:
 		x = -1000;
 		y = -1000;
