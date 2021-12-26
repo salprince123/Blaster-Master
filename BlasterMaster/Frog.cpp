@@ -28,6 +28,7 @@ Frog::Frog(float x, float y) : CGameObject()
 
 void Frog::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	DebugOut(L"%f %f\n", x, y);
 	int id = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetId();
 	CGameObject::Update(dt);
 	if(x <= 0) x = 0;
@@ -71,53 +72,65 @@ void Frog::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				}
 			}
 		}
+		if (y > 384 && y < 385)
+		{
+			if (nx > 0)
+			{
+				if (x < 1357 && x > 1208)
+				{
+					x += 2;
+					return;
+				}
+			}
+			else
+			{
+				if (x < 1357 && x > 1208)
+				{
+					x -= 2;
+					return;
+				}
+			}
+		}
+		else if (y > 128 && y < 129)
+		{
+			if (nx > 0)
+			{
+				if (x < 1357 && x > 1208)
+				{
+					x += 2;
+					return;
+				}
+			}
+			else
+			{
+				if (x < 1357 && x > 1208)
+				{
+					x -= 2;
+					return;
+				}
+			}
+		}
 	}
 	else if(id == 2)
 	{
-		if (y <= 340 && y >= 246 && x >= 112 && x <= 148)
+		if (y <= 340 && y >= 246 && x >= 112 && x <= 148 && ny==-1)
+		{
 			y -= 2;
+			if(y<247)
+				littleScene = 2;
+		}
+			
 		if (y <= 320 && y >= 224 && x >= 368 && x <= 400)
+		{
 			y += 2;
+			littleScene = 0;
+			if (y > 224)
+				littleScene = 3;
+		}
+			
 	}
 	//at small portal
-	if (y > 384 && y < 385)
-	{
-		if (nx > 0)
-		{
-			if (x < 1357 && x > 1208)
-			{
-				x+=2;
-				return;
-			}
-		}
-		else
-		{
-			if (x < 1357 && x > 1208)
-			{
-				x-=2;
-				return;
-			}
-		}
-	}
-	else if (y > 128 && y < 129)
-	{
-		if (nx > 0)
-		{
-			if (x < 1357 && x > 1208)
-			{
-				x += 2;
-				return;
-			}
-		}
-		else
-		{
-			if (x < 1357 && x > 1208)
-			{
-				x -= 2;
-				return;
-			}
-		}
-	}
+	
 	// Simple fall down
 	if(id==1)
 		vy += FROG_GRAVITY*dt ;

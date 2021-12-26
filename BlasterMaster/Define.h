@@ -36,7 +36,7 @@
 #define SMALL_SCENE_1_1_X 1296 
 #define SMALL_SCENE_1_1_Y 384
 //Scene2 
-#define SCENE2_MAX_X 528
+#define SCENE2_MAX_X 512
 #define SCENE2_MAX_Y 2048
 
 // QUAD TREE

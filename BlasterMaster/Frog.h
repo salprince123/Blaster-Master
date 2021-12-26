@@ -15,8 +15,10 @@ class Frog : public CGameObject
 	float start_y;
 	int maxBullet;
 	int oldState;
+	
 public:
 	int untouchable;
+	int littleScene = 0;
 	Frog(float x = 0.0f, float y = 0.0f);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);
 	virtual void Render();

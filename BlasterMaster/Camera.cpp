@@ -19,7 +19,7 @@ float Camera::getCamPosX()
 }
 void Camera::Update(float player_x, float player_y, float h)
 {
-	
+	Frog* player = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	int id = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetId();
 	//DebugOut(L"%f %f %f %f\n", player_x, player_y, player_x+width, player_y + height);
 	if (id == 1)
@@ -36,11 +36,10 @@ void Camera::Update(float player_x, float player_y, float h)
 	}
 	else
 	{
-		//DebugOut(L"%f\n", player_y);
 		if (player_x < width/2 || player_x < 204)
 		{
 			player_x = 10;			
-		}	
+		}
 		else
 		{
 			player_x -= width / 2;			
@@ -49,12 +48,25 @@ void Camera::Update(float player_x, float player_y, float h)
 		{
 			player_y =0;
 		}
+		else if (player->littleScene == 2)
+		{
+			player_y = SCENE2_MAX_Y-147 -height/2;
+		}
+		else if (player->littleScene == 3)
+		{
+			if(player->y <418)
+				player_y = SCENE2_MAX_Y - 224 - height*1.5;
+			else player_y -= height / 2;
+		}
 		else
 		{
 			player_y -= height / 2;
 		}
+		
 		if (player_x < 0) player_x = 0;
 		if (player_x + width > SCENE2_MAX_X) player_x = SCENE2_MAX_X - width;
+		if(player->littleScene == 3)
+			player_x = SCENE2_MAX_X - width;
 	}
 	SetCamPos(round(player_x), round(player_y));
 }
