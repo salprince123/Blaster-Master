@@ -21,6 +21,7 @@ void Camera::Update(float player_x, float player_y, float h)
 {
 	Frog* player = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	int id = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetId();
+	float maxX, minX, maxY, minY;
 	//DebugOut(L"%f %f %f %f\n", player_x, player_y, player_x+width, player_y + height);
 	if (id == 1)
 	{
@@ -36,37 +37,53 @@ void Camera::Update(float player_x, float player_y, float h)
 	}
 	else
 	{
-		if (player_x < width/2 || player_x < 204)
+		switch (player->littleScene)
 		{
-			player_x = 10;			
+		case 1:
+			minX = 10;
+			maxX = minX+width;
+			maxY = 1735;
+			minY = 0;
+			break;
+		case 2:
+			minX = 0;
+			maxX = 510;
+			minY = 1800;
+			maxY = 1800+height;
+			break;
+		case 3:
+			minX = 260;
+			maxX = 260+width;
+			minY = 1277;
+			maxY = 1732;
+			break;
+		case 4:
+			minX = 260;
+			maxX = 260 + width;
+			minY = 1017;
+			maxY = 1017+height;
+			break;
+		default:
+			minX = 10;
+			maxX = minX + width;
+			maxY = 1735;
+			minY = 0;
+			break;
 		}
-		else
-		{
-			player_x -= width / 2;			
+
+		player_x -= width / 2;
+		player_y -= height / 2;	
+		if (player_x < minX)
+			player_x = minX;
+		else if (player_x + width > maxX)
+			player_x = maxX - width;
+		if (player->isChangeScene == 0)
+		{			
+			if (player_y < minY)
+				player_y = minY;
+			else if (player_y + height > maxY)
+				player_y = maxY - height;
 		}
-		if (player_y  < 95)
-		{
-			player_y =0;
-		}
-		else if (player->littleScene == 2)
-		{
-			player_y = SCENE2_MAX_Y-147 -height/2;
-		}
-		else if (player->littleScene == 3)
-		{
-			if(player->y <418)
-				player_y = SCENE2_MAX_Y - 224 - height*1.5;
-			else player_y -= height / 2;
-		}
-		else
-		{
-			player_y -= height / 2;
-		}
-		
-		if (player_x < 0) player_x = 0;
-		if (player_x + width > SCENE2_MAX_X) player_x = SCENE2_MAX_X - width;
-		if(player->littleScene == 3)
-			player_x = SCENE2_MAX_X - width;
 	}
 	SetCamPos(round(player_x), round(player_y));
 }

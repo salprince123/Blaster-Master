@@ -15,6 +15,7 @@ Frog::Frog(float x, float y) : CGameObject()
 	{
 		level = PRINCE_LEVEL;
 		SetState(PRINCE_STATE_WALKING_DOWN);
+		littleScene = 1;
 	}
 		
 	untouchable = 0;
@@ -28,7 +29,7 @@ Frog::Frog(float x, float y) : CGameObject()
 
 void Frog::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	DebugOut(L"%f %f\n", x, y);
+	//DebugOut(L"%f %f %d\n", x, y, littleScene);
 	int id = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetId();
 	CGameObject::Update(dt);
 	if(x <= 0) x = 0;
@@ -116,19 +117,21 @@ void Frog::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		if (y <= 340 && y >= 246 && x >= 112 && x <= 148 && ny==-1)
 		{
 			y -= 2;
+			isChangeScene = 1;
 			if(y<247)
 				littleScene = 2;
-		}
-			
-		if (y <= 320 && y >= 224 && x >= 368 && x <= 400)
+		}			
+		else if (y <= 320 && y >= 224 && x >= 368 && x <= 400)
 		{
 			y += 2;
-			littleScene = 0;
+			isChangeScene = 1;
 			if (y > 224)
 				littleScene = 3;
 		}
-			
+		else isChangeScene = 0;
+		//DebugOut(L"%d\n", isChangeScene);
 	}
+	
 	//at small portal
 	
 	// Simple fall down

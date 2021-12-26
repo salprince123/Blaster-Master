@@ -19,6 +19,7 @@ class Frog : public CGameObject
 public:
 	int untouchable;
 	int littleScene = 0;
+	int isChangeScene = 0;
 	Frog(float x = 0.0f, float y = 0.0f);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);
 	virtual void Render();
