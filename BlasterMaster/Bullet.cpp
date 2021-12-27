@@ -53,7 +53,7 @@ void Bullet::Render()
 			ani = BULLET_ANI_BIG_RIGHT;
 			break;
 		case BULLET_STATE_DIE:
-			ani = BULLET_ANI_NOT_FIRE;
+			ani = BULLET_ANI_DIE;
 			break;
 		default:
 			break;
@@ -319,6 +319,7 @@ void Bullet::PlayerHandleStateFire(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		break;
 	case BULLET_STATE_FIRE_LEFT:case BULLET_STATE_FIRE_RIGHT:
 	{
+		collideX = 0;
 		lastTime = 0;
 		if (abs(x - x0) > BULLET_RANGE)
 		{
@@ -347,6 +348,7 @@ void Bullet::PlayerHandleStateFire(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 	case BULLET_STATE_FIRE_UP:
 	{
+		collideX = 0;
 		lastTime = 0;
 		if (abs(y - y0) > BULLET_RANGE)
 		{
@@ -379,6 +381,7 @@ void Bullet::PlayerHandleStateFire(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 	case BULLET_STATE_NOT_FIRE:
 		lastTime = 0;
+		collideX = 0;
 		HandleStateUnFire();
 		break;
 	default:
@@ -417,6 +420,7 @@ void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		{
 			lastTime = GetTickCount64();
 			LPCOLLISIONEVENT e = coEventsResult[i];
+			
 			if (dynamic_cast<CBrick*>(e->obj))
 			{				
 				if (state != BULLET_STATE_DIE && state != BULLET_STATE_NOT_FIRE)
@@ -630,6 +634,8 @@ void Bullet::SetState(int state)
 		else
 		{
 			vx = vy = 0;
+			x -= 8;
+			y += 8;
 		}
 		break;
 	}
@@ -651,4 +657,5 @@ void Bullet::SetState(int state)
 		}
 		break;
 	}
+
 }

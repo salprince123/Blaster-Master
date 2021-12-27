@@ -12,6 +12,7 @@ public:
 	int right = 0;
 	int id = 0;
 	float x0, y0;
+	int collideX = 0;
 	DWORD lastTime;	
 	float ballCarryTime=0;
 	int count = 60;
