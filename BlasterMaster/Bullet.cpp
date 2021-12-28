@@ -310,7 +310,7 @@ void Bullet::PlayerHandleStateFire(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	switch (state)
 	{
 	case BULLET_STATE_DIE:
-		if (GetTickCount64() - lastTime > 100)
+		if (GetTickCount64() - lastTime > 100 )
 		{
 			SetState(BULLET_STATE_NOT_FIRE);
 			lastTime = 0;

@@ -9,5 +9,8 @@
 66	textures\map21.png	0	15	150
 7	textures\Item.png	0	15	150
 8	textures\brick.png	0	0	0
+90	textures\boss01.png	0	0	0
+91	textures\boss02.png	0	0	0
+92	textures\boss03.png	0	0	0
 20	textures\misc.png	176	224	248
 10	textures\enemies.png	3	26	110

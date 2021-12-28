@@ -128,6 +128,13 @@ void Frog::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			if (y > 224)
 				littleScene = 3;
 		}
+		else if (y <= 848 && y >= 737 && x >= 368 && x <= 400)
+		{
+			y += 2;
+			isChangeScene = 1;
+			if (y > 846)
+				littleScene = 4;
+		}
 		else isChangeScene = 0;
 		//DebugOut(L"%d\n", isChangeScene);
 	}
