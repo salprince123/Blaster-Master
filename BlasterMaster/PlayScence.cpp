@@ -229,8 +229,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		{DebugOut(L"UPPER BAKCGROUND %d\n", tokens.size());
 			obj = new Background(); 
 			if (tokens.size() == 5)
-			{
-				
+			{				
 				int isUpper = atof(tokens[4].c_str());
 				dynamic_cast<Background*>(obj)->isUpper = isUpper;
 			}
