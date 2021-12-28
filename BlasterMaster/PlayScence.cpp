@@ -9,6 +9,7 @@
 #include "Portal.h"
 #include "LadyBird.h"
 #include "Boom.h"
+#include "SpecialBackground.h"
 
 #include "Background.h"
 
@@ -235,6 +236,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			}
 			break;
 			
+		}
+		case OBJECT_TYPE_SPECIAL_BACKGROUND:
+		{
+			obj = new SpecialBackground(x, y, x, y, 1);
+			break;			
 		}
 		case OBJECT_TYPE_PORTAL:
 			{	

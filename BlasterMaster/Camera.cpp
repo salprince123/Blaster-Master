@@ -60,8 +60,8 @@ void Camera::Update(float player_x, float player_y, float h)
 		case 4:
 			minX = 260;
 			maxX = 260 + width;
-			minY = 1017;
-			maxY = 1017+height;
+			minY = 1000;
+			maxY = 1000+height;
 			break;
 		
 		default:
