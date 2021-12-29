@@ -32,6 +32,7 @@ void GuardLaser::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vector<LPCOLLISIONEVENT> coEventsResult;
 	coEvents.clear();
 	CalcPotentialCollisions(coObjects, coEvents);	
+	Enemy::Update(dt, coObjects);
 	if (state == GUARDLASER_STATE_ACTIVE || state == GUARDLASER_STATE_FIRE)
 	{		
 		if ((y - pY) > 0 && (y - pY) < GUARDLASER_RANGE)
@@ -80,6 +81,8 @@ void GuardLaser::Render()
 {
 	int ani = GUARDLASER_ANI_DIE;
 	int alpha = 255;
+	if (isShoot != 0)
+		alpha = 150;
 	if (state == GUARDLASER_STATE_ACTIVE )
 	{
 		if (nx < 0)

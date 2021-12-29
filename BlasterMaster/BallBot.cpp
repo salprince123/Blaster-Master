@@ -91,6 +91,7 @@ void BallBot::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		y += dy;
 		
 	}
+	Enemy::Update(dt, coObjects);
 	
 }
 void BallBot::Render()
@@ -110,6 +111,8 @@ void BallBot::Render()
 		break;
 	}
 	int alpha = 255;
+	if (isShoot != 0)
+		alpha = 150;
 	animation_set->at(ani)->Render(x, y, alpha);
 	//RenderBoundingBox();
 }

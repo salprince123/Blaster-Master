@@ -20,7 +20,17 @@ void Enemy::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 
 void Enemy::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	CGameObject::Update(dt, coObjects);
+	//CGameObject::Update(dt, coObjects);
+	if (isShoot != 0)
+	{
+		if (time == 0)
+			time = GetTickCount64();
+		else if (GetTickCount64() - time > 200)
+		{
+			time = 0;
+			isShoot = 0;
+		}
+	}
 }
 
 void Enemy::Render()

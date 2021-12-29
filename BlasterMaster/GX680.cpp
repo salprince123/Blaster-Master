@@ -29,6 +29,7 @@ void GX680::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	Frog* player = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	player->GetPosition(pX, pY);
 	CGameObject::Update(dt, coObjects);
+	Enemy::Update(dt, coObjects);
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 	coEvents.clear();
@@ -103,6 +104,8 @@ void GX680::Render()
 {
 	int ani = GX680_ANI_DIE;
 	int alpha = 255;
+	if (isShoot != 0)
+		alpha = 150;
 	if (state == GX680_STATE_ACTIVE || state == GX680_STATE_FIRE)
 	{
 		if (vx < 0)

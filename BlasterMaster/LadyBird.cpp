@@ -28,6 +28,7 @@ void LadyBird::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	Frog* player = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	player->GetPosition(pX, pY);
 	if (abs(x - pX) > 150) return;	
+	Enemy::Update(dt, coObjects);
 	switch (state)
 	{
 		case LADYBIRD_STATE_WALKING_RIGHT:
@@ -64,7 +65,7 @@ void LadyBird::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 	}
 	if(y0==y1)
-		Enemy::Update(dt, coObjects);
+		CGameObject::Update(dt, coObjects);
 	else
 	{
 		if (state == LADYBIRD_STATE_COIN) return;
@@ -91,6 +92,8 @@ void LadyBird::Render()
 	else if (state == LADYBIRD_STATE_COIN)
 		ani = LADYBIRD_ANI_COIN;
 	int alpha = 255;
+	if (isShoot != 0)
+		alpha = 150;
 	animation_set->at(ani)->Render(x, y, alpha);
 }
 void LadyBird::SetState(int state)

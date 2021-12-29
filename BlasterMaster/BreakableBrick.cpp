@@ -14,6 +14,7 @@ void BreakableBrick::GetBoundingBox(float& left, float& top, float& right, float
 void BreakableBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CGameObject::Update(dt, coObjects);
+	Enemy::Update(dt, coObjects);
 }
 void BreakableBrick::Render()
 {
@@ -23,7 +24,8 @@ void BreakableBrick::Render()
 		ani = BREAKABLE_BRICK_ANI_ALIVE;
 	}
 	int alpha = 255;
-
+	if (isShoot != 0)
+		alpha = 150;
 	animation_set->at(ani)->Render(x, y, alpha);
 	//RenderBoundingBox();
 }

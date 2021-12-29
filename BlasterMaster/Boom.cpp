@@ -24,16 +24,7 @@ void Boom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (abs(x - pX) < 20 && (y - pY) > 10)
 		SetState(BOOM_STATE_FIRE);
 	Enemy::Update(dt, coObjects);
-	if (isShoot != 0)
-	{
-		if (time == 0)
-			time = GetTickCount64();
-		else if (GetTickCount64() - time > 200)
-		{
-			time = 0;
-			isShoot = 0;
-		}
-	}
+	
 }
 void Boom::Render()
 {

@@ -450,7 +450,8 @@ void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					if (health == 1)
 						dynamic_cast<Worm*>(e->obj)->SetState(WORM_STATE_DIE);
 					else if (health > 1)
-						dynamic_cast<Worm*>(e->obj)->health--;					
+						dynamic_cast<Worm*>(e->obj)->health--;	
+					dynamic_cast<Enemy*>(e->obj)->isShoot = 1;
 					SetState(BULLET_STATE_DIE);
 				}
 			}
@@ -459,6 +460,7 @@ void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (state != BULLET_STATE_DIE && state != BULLET_STATE_NOT_FIRE)
 				{
 					dynamic_cast<BreakableBrick*>(e->obj)->SetState(BREAKABLE_BRICK_STATE_DIE);
+					dynamic_cast<Enemy*>(e->obj)->isShoot = 1;
 					SetState(BULLET_STATE_DIE);
 				}
 			}
@@ -467,6 +469,7 @@ void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (state != BULLET_STATE_DIE && state != BULLET_STATE_NOT_FIRE)
 				{
 					dynamic_cast<LadyBird*>(e->obj)->SetState(LADYBIRD_STATE_COIN);
+					dynamic_cast<Enemy*>(e->obj)->isShoot = 1;
 					SetState(BULLET_STATE_DIE);
 				}
 			}
@@ -479,6 +482,7 @@ void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						dynamic_cast<EyeLet*>(e->obj)->SetState(EYELET_STATE_COIN);
 					else if (health > 1)
 						dynamic_cast<EyeLet*>(e->obj)->health--;
+					dynamic_cast<Enemy*>(e->obj)->isShoot = 1;
 					SetState(BULLET_STATE_DIE);
 				}
 			}
@@ -487,6 +491,7 @@ void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (state != BULLET_STATE_DIE && state != BULLET_STATE_NOT_FIRE && enemyHandle==NULL)
 				{
 					dynamic_cast<BallCarry*>(e->obj)->SetState(BALLCARRY_STATE_COIN);
+					dynamic_cast<Enemy*>(e->obj)->isShoot = 1;
 					SetState(BULLET_STATE_DIE);
 				}
 			}
@@ -495,6 +500,7 @@ void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (state != BULLET_STATE_DIE && state != BULLET_STATE_NOT_FIRE && enemyHandle == NULL)
 				{
 					dynamic_cast<BallBot*>(e->obj)->SetState(BALLBOT_STATE_DIE);
+					dynamic_cast<Enemy*>(e->obj)->isShoot = 1;
 					SetState(BULLET_STATE_DIE);
 				}
 			}
@@ -507,6 +513,7 @@ void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						dynamic_cast<GX680*>(e->obj)->SetState(GX680_STATE_DIE);
 					else if (health > 1)
 						dynamic_cast<GX680*>(e->obj)->health--;
+					dynamic_cast<Enemy*>(e->obj)->isShoot = 1;
 					SetState(BULLET_STATE_DIE);
 				}
 			}
@@ -515,6 +522,7 @@ void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (state != BULLET_STATE_DIE && state != BULLET_STATE_NOT_FIRE && enemyHandle == NULL)
 				{
 					dynamic_cast<GuardLaser*>(e->obj)->SetState(GUARDLASER_STATE_DIE);
+					dynamic_cast<Enemy*>(e->obj)->isShoot = 1;
 					SetState(BULLET_STATE_DIE);
 				}
 			}
@@ -523,6 +531,7 @@ void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (state != BULLET_STATE_DIE && state != BULLET_STATE_NOT_FIRE && enemyHandle == NULL)
 				{
 					dynamic_cast<Sensor*>(e->obj)->SetState(SENSOR_STATE_DIE);
+					dynamic_cast<Enemy*>(e->obj)->isShoot = 1;
 					SetState(BULLET_STATE_DIE);
 				}
 			}

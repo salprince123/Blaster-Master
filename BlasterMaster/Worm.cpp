@@ -28,6 +28,7 @@ void Worm::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	float pX, pY;
 	Frog* player = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	player->GetPosition(pX, pY);
+	Enemy::Update(dt, coObjects);
 	if (enemyHandle != NULL && enemyHandle->state == BOOM_STATE_FIRE)
 	{
 		SetState(WORM_STATE_ACTIVE);
@@ -67,6 +68,8 @@ void Worm::Render()
 {
 	int ani = WORM_ANI_DIE;
 	int alpha = 255;
+	if (isShoot != 0)
+		alpha = 150;
 	if (state == WORM_STATE_ACTIVE)
 	{
 		if (vx < 0)

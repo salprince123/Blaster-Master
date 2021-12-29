@@ -61,6 +61,7 @@ void EyeLet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		dy = vx * sin(45) * dt;
 	x += dx;
 	y += dy;
+	Enemy::Update(dt, coObjects);
 }
 void EyeLet::Render()
 {
@@ -76,6 +77,8 @@ void EyeLet::Render()
 	else if (state == EYELET_STATE_COIN)
 		ani = EYELET_ANI_COIN;
 	int alpha = 255;
+	if (isShoot != 0)
+		alpha = 150;
 	animation_set->at(ani)->Render(x, y, alpha);
 }
 void EyeLet::SetState(int state)

@@ -50,6 +50,7 @@ void BallCarry::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		t_fire0 = GetTickCount64();
 	}
+	Enemy::Update(dt, coObjects);
 	CGameObject::Update(dt, coObjects);
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
@@ -105,7 +106,8 @@ void BallCarry::Render()
 	else if (state == BALLCARRY_STATE_FIRE)
 		ani = BALLCARRY_ANI_FIRE;
 	int alpha = 255;
-
+	if (isShoot != 0)
+		alpha = 150;
 	animation_set->at(ani)->Render(x, y, alpha);
 	//RenderBoundingBox();
 }

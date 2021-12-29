@@ -24,7 +24,7 @@ void Sensor::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	float pX, pY;
 	Frog* player = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	player->GetPosition(pX, pY);	
-
+	Enemy::Update(dt, coObjects);
 	CGameObject::Update(dt, coObjects);
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
@@ -60,6 +60,8 @@ void Sensor::Render()
 {
 	int ani = SENSOR_ANI_IDLE;
 	int alpha = 255;
+	if (isShoot != 0)
+		alpha = 150;
 	if (vx != 0)
 		ani = SENSOR_ANI_WALK;
 	animation_set->at(ani)->Render(x, y, alpha);
