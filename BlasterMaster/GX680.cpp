@@ -10,6 +10,7 @@ GX680::GX680(int x0, int y0, int x1, int y1, int nx)
 	this->nx = nx;
 	this->ny = -1;
 	this->SetState(GX680_STATE_ACTIVE);
+	this->health = 2;
 }
 void GX680::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {

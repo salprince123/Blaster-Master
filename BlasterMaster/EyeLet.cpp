@@ -11,6 +11,7 @@ EyeLet::EyeLet(int x0, int y0, int x1, int y1, int nx)
 	this->ny = -1;
 	this->nx = nx;
 	this->SetState(EYELET_STATE_WALKING_RIGHT);
+	this->health = 2;
 }
 void EyeLet::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {

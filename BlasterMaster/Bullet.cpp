@@ -328,12 +328,10 @@ void Bullet::PlayerHandleStateFire(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 		else
 		{
-
 			if (isCreate == 1)
 			{
 				dy = -50 * sin(count);
 				dx = state / BULLET_STATE_FIRE_RIGHT;
-
 			}
 			else if (isCreate == -1)
 			{
@@ -448,7 +446,11 @@ void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				if (state != BULLET_STATE_DIE && state != BULLET_STATE_NOT_FIRE)
 				{
-					dynamic_cast<Worm*>(e->obj)->SetState(WORM_STATE_DIE);
+					int health = dynamic_cast<Worm*>(e->obj)->health;
+					if (health == 1)
+						dynamic_cast<Worm*>(e->obj)->SetState(WORM_STATE_DIE);
+					else if (health > 1)
+						dynamic_cast<Worm*>(e->obj)->health--;					
 					SetState(BULLET_STATE_DIE);
 				}
 			}
@@ -472,7 +474,11 @@ void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				if (state != BULLET_STATE_DIE && state != BULLET_STATE_NOT_FIRE)
 				{
-					dynamic_cast<EyeLet*>(e->obj)->SetState(EYELET_STATE_COIN);
+					int health = dynamic_cast<EyeLet*>(e->obj)->health;
+					if (health == 1)
+						dynamic_cast<EyeLet*>(e->obj)->SetState(EYELET_STATE_COIN);
+					else if (health > 1)
+						dynamic_cast<EyeLet*>(e->obj)->health--;
 					SetState(BULLET_STATE_DIE);
 				}
 			}
@@ -496,7 +502,11 @@ void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				if (state != BULLET_STATE_DIE && state != BULLET_STATE_NOT_FIRE && enemyHandle == NULL)
 				{
-					dynamic_cast<GX680*>(e->obj)->SetState(GX680_STATE_DIE);
+					int health = dynamic_cast<GX680*>(e->obj)->health;
+					if (health == 1)
+						dynamic_cast<GX680*>(e->obj)->SetState(GX680_STATE_DIE);
+					else if (health > 1)
+						dynamic_cast<GX680*>(e->obj)->health--;
 					SetState(BULLET_STATE_DIE);
 				}
 			}
