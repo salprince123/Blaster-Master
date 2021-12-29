@@ -262,7 +262,11 @@ void Frog::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						dynamic_cast<Bullet*>(e->obj)->SetState(BULLET_STATE_DIE);
 					SetState(BULLET_STATE_DIE);
 				}
-				else StartUntouchable();
+				else
+				{
+					SetState(BULLET_STATE_DIE);
+					StartUntouchable();
+				}
 			}
 			else if (dynamic_cast<CPortal*>(e->obj))
 			{
