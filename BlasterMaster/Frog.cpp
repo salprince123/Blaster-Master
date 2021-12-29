@@ -259,13 +259,18 @@ void Frog::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (state != BULLET_STATE_DIE && state != BULLET_STATE_NOT_FIRE)
 				{
 					if (dynamic_cast<Bullet*>(e->obj)->enemyHandle != NULL)
+					{
+						StartUntouchable();
 						dynamic_cast<Bullet*>(e->obj)->SetState(BULLET_STATE_DIE);
-					SetState(BULLET_STATE_DIE);
+					}
 				}
 				else
 				{
-					SetState(BULLET_STATE_DIE);
-					StartUntouchable();
+					if (dynamic_cast<Bullet*>(e->obj)->enemyHandle != NULL)
+					{
+						StartUntouchable();
+						dynamic_cast<Bullet*>(e->obj)->SetState(BULLET_STATE_DIE);
+					}
 				}
 			}
 			else if (dynamic_cast<CPortal*>(e->obj))
