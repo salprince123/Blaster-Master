@@ -143,6 +143,5 @@ void FrogWheel::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		else if (this->type == FROG_WHEEL_TYPE_RIGHT)
 			x -= 2;
 	}
-	DebugOut(L"%d \n", frog->GetState());
 	CGameObject::Update(dt, coObjects);
 }

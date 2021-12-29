@@ -214,10 +214,14 @@ void Frog::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 			else if (dynamic_cast<LadyBird*>(e->obj))
 			{
+				//if (e->ny < 0)
+					//DebugOut(L"%d\n", e->ny);
 				if (dynamic_cast<LadyBird*>(e->obj)->GetState() == LADYBIRD_STATE_COIN)
 				{
 					e->obj->SetState(LADYBIRD_STATE_DIE);
 				}
+				else if (e->ny > 0)
+					e->obj->SetState(LADYBIRD_STATE_DIE);
 				else
 					StartUntouchable();
 			}
