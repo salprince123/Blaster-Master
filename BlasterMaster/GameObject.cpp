@@ -84,8 +84,8 @@ void CGameObject::CalcPotentialCollisions(
 						coEvents.push_back(e);
 				}					
 				else if (dynamic_cast<Sensor*>(this) && dynamic_cast<BreakableBrick*>(e->obj));
-				else 
-				coEvents.push_back(e);
+				else coEvents.push_back(e);
+				
 			}
 				
 		}
