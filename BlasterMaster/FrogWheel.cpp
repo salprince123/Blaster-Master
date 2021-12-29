@@ -102,11 +102,7 @@ void FrogWheel::SetState(int state)
 }
 void FrogWheel::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	//DebugOut(L"[STATE WHEEL] %d\n", type);
-	switch (state)
-	{
-		
-	}
+	
 	FrogBody* bodyDown = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetBodyDown();
 	if (this->type == FROG_WHEEL_TYPE_LEFT)
 	{		

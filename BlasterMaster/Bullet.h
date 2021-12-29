@@ -1,4 +1,6 @@
 #pragma once
+#pragma warning( disable : 4305 )
+
 #include "GameObject.h"
 #include "Define.h"
 

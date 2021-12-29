@@ -1,4 +1,5 @@
 #pragma once
+#pragma warning( disable : 4305 )
 #include "Enemy.h"
 #include "Utils.h"
 #include "Define.h"
