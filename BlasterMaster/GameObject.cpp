@@ -82,12 +82,13 @@ void CGameObject::CalcPotentialCollisions(
 				{
 					if (dynamic_cast<BreakableBrick*>(e->obj))
 						coEvents.push_back(e);
+					if(dynamic_cast<Enemy*>(e->obj)->state== BALLCARRY_STATE_COIN)
+						coEvents.push_back(e);
 				}					
 				else if (dynamic_cast<Sensor*>(this) && dynamic_cast<BreakableBrick*>(e->obj));
 				else coEvents.push_back(e);
 				
-			}
-				
+			}				
 		}
 		else
 			delete e;
