@@ -237,7 +237,17 @@ void Frog::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 			else if (dynamic_cast<GX680*>(e->obj))
 			{
-				if (dynamic_cast<GX680*>(e->obj)->GetState() != GX680_STATE_ACTIVE)
+				if (dynamic_cast<GX680*>(e->obj)->GetState() != GX680_STATE_UNACTIVE)
+					StartUntouchable();
+			}
+			else if (dynamic_cast<Sensor*>(e->obj))
+			{
+				if (dynamic_cast<Sensor*>(e->obj)->GetState() != SENSOR_STATE_DIE)
+					StartUntouchable();
+			}
+			else if (dynamic_cast<GuardLaser*>(e->obj))
+			{
+				if (dynamic_cast<GuardLaser*>(e->obj)->GetState() != GUARDLASER_STATE_DIE)
 					StartUntouchable();
 			}
 			else if (dynamic_cast<Bullet*>(e->obj))
