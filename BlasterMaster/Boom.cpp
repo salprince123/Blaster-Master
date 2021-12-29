@@ -4,6 +4,7 @@
 Boom::Boom()
 {
 	SetState(BOOM_STATE_ALIVE);
+	health = 3;
 }
 void Boom::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
