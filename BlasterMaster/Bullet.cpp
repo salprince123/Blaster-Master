@@ -440,6 +440,7 @@ void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						dynamic_cast<Boom*>(e->obj)->SetState(BOOM_STATE_DIE);
 					else if (health > 1)
 						dynamic_cast<Boom*>(e->obj)->health--;
+					dynamic_cast<Boom*>(e->obj)->isShoot = 1;
 					SetState(BULLET_STATE_DIE);
 				}
 			}

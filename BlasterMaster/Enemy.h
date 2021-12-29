@@ -13,6 +13,8 @@ protected:
 	int y1 = 0;
 public:
 	int health = 1;
+	int isShoot = 0;
+	float time = 0;
 	Enemy();
 	Enemy(int x0, int y0, int x, int y);
 	virtual void SetState(int state);
