@@ -135,5 +135,14 @@ void FrogWheel::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		this->y -= 2;
 	else if (((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer()->GetState() == FROG_STATE_FALLING_DOWN)
 		this->y += 3;
+	if (frog->GetState() == FROG_STATE_UP_LEFT || frog->GetState() == FROG_STATE_UP_RIGHT)
+	{
+		y -= 3;
+		if (this->type == FROG_WHEEL_TYPE_LEFT)
+			x += 2;
+		else if (this->type == FROG_WHEEL_TYPE_RIGHT)
+			x -= 2;
+	}
+	DebugOut(L"%d \n", frog->GetState());
 	CGameObject::Update(dt, coObjects);
 }

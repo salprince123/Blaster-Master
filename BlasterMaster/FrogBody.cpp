@@ -31,7 +31,10 @@ void FrogBody::Render()
 		case FROG_BODY_UP_STATE_RIGHT:
 			ani = FROG_BODY_UP_ANI_RIGHT;
 			break;
-		
+		case FROG_BODY_UP_STATE_UP_RIGHT:
+			break;
+		case FROG_BODY_UP_STATE_UP_LEFT:
+			break;
 
 		case FROG_BODY_DOWN_STATE_LEFT_RIGHT:
 			ani = FROG_BODY_DOWN_ANI_LEFT_RIGHT;
@@ -144,6 +147,10 @@ void FrogBody::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 		}
 		this->y = mario->y ;
+		if (mario->GetState() == FROG_STATE_UP_LEFT || mario->GetState() == FROG_STATE_UP_RIGHT)
+		{
+			y += 3;
+		}
 	}
 	else if (type == FROG_BODY_TYPE_DOWN)
 	{
