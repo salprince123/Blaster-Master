@@ -232,7 +232,7 @@ void Frog::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 			else if (dynamic_cast<BallBot*>(e->obj))
 			{
-				if (dynamic_cast<BallCarry*>(e->obj)->GetState() != BALLBOT_STATE_UNACTIVE)
+				if (dynamic_cast<BallBot*>(e->obj)->GetState() != BALLBOT_STATE_UNACTIVE)
 					StartUntouchable();
 			}
 			else if (dynamic_cast<GX680*>(e->obj))
