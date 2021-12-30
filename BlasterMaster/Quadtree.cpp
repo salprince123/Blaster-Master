@@ -125,6 +125,7 @@ void Quadtree::_ParseSection_OBJECTS(string line)
         }
         case OBJECT_TYPE_BOOM: obj = new Boom(); break;
         case OBJECT_TYPE_BREAKABLE_BRICK: obj = new BreakableBrick(); break;
+        case OBJECT_TYPE_ENEMY1: obj = new Enemy1(); break;
         case OBJECT_TYPE_BRICK:
         {
             obj = new CBrick();

@@ -86,10 +86,11 @@ void CGameObject::CalcPotentialCollisions(
 						coEvents.push_back(e);
 				}
 				else if (dynamic_cast<Sensor*>(this) && dynamic_cast<BreakableBrick*>(e->obj));
+				else if (dynamic_cast<GX680*>(this) && dynamic_cast<Enemy1*>(e->obj));
+				else if (dynamic_cast<Bullet*>(this) && dynamic_cast<Enemy1*>(e->obj));
 				else if (dynamic_cast<Bullet*>(this) && dynamic_cast<Bullet*>(this)->enemyHandle != NULL
 					&& dynamic_cast<Bullet*>(e->obj) && dynamic_cast<Bullet*>(e->obj)->enemyHandle != NULL);				
-				else coEvents.push_back(e);
-				
+				else coEvents.push_back(e);				
 			}				
 		}
 		else

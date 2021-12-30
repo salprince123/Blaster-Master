@@ -198,6 +198,10 @@ void Frog::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (dynamic_cast<Boom*>(e->obj)->GetState() == BOOM_STATE_ALIVE)
 					 StartUntouchable();
 			}
+			else if (dynamic_cast<Enemy1*>(e->obj))
+			{
+				StartUntouchable();
+			}
 			else if (dynamic_cast<Worm*>(e->obj))
 			{
 				if (dynamic_cast<Worm*>(e->obj)->GetState() == WORM_STATE_ACTIVE)

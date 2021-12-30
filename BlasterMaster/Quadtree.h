@@ -17,6 +17,7 @@
 #include "Worm.h"
 #include "BreakableBrick.h"
 #include "GuardLaser.h"
+#include "Enemy1.h"
 using namespace std;
 class Rect
 {
